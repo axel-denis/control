@@ -48,7 +48,7 @@ in {
     virtualisation.oci-containers.containers = {
       jellyfin = {
         image = "jellyfin/jellyfin:latest";
-        ports = [ "8096:${cfg.port}" ];
+        ports = [ "${cfg.port}:8096" ];
         volumes = [
           #"${jellyfinRoot}/media:/media"
           "/mnt/films/:/media"

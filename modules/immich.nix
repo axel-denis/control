@@ -79,7 +79,7 @@ in {
     virtualisation.oci-containers.containers = {
       immich = {
         image = "ghcr.io/immich-app/immich-server:${cfg.immichVersion}";
-        ports = [ "2283:${cfg.port}" ];
+        ports = [ "${cfg.port}:2283" ];
         environment = {
           IMMICH_VERSION = cfg.immichVersion;
           DB_HOSTNAME = "immich_postgres";
