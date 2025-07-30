@@ -27,6 +27,13 @@ in {
       description = "Version name to use for Immich images";
     };
 
+    port = mkOption {
+      type = types.string;
+      default = "2283";
+      defaultText = "2283";
+      description = "Port to use for Immich";
+    };
+
     pathOverride = {
       database = mkInheritedPathOption {
         parentName = "rootPath";
@@ -72,7 +79,7 @@ in {
     virtualisation.oci-containers.containers = {
       immich = {
         image = "ghcr.io/immich-app/immich-server:${cfg.immichVersion}";
-        ports = [ "2283:2283" ];
+        ports = [ "2283:${cfg.port}" ];
         environment = {
           IMMICH_VERSION = cfg.immichVersion;
           DB_HOSTNAME = "immich_postgres";
