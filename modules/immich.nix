@@ -28,8 +28,8 @@ in {
     };
 
     port = mkOption {
-      type = types.string;
-      default = "2283";
+      type = types.int;
+      default = 2283;
       defaultText = "2283";
       description = "Port to use for Immich";
     };

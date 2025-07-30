@@ -19,6 +19,13 @@ in {
       description = "Root path for Jellyfin media and appdata (required)";
     };
 
+    port = mkOption {
+      type = types.int;
+      default = 8096;
+      defaultText = "8096";
+      description = "Port to use for Immich";
+    };
+
     pathOverride = {
       media = mkInheritedPathOption {
         parentName = "rootPath";
@@ -41,7 +48,7 @@ in {
     virtualisation.oci-containers.containers = {
       jellyfin = {
         image = "jellyfin/jellyfin:latest";
-        ports = [ "8096:8096" ];
+        ports = [ "8096:${cfg.port}" ];
         volumes = [
           #"${jellyfinRoot}/media:/media"
           "/mnt/films/:/media"
