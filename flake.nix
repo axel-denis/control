@@ -9,6 +9,10 @@
     in {
       nixosModules.default = { lib, ... }@args:
         let inherit (args) config pkgs;
-        in import ./modules { inherit lib config pkgs; };
+        in import [
+          ./modules/transmission.nix
+          ./modules/immich.nix
+          ./modules/jellyfin.nix
+        ] { inherit lib config pkgs; };
     };
 }
