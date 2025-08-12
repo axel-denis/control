@@ -6,7 +6,7 @@
     system = "x86_64-linux";
     pkgs = import nixpkgs { inherit system; };
   in {
-    nixosModules.default = [
+    modules = [
       ./modules/transmission.nix
       ./modules/immich.nix
       ./modules/jellyfin.nix
