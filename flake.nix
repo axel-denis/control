@@ -7,10 +7,11 @@
     pkgs = import nixpkgs { inherit system; };
   in {
     nixosModules = {
+      default = self.nixosModules;
       transmission = ./modules/transmission.nix;
       immich = ./modules/immich.nix;
       jellyfin = ./modules/jellyfin.nix;
     };
-    lib = import ./lib { inherit (pkgs) lib; };
+#    lib = import ./lib { inherit (pkgs) lib; };
   };
 }
