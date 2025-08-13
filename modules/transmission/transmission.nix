@@ -5,6 +5,8 @@ with lib;
 let cfg = config.myhomeserver.transmission;
 in {
   options.myhomeserver.transmission = {
+    enable = mkEnableOption "Enable Transmission";
+
     version = mkOption {
       type = types.string;
       default = "release";
