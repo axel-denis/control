@@ -7,7 +7,7 @@
     pkgs = import nixpkgs { inherit system; };
   in {
     nixosModules = {
-      default = self.nixosModules;
+      default = self.nixosModule;
       transmission = ./modules/transmission.nix;
       immich = ./modules/immich.nix;
       jellyfin = ./modules/jellyfin.nix;
