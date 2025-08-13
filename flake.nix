@@ -13,9 +13,9 @@
       in {
         # This module simply imports the other modules
         imports = [
-          ./modules/jellyfin
-          ./modules/immich
-          ./modules/transmission
+          ./modules/jellyfin/jellyfin.nix
+          ./modules/immich/immich.nix
+          ./modules/transmission/transmission.nix
         ];
 
         # If you need to pass your flake helpers into the submodules,
