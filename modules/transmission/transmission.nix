@@ -46,19 +46,18 @@ in {
     };
   };
 
-  virtualisation.oci-containers = {
-    backend = "docker";
-    containers.transmission = {
-      image = "haugene/transmission-openvpn:${cfg.version}";
-      extraOptions = [ "--cap-add=NET_ADMIN" ];
+  config = mkIf cfg.enable {
+    virtualisation.oci-containers.containers.transmission = {
+	  image = "haugene/transmission-openvpn:${cfg.version}";
+	  extraOptions = [ "--cap-add=NET_ADMIN" ];
 
-      volumes = [
-        "${cfg.pathOverride.download}:/data"
-        "${cfg.pathOverride.config}:/config"
-      ];
+	  volumes = [
+	    "${cfg.pathOverride.download}:/data"
+	    "${cfg.pathOverride.config}:/config"
+	  ];
 
-      environmentFiles = [ cfg.environmentFile ];
-      ports = [ "${cfg.port}:9091" ];
-    };
+	  environmentFiles = [ cfg.environmentFile ];
+	  ports = [ "${cfg.port}:9091" ];
+	};
   };
 }
