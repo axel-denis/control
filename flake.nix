@@ -1,18 +1,25 @@
 {
-  description = "Home Server Service Modules";
+  description = "Home Server Service Modules (aggregated)";
 
-  outputs = { self }: {
-  	jellyfin = {
-  	  path = "./jellyfin";
-  	  description = "jellyfin container";
-  	};
-  	immich = {
-  	  path = "./immich";
-  	  description = "immich container";
-  	};
-  	transmission = {
-  	  path = "./transmission";
-  	  description = "transmission container";
-  	};
+  outputs = { self, ... }:
+  let
+    system = "x86_64-linux";
+    #pkgs = import nixpkgs { inherit system; };
+    flakeLib = import ./lib; # { inherit (pkgs) lib; }; # your helpers
+  in {
+    nixosModules.default = { lib, ... }@args:
+      let
+        inherit (args) config pkgs;
+      in {
+        # This module simply imports the other modules
+        imports = [
+          ./modules/jellyfin
+          ./modules/immich
+          ./modules/transmission
+        ];
+
+        # If you need to pass your flake helpers into the submodules,
+        # have those submodules use `flakeLib` via import arguments (see below).
+      };
   };
 }
