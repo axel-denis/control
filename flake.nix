@@ -1,17 +1,18 @@
 {
   description = "Home Server Service Modules";
 
-  outputs = { self, nixpkgs, ... }:
-  let
-    system = "x86_64-linux";
-    pkgs = import nixpkgs { inherit system; };
-  in {
-    nixosModules = {
-      default = self.nixosModule;
-      transmission = ./modules/transmission.nix;
-      immich = ./modules/immich.nix;
-      jellyfin = ./modules/jellyfin.nix;
-    };
-#    lib = import ./lib { inherit (pkgs) lib; };
+  outputs = { self }: {
+  	jellyfin = {
+  	  path = "./jellyfin";
+  	  description = "jellyfin container";
+  	};
+  	immich = {
+  	  path = "./immich";
+  	  description = "immich container";
+  	};
+  	transmission = {
+  	  path = "./transmission";
+  	  description = "transmission container";
+  	};
   };
 }
