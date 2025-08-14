@@ -4,7 +4,7 @@
   outputs = { self, ... }:
     let
       system = "x86_64-linux";
-      lib = import ./lib { inherit inputs; };
+      lib = import ./lib;
     in {
       nixosModules.default = { lib, ... }@args:
         let inherit (args) config lib;
