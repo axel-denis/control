@@ -122,6 +122,9 @@ in {
       };
     };
 
-    systemd.services = mkDockerNetworkService { "immich-net" config };
+    systemd.services = mkDockerNetworkService {
+      networkName = "immich-net";
+      config = config;
+    };
   };
 }
