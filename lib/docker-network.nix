@@ -1,7 +1,7 @@
 { lib }:
 
 {
-  mkDockerNetworkService = networkName: config:
+  mkDockerNetworkService = { networkName, config }:
     let dockercli = "${config.virtualisation.docker.package}/bin/docker";
     in {
       "init-${networkName}-network" = {
