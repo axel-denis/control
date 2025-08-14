@@ -124,7 +124,7 @@ in {
 
     systemd.services = mkDockerNetworkService {
       networkName = "immich-net";
-      config = config;
+      dockerCli = "${config.virtualisation.docker.package}/bin/docker";
     };
   };
 }
