@@ -122,6 +122,6 @@ in {
       };
     };
 
-    systemd.services = lib.mkDockerNetworkService "immich-net" config;
+    systemd.services = mkDockerNetworkService { "immich-net" config };
   };
 }
