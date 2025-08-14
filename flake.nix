@@ -4,7 +4,7 @@
   outputs = { self, ... }:
   let
     system = "x86_64-linux";
-    flakeLib = import ./lib; # { inherit (pkgs) lib; }; # your helpers
+    flakeLib = import ./lib { inherit lib; };
   in {
     nixosModules.default = { lib, ... }@args:
       let
