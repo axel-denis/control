@@ -1,8 +1,10 @@
 { config, lib, ... }:
 
 with lib;
-rec {
-  options = rec {
+
+let cfg = config.myhomeserver.immich;
+in {
+  options = {
     enable = mkEnableOption "Enable Immich container";
 
     rootPath = mkOption {
@@ -35,37 +37,37 @@ rec {
     pathOverride = {
       database = mkInheritedPathOption {
         parentName = "rootPath";
-        parent = rootPath;
+        parent = cfg.rootPath;
         defaultSubpath = "db";
         description = "Path for Immich database.";
       };
 
       uploads = mkInheritedPathOption {
         parentName = "rootPath";
-        parent = rootPath;
+        parent = cfg.rootPath;
         defaultSubpath = "pictures";
         description = "Path for Immich uploads (pictures).";
       };
 
       machineLearning = mkInheritedPathOption {
         parentName = "rootPath";
-        parent = rootPath;
+        parent = cfg.rootPath;
         defaultSubpath = "machine_learning";
         description = "Path for Immich appdata (machine learning model cache).";
       };
     };
   };
 
-  config = mkIf options.enable {
+  config = mkIf cfg.enable {
 
     # REVIEW - maybe not useful as unset paths without defaults should crash ?
     assertions = [
       {
-        assertion = options.rootPath != "";
+        assertion = cfg.rootPath != "";
         message = "You must specify myhomeserver.immich.rootPath";
       }
       {
-        assertion = options.dbPasswordFile != "";
+        assertion = cfg.dbPasswordFile != "";
         message = "You must specify myhomeserver.immich.dbPasswordFile";
       }
     ];
@@ -76,14 +78,14 @@ rec {
     # Define Docker containers for Immich
     virtualisation.oci-containers.containers = {
       immich = {
-        image = "ghcr.io/immich-app/immich-server:${options.immichVersion}";
-        ports = [ "${options.port}:2283" ];
+        image = "ghcr.io/immich-app/immich-server:${cfg.immichVersion}";
+        ports = [ "${cfg.port}:2283" ];
         environment = {
-          IMMICH_VERSION = options.immichVersion;
+          IMMICH_VERSION = cfg.immichVersion;
           DB_HOSTNAME = "immich_postgres";
           DB_USERNAME = "immich";
           DB_DATABASE_NAME = "immich";
-          DB_PASSWORD = builtins.readFile options.dbPasswordFile;
+          DB_PASSWORD = builtins.readFile cfg.dbPasswordFile;
           REDIS_HOSTNAME = "immich_redis";
         };
         volumes = [
@@ -95,9 +97,9 @@ rec {
 
       immich_machine_learning = {
         image =
-          "ghcr.io/immich-app/immich-machine-learning:${options.immichVersion}";
-        environment = { IMMICH_VERSION = options.immichVersion; };
-        volumes = [ "${options.machineLearning}/model-cache:/cache" ];
+          "ghcr.io/immich-app/immich-machine-learning:${cfg.immichVersion}";
+        environment = { IMMICH_VERSION = cfg.immichVersion; };
+        volumes = [ "${cfg.machineLearning}/model-cache:/cache" ];
         extraOptions = [ "--network=immich-net" ];
       };
 
@@ -111,11 +113,11 @@ rec {
         image =
           "tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0";
         environment = {
-          POSTGRES_PASSWORD = builtins.readFile options.dbPasswordFile;
+          POSTGRES_PASSWORD = builtins.readFile cfg.dbPasswordFile;
           POSTGRES_USER = "immich";
           POSTGRES_DB = "immich";
         };
-        volumes = [ "${options.pathOverride.database}:/var/lib/postgresql/data" ];
+        volumes = [ "${cfg.pathOverride.database}:/var/lib/postgresql/data" ];
         extraOptions = [ "--network=immich-net" ];
       };
     };

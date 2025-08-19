@@ -10,9 +10,9 @@
         let inherit (args) config lib;
         in {
           imports = [
-            ./modules/jellyfin/jellyfin.nix
+            # ./modules/jellyfin/jellyfin.nix
             ./modules/immich/immich.nix
-            ./modules/transmission/transmission.nix
+            # ./modules/transmission/transmission.nix
           ];
         };
     };
