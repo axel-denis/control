@@ -12,12 +12,11 @@ in {
       description = "Root path for Immich data (required)";
     };
 
-    dbPasswordFile = mkOption {
-      type = types.path;
+    dbPassword = mkOption {
+      type = types.string;
       description = ''
-        Path to a file containing the Postgres password for Immich.
+        Postgres password for Immich.
       '';
-      example = "/run/secrets/immich-db-password";
     };
 
     version = mkOption {
@@ -67,8 +66,8 @@ in {
     #     message = "You must specify myhomeserver.immich.rootPath";
     #   }
     #   {
-    #     assertion = cfg.dbPasswordFile != "";
-    #     message = "You must specify myhomeserver.immich.dbPasswordFile";
+    #     assertion = cfg.dbPassword != "";
+    #     message = "You must specify myhomeserver.immich.dbPassword";
     #   }
     # ];
 
@@ -85,7 +84,7 @@ in {
           DB_HOSTNAME = "immich_postgres";
           DB_USERNAME = "immich";
           DB_DATABASE_NAME = "immich";
-          DB_PASSWORD = builtins.readFile cfg.dbPasswordFile;
+          DB_PASSWORD = cfg.dbPassword;
           REDIS_HOSTNAME = "immich_redis";
         };
         volumes = [
@@ -113,7 +112,7 @@ in {
         image =
           "tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0";
         environment = {
-          POSTGRES_PASSWORD = builtins.readFile cfg.dbPasswordFile;
+          POSTGRES_PASSWORD = cfg.dbPassword;
           POSTGRES_USER = "immich";
           POSTGRES_DB = "immich";
         };
