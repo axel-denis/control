@@ -98,7 +98,7 @@ in {
         image =
           "ghcr.io/immich-app/immich-machine-learning:${toString cfg.version}";
         environment = { IMMICH_VERSION = toString cfg.version; };
-        volumes = [ "${cfg.machineLearning}/model-cache:/cache" ];
+        volumes = [ "${cfg.pathOverride.machineLearning}/model-cache:/cache" ];
         extraOptions = [ "--network=immich-net" ];
       };
 
