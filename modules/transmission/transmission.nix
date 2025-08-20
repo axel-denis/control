@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, helpers, lib, ... }:
 
 with lib;
 
@@ -9,8 +9,8 @@ in {
 
     version = mkOption {
       type = types.string;
-      default = "release";
-      defaultText = "release";
+      default = "latest";
+      defaultText = "latest";
       description = "Version name to use for Transmission images";
     };
 
@@ -20,14 +20,14 @@ in {
     };
 
     pathOverride = {
-      download = mkInheritedPathOption {
+      download = helpers.mkInheritedPathOption {
         parentName = "rootPath";
         parent = cfg.rootPath;
         defaultSubpath = "downloads";
         description = "Path for Transmission downloads.";
       };
 
-      config = mkInheritedPathOption {
+      config = helpers.mkInheritedPathOption {
         parentName = "rootPath";
         parent = cfg.rootPath;
         defaultSubpath = "config";
@@ -49,17 +49,20 @@ in {
   };
 
   config = mkIf cfg.enable {
+    virtualisation.docker.enable = true;
+    virtualisation.oci-containers.backend = "docker";
+
     virtualisation.oci-containers.containers.transmission = {
-	  image = "haugene/transmission-openvpn:${cfg.version}";
-	  extraOptions = [ "--cap-add=NET_ADMIN" ];
+      image = "haugene/transmission-openvpn:${cfg.version}";
+      extraOptions = [ "--cap-add=NET_ADMIN" ];
 
-	  volumes = [
-	    "${cfg.pathOverride.download}:/data"
-	    "${cfg.pathOverride.config}:/config"
-	  ];
+      volumes = [
+        "${cfg.pathOverride.download}:/data"
+        "${cfg.pathOverride.config}:/config"
+      ];
 
-	  environmentFiles = [ cfg.environmentFile ];
-	  ports = [ "${cfg.port}:9091" ];
-	};
+      environmentFiles = [ cfg.environmentFile ];
+      ports = [ "${toString cfg.port}:9091" ];
+    };
   };
 }
