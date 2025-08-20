@@ -26,14 +26,14 @@ in {
     };
 
     pathOverride = {
-      media = mkInheritedPathOption {
+      media = helpers.mkInheritedPathOption {
         parentName = "rootPath";
         parent = cfg.rootPath;
         defaultSubpath = "media";
         description = "Path for Jellyfin media (movies).";
       };
 
-      config = mkInheritedPathOption {
+      config = helpers.mkInheritedPathOption {
         parentName = "rootPath";
         parent = cfg.rootPath;
         defaultSubpath = "config";
