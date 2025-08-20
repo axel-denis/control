@@ -1,7 +1,6 @@
 { config, helpers, lib, ... }:
 
 with lib;
-
 let
   cfg = config.myhomeserver.immich; # (gets the config values the user has set)
 in {
