@@ -1,4 +1,6 @@
-{ config, helpers, ... }:
+{ config, helpers, lib, ... }:
+
+with lib;
 
 let cfg = config.myhomeserver.immich; # gets the config values the user has set
 in {
@@ -56,7 +58,7 @@ in {
     };
   };
 
-  config.myhomeserver.immich = mkIf cfg.enable {
+  config = mkIf cfg.enable {
 
     # REVIEW - maybe not useful as unset paths without defaults should crash ?
     # assertions = [
