@@ -20,14 +20,14 @@ in {
     };
 
     pathOverride = {
-      download = mkInheritedPathOption {
+      download = helpers.mkInheritedPathOption {
         parentName = "rootPath";
         parent = cfg.rootPath;
         defaultSubpath = "downloads";
         description = "Path for Transmission downloads.";
       };
 
-      config = mkInheritedPathOption {
+      config = helpers.mkInheritedPathOption {
         parentName = "rootPath";
         parent = cfg.rootPath;
         defaultSubpath = "config";
