@@ -1,7 +1,6 @@
-{ config, lib, ... }:
+{ config, helpers, lib, ... }:
 
 with lib;
-
 let cfg = config.myhomeserver.jellyfin;
 in {
   options.myhomeserver.jellyfin = {
@@ -9,8 +8,8 @@ in {
 
     version = mkOption {
       type = types.string;
-      default = "release";
-      defaultText = "release";
+      default = "latest";
+      defaultText = "latest";
       description = "Version name to use for Jellyfin images";
     };
 
@@ -27,14 +26,14 @@ in {
     };
 
     pathOverride = {
-      media = mkInheritedPathOption {
+      media = helpers.mkInheritedPathOption {
         parentName = "rootPath";
         parent = cfg.rootPath;
         defaultSubpath = "media";
         description = "Path for Jellyfin media (movies).";
       };
 
-      config = mkInheritedPathOption {
+      config = helpers.mkInheritedPathOption {
         parentName = "rootPath";
         parent = cfg.rootPath;
         defaultSubpath = "config";
@@ -45,14 +44,16 @@ in {
 
   config = mkIf cfg.enable {
     virtualisation.docker.enable = true;
+    virtualisation.oci-containers.backend = "docker";
+
     virtualisation.oci-containers.containers = {
       jellyfin = {
-        image = "jellyfin/jellyfin:latest";
-        ports = [ "${cfg.port}:8096" ];
+        image = "jellyfin/jellyfin:${cfg.version}";
+        ports = [ "${toString cfg.port}:8096" ];
         volumes = [
           #"${jellyfinRoot}/media:/media"
-          "/mnt/films/:/media"
-          "${jellyfinRoot}/config:/config"
+          "${cfg.pathOverride.media}:/media"
+          "${cfg.pathOverride.config}:/config"
         ];
       };
     };
