@@ -7,7 +7,7 @@
     let
       system = "x86_64-linux";
       lib = nixpkgs.lib;
-      helpers = import ./helpers { inherit helpers; };
+      helpers = import ./helpers { inherit lib; };
 
       mkModule = path:
         { ... }@args:
