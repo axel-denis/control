@@ -88,7 +88,7 @@ in {
           REDIS_HOSTNAME = "immich_redis";
         };
         volumes = [
-          "${immichPhotos}:/usr/src/app/upload"
+          "${cfg.uploads}:/usr/src/app/upload"
           "/etc/localtime:/etc/localtime:ro"
         ];
         extraOptions = [ "--network=immich-net" ];
