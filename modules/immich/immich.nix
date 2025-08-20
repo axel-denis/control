@@ -2,7 +2,8 @@
 
 with lib;
 
-let cfg = config.myhomeserver.immich; # gets the config values the user has set
+let
+  cfg = config.myhomeserver.immich; # (gets the config values the user has set)
 in {
   options.myhomeserver.immich = {
     enable = mkEnableOption "Enable Immich container";
@@ -59,22 +60,9 @@ in {
 
   config = mkIf cfg.enable {
 
-    # REVIEW - maybe not useful as unset paths without defaults should crash ?
-    # assertions = [
-    #   {
-    #     assertion = cfg.rootPath != "";
-    #     message = "You must specify myhomeserver.immich.rootPath";
-    #   }
-    #   {
-    #     assertion = cfg.dbPassword != "";
-    #     message = "You must specify myhomeserver.immich.dbPassword";
-    #   }
-    # ];
-
-    # Enable Docker
     virtualisation.docker.enable = true;
+    virtualisation.oci-containers.backend = "docker";
 
-    # Define Docker containers for Immich
     virtualisation.oci-containers.containers = {
       immich = {
         image = "ghcr.io/immich-app/immich-server:${toString cfg.version}";
