@@ -35,21 +35,21 @@ in {
     };
 
     pathOverride = {
-      database = mkInheritedPathOption {
+      database = lib.mkInheritedPathOption {
         parentName = "rootPath";
         parent = cfg.rootPath;
         defaultSubpath = "db";
         description = "Path for Immich database.";
       };
 
-      uploads = mkInheritedPathOption {
+      uploads = lib.mkInheritedPathOption {
         parentName = "rootPath";
         parent = cfg.rootPath;
         defaultSubpath = "pictures";
         description = "Path for Immich uploads (pictures).";
       };
 
-      machineLearning = mkInheritedPathOption {
+      machineLearning = lib.mkInheritedPathOption {
         parentName = "rootPath";
         parent = cfg.rootPath;
         defaultSubpath = "machine_learning";
