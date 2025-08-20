@@ -10,7 +10,7 @@
       helpers = import ./lib;
     in {
       nixosModules.default = { ... }@args:
-        let inherit (args) config helpers lib;
+        let inherit (args) config;
         in {
           imports = [
             # ./modules/jellyfin/jellyfin.nix
