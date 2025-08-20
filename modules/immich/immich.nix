@@ -77,10 +77,10 @@ in {
     # Define Docker containers for Immich
     virtualisation.oci-containers.containers = {
       immich = {
-        image = "ghcr.io/immich-app/immich-server:${cfg.immichVersion}";
+        image = "ghcr.io/immich-app/immich-server:${cfg.version}";
         ports = [ "${cfg.port}:2283" ];
         environment = {
-          IMMICH_VERSION = cfg.immichVersion;
+          IMMICH_VERSION = cfg.version;
           DB_HOSTNAME = "immich_postgres";
           DB_USERNAME = "immich";
           DB_DATABASE_NAME = "immich";
@@ -95,9 +95,8 @@ in {
       };
 
       immich_machine_learning = {
-        image =
-          "ghcr.io/immich-app/immich-machine-learning:${cfg.immichVersion}";
-        environment = { IMMICH_VERSION = cfg.immichVersion; };
+        image = "ghcr.io/immich-app/immich-machine-learning:${cfg.version}";
+        environment = { IMMICH_VERSION = cfg.version; };
         volumes = [ "${cfg.machineLearning}/model-cache:/cache" ];
         extraOptions = [ "--network=immich-net" ];
       };
