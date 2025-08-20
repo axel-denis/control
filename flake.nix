@@ -21,8 +21,8 @@
         default = { ... }: {
           imports = [
             self.nixosModules.immich
-            self.nixosModules.jellyfin
-            self.nixosModules.transmission
+            # self.nixosModules.jellyfin
+            # self.nixosModules.transmission
           ];
         };
       };
