@@ -14,7 +14,7 @@
         import path (args // { inherit helpers lib; });
     in {
       nixosModules = {
-        immich = mkModule ./modules/immich/immich.nix;
+        immich = mkModule ./modules/immich.nix;
         # jellyfin = mkModule ./modules/jellyfin/jellyfin.nix;
         # transmission = mkModule ./modules/transmission/transmission.nix;
 
