@@ -3,20 +3,28 @@
 
   inputs = { nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05"; };
 
-  outputs = { self, ... }:
+  outputs = { self, nixpkgs, ... }:
     let
       system = "x86_64-linux";
-      lib = self.inputs.nixpkgs.lib;
-      helpers = import ./lib;
+      lib = nixpkgs.lib;
+      helpers = import ./helpers;
+
+      mkModule = path:
+        { ... }@args:
+        import path (args // { inherit helpers lib; });
     in {
-      nixosModules.default = { ... }@args:
-        let inherit (args) config;
-        in {
+      nixosModules = {
+        immich = mkModule ./modules/immich/immich.nix;
+        # jellyfin = mkModule ./modules/jellyfin/jellyfin.nix;
+        # transmission = mkModule ./modules/transmission/transmission.nix;
+
+        default = { ... }: {
           imports = [
-            # ./modules/jellyfin/jellyfin.nix
-            ./modules/immich/immich.nix
-            # ./modules/transmission/transmission.nix
+            self.nixosModules.immich
+            self.nixosModules.jellyfin
+            self.nixosModules.transmission
           ];
         };
+      };
     };
 }
