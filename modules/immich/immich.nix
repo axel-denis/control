@@ -1,6 +1,4 @@
-{ config, lib, ... }:
-
-with lib;
+{ config, helpers, ... }:
 
 let cfg = config.myhomeserver.immich; # gets the config values the user has set
 in {
@@ -35,21 +33,21 @@ in {
     };
 
     pathOverride = {
-      database = lib.mkInheritedPathOption {
+      database = helpers.mkInheritedPathOption {
         parentName = "rootPath";
         parent = cfg.rootPath;
         defaultSubpath = "db";
         description = "Path for Immich database.";
       };
 
-      uploads = lib.mkInheritedPathOption {
+      uploads = helpers.mkInheritedPathOption {
         parentName = "rootPath";
         parent = cfg.rootPath;
         defaultSubpath = "pictures";
         description = "Path for Immich uploads (pictures).";
       };
 
-      machineLearning = lib.mkInheritedPathOption {
+      machineLearning = helpers.mkInheritedPathOption {
         parentName = "rootPath";
         parent = cfg.rootPath;
         defaultSubpath = "machine_learning";

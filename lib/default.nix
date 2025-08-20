@@ -1,7 +1,4 @@
-{ ... }@inputs:
-
-inputs.nixpkgs.lib.extend (final: prev: {
-
+{
   mkDockerNetworkService = { networkName, dockerCli }: {
     "init-${networkName}-network" = {
       description = "Create Docker network bridge: ${networkName}";
@@ -35,4 +32,4 @@ inputs.nixpkgs.lib.extend (final: prev: {
       description =
         ''${parentName} (default to ${parentName} + "/${defaultSubpath}")'';
     };
-})
+}

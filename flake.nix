@@ -1,15 +1,13 @@
 {
   description = "Home Server Service Modules (aggregated)";
 
-  inputs = { nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05"; };
-
   outputs = { self, ... }:
     let
       system = "x86_64-linux";
-      lib = import ./lib { inherit inputs; };
+      helpers = import ./lib;
     in {
       nixosModules.default = { ... }@args:
-        let inherit (args) config lib;
+        let inherit (args) config helpers;
         in {
           imports = [
             # ./modules/jellyfin/jellyfin.nix
