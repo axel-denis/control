@@ -56,7 +56,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config.myhomeserver.immich = mkIf cfg.enable {
 
     # REVIEW - maybe not useful as unset paths without defaults should crash ?
     # assertions = [
