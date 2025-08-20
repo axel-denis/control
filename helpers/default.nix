@@ -1,3 +1,5 @@
+{ lib, ... }:
+
 {
   mkDockerNetworkService = { networkName, dockerCli }: {
     "init-${networkName}-network" = {
