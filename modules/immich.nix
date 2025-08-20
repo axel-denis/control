@@ -64,7 +64,7 @@ in {
 
     virtualisation.oci-containers.containers = {
       immich = {
-        image = "ghcr.io/immich-app/immich-server:${toString cfg.version}";
+        image = "ghcr.io/immich-app/immich-server:${cfg.version}";
         ports = [ "${toString cfg.port}:2283" ];
         environment = {
           IMMICH_VERSION = toString cfg.version;

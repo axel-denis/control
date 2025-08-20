@@ -15,13 +15,13 @@
     in {
       nixosModules = {
         immich = mkModule ./modules/immich.nix;
-        # jellyfin = mkModule ./modules/jellyfin/jellyfin.nix;
+        jellyfin = mkModule ./modules/jellyfin.nix;
         # transmission = mkModule ./modules/transmission/transmission.nix;
 
         default = { ... }: {
           imports = [
             self.nixosModules.immich
-            # self.nixosModules.jellyfin
+            self.nixosModules.jellyfin
             # self.nixosModules.transmission
           ];
         };
