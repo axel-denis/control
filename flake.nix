@@ -6,7 +6,7 @@
   outputs = { self, ... }:
     let
       system = "x86_64-linux";
-      lib = nixpkgs.lib;
+      lib = self.inputs.nixpkgs.lib;
       helpers = import ./lib;
     in {
       nixosModules.default = { ... }@args:
