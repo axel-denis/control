@@ -122,7 +122,7 @@ in {
       };
     };
 
-    systemd.services = mkDockerNetworkService {
+    systemd.services = helpers.mkDockerNetworkService {
       networkName = "immich-net";
       dockerCli = "${config.virtualisation.docker.package}/bin/docker";
     };
