@@ -1,14 +1,30 @@
 {
-  description = "Home Server Service Modules";
+  description = "Home Server Service Modules (aggregated)";
+
+  inputs = { nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05"; };
 
   outputs = { self, nixpkgs, ... }:
     let
       system = "x86_64-linux";
-      pkgs = import nixpkgs { inherit system; };
-      lib = import ./lib { inherit (pkgs) lib; };
+      lib = nixpkgs.lib;
+      helpers = import ./helpers { inherit lib; };
+
+      mkModule = path:
+        { ... }@args:
+        import path (args // { inherit helpers lib; });
     in {
-      nixosModules.default = { lib, ... }@args:
-        let inherit (args) config pkgs;
-        in import ./modules { inherit lib config pkgs; };
+      nixosModules = {
+        immich = mkModule ./modules/immich/immich.nix;
+        # jellyfin = mkModule ./modules/jellyfin/jellyfin.nix;
+        # transmission = mkModule ./modules/transmission/transmission.nix;
+
+        default = { ... }: {
+          imports = [
+            self.nixosModules.immich
+            # self.nixosModules.jellyfin
+            # self.nixosModules.transmission
+          ];
+        };
+      };
     };
 }
