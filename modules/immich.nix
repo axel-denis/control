@@ -1,10 +1,9 @@
 { config, helpers, lib, ... }:
 
 with lib;
-let
-  cfg = config.myhomeserver.immich; # (gets the config values the user has set)
+let cfg = config.homeserver.immich; # (gets the config values the user has set)
 in {
-  options.myhomeserver.immich = {
+  options.homeserver.immich = {
     enable = mkEnableOption "Enable Immich container";
 
     rootPath = mkOption {

@@ -2,9 +2,9 @@
 
 with lib;
 
-let cfg = config.myhomeserver.transmission;
+let cfg = config.homeserver.transmission;
 in {
-  options.myhomeserver.transmission = {
+  options.homeserver.transmission = {
     enable = mkEnableOption "Enable Transmission";
 
     version = mkOption {

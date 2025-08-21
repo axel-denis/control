@@ -1,9 +1,9 @@
 { config, helpers, lib, ... }:
 
 with lib;
-let cfg = config.myhomeserver.jellyfin;
+let cfg = config.homeserver.jellyfin;
 in {
-  options.myhomeserver.jellyfin = {
+  options.homeserver.jellyfin = {
     enable = mkEnableOption "Enable Jellyfin";
 
     version = mkOption {
