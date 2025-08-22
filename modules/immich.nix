@@ -98,7 +98,7 @@ in {
         image =
           "tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0";
         environment = {
-          POSTGRES_PASSWORD = cfg.dbPassword;
+          POSTGRES_PASSWORD = readFile cfg.dbPasswordFile;
           POSTGRES_USER = "immich";
           POSTGRES_DB = "immich";
         };
