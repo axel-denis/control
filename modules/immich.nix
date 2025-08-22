@@ -11,6 +11,14 @@ in {
       description = "Root path for Immich data (required)";
     };
 
+    dbPasswordFile = mkOption {
+      type = types.path;
+      description = ''
+        Postgres password file for Immich.
+      '';
+    };
+
+    # for security purposes, please use dbPasswordFile
     dbPassword = mkOption {
       type = types.string;
       description = ''
@@ -70,7 +78,10 @@ in {
           DB_HOSTNAME = "immich_postgres";
           DB_USERNAME = "immich";
           DB_DATABASE_NAME = "immich";
-          DB_PASSWORD = cfg.dbPassword;
+          DB_PASSWORD = if cfg.dbPasswordFile != null then
+            builtins.readFile cfg.dbPasswordFile
+          else
+            cfg.dbPassword;
           REDIS_HOSTNAME = "immich_redis";
         };
         volumes = [
