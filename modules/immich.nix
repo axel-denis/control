@@ -18,14 +18,6 @@ in {
       '';
     };
 
-    # for security purposes, please use dbPasswordFile
-    dbPassword = mkOption {
-      type = types.string;
-      description = ''
-        Postgres password for Immich.
-      '';
-    };
-
     version = mkOption {
       type = types.string;
       default = "release";
@@ -78,10 +70,7 @@ in {
           DB_HOSTNAME = "immich_postgres";
           DB_USERNAME = "immich";
           DB_DATABASE_NAME = "immich";
-          DB_PASSWORD = if cfg.dbPasswordFile != null then
-            builtins.readFile cfg.dbPasswordFile
-          else
-            cfg.dbPassword;
+          DB_PASSWORD = readFile cfg.dbPasswordFile;
           REDIS_HOSTNAME = "immich_redis";
         };
         volumes = [
