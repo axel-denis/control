@@ -70,12 +70,13 @@ in {
           DB_HOSTNAME = "immich_postgres";
           DB_USERNAME = "immich";
           DB_DATABASE_NAME = "immich";
-          DB_PASSWORD = readFile cfg.dbPasswordFile;
+          DB_PASSWORD_FILE = "/run/secrets/immich-db-password";
           REDIS_HOSTNAME = "immich_redis";
         };
         volumes = [
           "${cfg.pathOverride.uploads}:/usr/src/app/upload"
           "/etc/localtime:/etc/localtime:ro"
+          "${cfg.dbPasswordFile}:/run/secrets/immich-db-password:ro"
         ];
         extraOptions = [ "--network=immich-net" ];
       };
@@ -98,11 +99,14 @@ in {
         image =
           "tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0";
         environment = {
-          POSTGRES_PASSWORD = readFile cfg.dbPasswordFile;
+          POSTGRES_PASSWORD_FILE = "/run/secrets/immich-db-password";
           POSTGRES_USER = "immich";
           POSTGRES_DB = "immich";
         };
-        volumes = [ "${cfg.pathOverride.database}:/var/lib/postgresql/data" ];
+        volumes = [
+          "${cfg.pathOverride.database}:/var/lib/postgresql/data"
+          "${cfg.dbPasswordFile}:/run/secrets/immich-db-password:ro"
+        ];
         extraOptions = [ "--network=immich-net" ];
       };
     };
