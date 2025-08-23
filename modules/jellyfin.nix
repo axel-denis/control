@@ -22,7 +22,7 @@ in {
       type = types.int;
       default = 8096;
       defaultText = "8096";
-      description = "Port to use for Immich";
+      description = "Port to use for Jellyfin";
     };
 
     pathOverride = {
