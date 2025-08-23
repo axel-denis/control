@@ -36,7 +36,6 @@ in {
       openspeedtest = {
         image = "openspeedtest/${cfg.version}";
         ports = [ "${toString cfg.httpPort}:3000" "${cfg.httpsPort}:3001" ];
-        restartPolicy = "unless-stopped";
       };
     };
   };
