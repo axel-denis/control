@@ -16,7 +16,7 @@
       nixosModules = {
         immich = mkModule ./modules/immich.nix;
         jellyfin = mkModule ./modules/jellyfin.nix;
-        transmission = mkModule ./modules/transmission/transmission.nix;
+        transmission = mkModule ./modules/transmission.nix;
 
         default = { ... }: {
           imports = [
