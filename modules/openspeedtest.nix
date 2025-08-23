@@ -35,6 +35,14 @@ in {
     virtualisation.oci-containers.containers = {
       openspeedtest = {
         image = "openspeedtest/${cfg.version}";
+        labels = {
+          "traefik.enable" = "true";
+          "traefik.http.routers.openspeedtest.rule" = "Host(`192.168.1.128`)";
+          "traefik.http.routers.openspeedtest.entrypoints" = "web";
+          "traefik.http.middlewares.limit.buffering.maxRequestBodyBytes" =
+            "10000000000";
+          "traefik.http.routers.openspeedtest.middlewares" = "limit";
+        };
         ports =
           [ "${toString cfg.httpPort}:3000" "${toString cfg.httpsPort}:3001" ];
       };
