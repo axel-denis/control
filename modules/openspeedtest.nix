@@ -35,7 +35,8 @@ in {
     virtualisation.oci-containers.containers = {
       openspeedtest = {
         image = "openspeedtest/${cfg.version}";
-        ports = [ "${toString cfg.httpPort}:3000" "${cfg.httpsPort}:3001" ];
+        ports =
+          [ "${toString cfg.httpPort}:3000" "${toString cfg.httpsPort}:3001" ];
       };
     };
   };
