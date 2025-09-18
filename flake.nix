@@ -9,20 +9,26 @@
       lib = nixpkgs.lib;
       helpers = import ./helpers { inherit lib; };
 
+      pkgs = import nixpkgs {
+        inherit system;
+      };
+
       mkModule = path:
         { ... }@args:
-        import path (args // { inherit helpers lib; });
+        import path (args // { inherit helpers lib pkgs; });
     in {
       nixosModules = {
         immich = mkModule ./modules/immich.nix;
         jellyfin = mkModule ./modules/jellyfin.nix;
         transmission = mkModule ./modules/transmission.nix;
+        terminal = mkModule ./modules/terminal.nix;
 
         default = { ... }: {
           imports = [
             self.nixosModules.immich
             self.nixosModules.jellyfin
             self.nixosModules.transmission
+            self.nixosModules.terminal
           ];
         };
       };
