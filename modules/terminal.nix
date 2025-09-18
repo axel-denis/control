@@ -3,7 +3,7 @@
 with lib;
 let cfg = config.homeserver.terminal;
 in {
-  options.homeserver.jellyfin = {
+  options.homeserver.terminal = {
     enableOhMyZsh = mkEnableOption "Enable and activate Zsh";
 
     ohMyZshTheme = mkOption {
@@ -13,7 +13,7 @@ in {
       description = "Theme for oh-my-zsh";
     };
 
-    enableNeofetchGreet = mkEnableOption "Enable neofetch at the terminal startup";
+    enableNeofetchGreet = mkEnableOption "Enable neofetch at the terminal startup (if zsh is enabled)";
   };
 
   config = {
