@@ -11,7 +11,7 @@
 
       mkModule = path:
         { ... }@args:
-        import path (args // { inherit helpers lib; });
+        import path (args // { inherit helpers lib nixpkgs; });
     in {
       nixosModules = {
         immich = mkModule ./modules/immich.nix;
