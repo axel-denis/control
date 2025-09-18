@@ -16,19 +16,19 @@ in {
     enableNeofetchGreet = mkEnableOption "Enable neofetch at the terminal startup (if zsh is enabled)";
   };
 
-  config = {
-    mkIf cfg.enableOhMyZsh {
+  config = mkMerge [
+    (mkIf cfg.enableOhMyZsh {
       programs.zsh.enable = true;
       users.defaultUserShell = pkgs.zsh;
       programs.zsh.ohMyZsh = {
         enable = true;
         theme = cfg.ohMyZshTheme;
       };
-    };
-    mkIf cfg.enableNeofetchGreet {
+    })
+    (mkIf cfg.enableNeofetchGreet {
       environment.etc."zprofile".text = ''
         neofetch
       '';
-    };
-  };
+    })
+  ];
 }
