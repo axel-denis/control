@@ -1,4 +1,4 @@
-{ config, helpers, lib, nixpkgs ... }:
+{ config, helpers, lib, nixpkgs, ... }:
 
 with lib;
 let cfg = config.homeserver.terminal;
