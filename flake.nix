@@ -9,9 +9,13 @@
       lib = nixpkgs.lib;
       helpers = import ./helpers { inherit lib; };
 
+      pkgs = import nixpkgs {
+        inherit system;
+      };
+
       mkModule = path:
         { ... }@args:
-        import path (args // { inherit helpers lib nixpkgs; });
+        import path (args // { inherit helpers lib pkgs; });
     in {
       nixosModules = {
         immich = mkModule ./modules/immich.nix;

@@ -1,4 +1,4 @@
-{ config, helpers, lib, nixpkgs, ... }:
+{ config, helpers, lib, pkgs, ... }:
 
 with lib;
 let cfg = config.homeserver.terminal;
@@ -19,7 +19,7 @@ in {
   config = mkMerge [
     (mkIf cfg.enableOhMyZsh {
       programs.zsh.enable = true;
-      users.defaultUserShell = nixpkgs.zsh;
+      users.defaultUserShell = pkgs.zsh;
       programs.zsh.ohMyZsh = {
         enable = true;
         theme = cfg.ohMyZshTheme;
