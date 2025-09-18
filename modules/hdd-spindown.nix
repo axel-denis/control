@@ -11,6 +11,7 @@ in {
       default = 60;
       defaultText = "60";
       description = "Timeout in seconds before spinning down idle HDDs";
+    };
   };
 
   config = mkIf cfg.enable {
