@@ -1,9 +1,9 @@
 { config, helpers, lib, pkgs, ... }:
 
 with lib;
-let cfg = config.homeserver.hddspindown;
+let cfg = config.homeserver.hdd-spindown;
 in {
-  options.homeserver.hddspindown = {
+  options.homeserver.hdd-spindown = {
     enable = mkEnableOption "Enable HDD spindown";
 
     timeoutSeconds = mkOption {
@@ -24,7 +24,7 @@ in {
         ''SUBSYSTEM=="block"''
         ''KERNEL=="sd[a-z]"''
         ''ATTR{queue/rotational}=="1"''
-        ''RUN+="${pkgs.hdparm}/bin/hdparm -B 90 -S ${cfg.timeoutSeconds / 5} /dev/%k"''
+        ''RUN+="${pkgs.hdparm}/bin/hdparm -B 90 -S ${toString (cfg.timeoutSeconds / 5)} /dev/%k"''
       ])]);
   };
 }

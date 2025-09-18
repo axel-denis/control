@@ -22,7 +22,7 @@
         jellyfin = mkModule ./modules/jellyfin.nix;
         transmission = mkModule ./modules/transmission.nix;
         terminal = mkModule ./modules/terminal.nix;
-        hddspindown = mkModule ./modules/hddspindown.nix;
+        hdd-spindown = mkModule ./modules/hdd-spindown.nix;
 
         default = { ... }: {
           imports = [
@@ -30,7 +30,7 @@
             self.nixosModules.jellyfin
             self.nixosModules.transmission
             self.nixosModules.terminal
-            self.nixosModules.hddspindown
+            self.nixosModules.hdd-spindown
           ];
         };
       };
