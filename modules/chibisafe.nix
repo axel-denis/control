@@ -4,7 +4,7 @@ with lib;
 let
   cfg = config.homeserver.chibisafe;
   Caddyfile = pkgs.writeText "Caddyfile" ''
-    {:80} {
+    {$BASE_URL} {
       route {
         file_server * {
             root /app/uploads
@@ -72,21 +72,21 @@ in {
         parentName = "rootPath";
         parent = cfg.rootPath;
         defaultSubpath = "media";
-        description = "Path for chibisafe media (movies).";
+        description = "Path for chibisafe database.";
       };
 
       uploads = helpers.mkInheritedPathOption {
         parentName = "rootPath";
         parent = cfg.rootPath;
         defaultSubpath = "config";
-        description = "Path for chibisafe appdata (config).";
+        description = "Path for chibisafe uploads.";
       };
 
       logs = helpers.mkInheritedPathOption {
         parentName = "rootPath";
         parent = cfg.rootPath;
         defaultSubpath = "config";
-        description = "Path for chibisafe appdata (config).";
+        description = "Path for chibisafe logs.";
       };
     };
   };
@@ -100,7 +100,7 @@ in {
         image = "chibisafe/chibisafe:${cfg.version}";
         ports = [ "${toString cfg.port}:8001" ];
         environment = {
-          BASE_API_URL = "http://chibisafe_server:${toString cfg.server-port}";
+          BASE_API_URL = "http://chibisafe_server:${toString 8097}";
         };
       };
 
