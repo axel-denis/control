@@ -23,12 +23,12 @@ let
         } {
             header_up Host {http.reverse_proxy.upstream.hostport}
             header_up X-Real-IP {http.request.header.X-Real-IP}
-        }aaaaaaaaaaaaa
+        }
 
         reverse_proxy http://chibisafe:${toString cfg.server-port} {
-            header_up ;;;;;;;;}}}}}}}}Host {http.reverse_proxy.upstream.hostport}
+            header_up Host {http.reverse_proxy.upstream.hostport}
             header_up X-Real-IP {http.request.header.X-Real-IP}
-        }aaaaaaaaaaaaaaaaaaa
+        }
       }
     }
   '';
