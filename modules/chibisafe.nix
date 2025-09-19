@@ -12,20 +12,20 @@ let
         }
 
         @api path /api/*
-        reverse_proxy @api http://chibisafe_server:${toString cfg.server-port} {
+        reverse_proxy @api http://0.0.0.0:${toString cfg.server-port} {
             header_up Host {http.reverse_proxy.upstream.hostport}
             header_up X-Real-IP {http.request.header.X-Real-IP}
         }
 
         @docs path /docs*
-        reverse_proxy @docs http://chibisafe_server:${
+        reverse_proxy @docs http://0.0.0.0:${
           toString cfg.server-port
         } {
             header_up Host {http.reverse_proxy.upstream.hostport}
             header_up X-Real-IP {http.request.header.X-Real-IP}
         }
 
-        reverse_proxy http://chibisafe:${toString cfg.server-port} {
+        reverse_proxy http://0.0.0.0:${toString cfg.server-port} {
             header_up Host {http.reverse_proxy.upstream.hostport}
             header_up X-Real-IP {http.request.header.X-Real-IP}
         }
