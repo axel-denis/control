@@ -1,4 +1,4 @@
-{ config, helpers, lib, ... }:
+{ config, helpers, lib, pkgs, ... }:
 
 with lib;
 let cfg = config.homeserver.chibisafe;
