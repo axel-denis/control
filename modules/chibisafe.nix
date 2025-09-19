@@ -3,7 +3,7 @@
 with lib;
 let
   cfg = config.homeserver.chibisafe;
-  CaddyFile = pkgs.writeText "Caddyfile" ''
+  Caddyfile = pkgs.writeText "Caddyfile" ''
     {$BASE_URL} {
       route {
         file_server * {
