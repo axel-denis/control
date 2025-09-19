@@ -61,7 +61,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf cfg.enable rec {
     virtualisation.docker.enable = true;
     virtualisation.oci-containers.backend = "docker";
 
