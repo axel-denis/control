@@ -21,6 +21,7 @@
         transmission = mkModule ./modules/transmission.nix;
         terminal = mkModule ./modules/terminal.nix;
         chibisafe = mkModule ./modules/chibisafe.nix;
+        hdd-spindown = mkModule ./modules/hdd-spindown.nix;
 
         default = { ... }: {
           imports = [
@@ -29,6 +30,7 @@
             self.nixosModules.transmission
             self.nixosModules.terminal
             self.nixosModules.chibisafe
+            self.nixosModules.hdd-spindown
           ];
         };
       };
