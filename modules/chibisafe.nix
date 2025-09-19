@@ -48,21 +48,9 @@ in {
 
     port = mkOption {
       type = types.int;
-      default = 8096;
-      defaultText = "8096";
+      default = 8777;
+      defaultText = "8777";
       description = "Port to use for chibisafe";
-    };
-
-    server-port = helpers.mkInheritedIntOption {
-      parentName = "port";
-      parent = cfg.port;
-      description = "Port for chibisafe server";
-    };
-
-    caddy-port = helpers.mkInheritedIntOption {
-      parentName = "server-port";
-      parent = cfg.server-port;
-      description = "Port for chibisafe caddy";
     };
 
     pathOverride = {
@@ -96,7 +84,6 @@ in {
     virtualisation.oci-containers.containers = {
       chibisafe = {
         image = "chibisafe/chibisafe:${cfg.version}";
-        #ports = [ "${toString cfg.port}:8001" ];
         environment = {
           BASE_API_URL = "http://chibisafe_server:8000";
         };
@@ -105,7 +92,6 @@ in {
 
       chibisafe_server = {
         image = "chibisafe/chibisafe-server:${cfg.version}";
-        #ports = [ "${toString cfg.server-port}:8000" ];
         volumes = [
           "${cfg.pathOverride.database}:/app/database:rw"
           "${cfg.pathOverride.uploads}:/app/uploads:rw"
@@ -116,7 +102,7 @@ in {
 
       chibisafe_caddy = {
         image = "caddy:2-alpine";
-        ports = [ "${toString cfg.caddy-port}:80" ];
+        ports = [ "${toString cfg.port}:80" ];
         environment = { BASE_URL = ":80"; };
         volumes = [
           "${cfg.pathOverride.uploads}:/app/uploads:ro"
@@ -132,4 +118,3 @@ in {
     };
   };
 }
-
