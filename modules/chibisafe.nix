@@ -122,7 +122,7 @@ in {
         environment = { BASE_URL = ":80"; };
         volumes = [
           "${cfg.pathOverride.uploads}:/app/uploads:ro"
-          "${Caddyfile}:/etc/caddy/Caddyfile:ro"
+          "${self.Caddyfile}:/etc/caddy/Caddyfile:ro"
         ];
       };
     };
