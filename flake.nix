@@ -9,9 +9,7 @@
       lib = nixpkgs.lib;
       helpers = import ./helpers { inherit lib; };
 
-      pkgs = import nixpkgs {
-        inherit system;
-      };
+      pkgs = import nixpkgs { inherit system; };
 
       mkModule = path:
         { ... }@args:
@@ -22,6 +20,7 @@
         jellyfin = mkModule ./modules/jellyfin.nix;
         transmission = mkModule ./modules/transmission.nix;
         terminal = mkModule ./modules/terminal.nix;
+        chibisafe = mkModule ./modules/chibisafe.nix;
 
         default = { ... }: {
           imports = [
@@ -29,6 +28,7 @@
             self.nixosModules.jellyfin
             self.nixosModules.transmission
             self.nixosModules.terminal
+            self.nixosModules.chibisafe
           ];
         };
       };
