@@ -12,20 +12,18 @@ let
         }
 
         @api path /api/*
-        reverse_proxy @api http://0.0.0.0:${toString cfg.server-port} {
+        reverse_proxy @api http://chibisafe_server:8000 {
             header_up Host {http.reverse_proxy.upstream.hostport}
             header_up X-Real-IP {http.request.header.X-Real-IP}
         }
 
         @docs path /docs*
-        reverse_proxy @docs http://0.0.0.0:${
-          toString cfg.server-port
-        } {
+        reverse_proxy @docs http://chibisafe_server:8000 {
             header_up Host {http.reverse_proxy.upstream.hostport}
             header_up X-Real-IP {http.request.header.X-Real-IP}
         }
 
-        reverse_proxy http://0.0.0.0:${toString cfg.server-port} {
+        reverse_proxy http://chibisafe:8001 {
             header_up Host {http.reverse_proxy.upstream.hostport}
             header_up X-Real-IP {http.request.header.X-Real-IP}
         }
@@ -98,15 +96,15 @@ in {
     virtualisation.oci-containers.containers = {
       chibisafe = {
         image = "chibisafe/chibisafe:${cfg.version}";
-        ports = [ "${toString cfg.port}:8001" ];
+        #ports = [ "${toString cfg.port}:8001" ];
         environment = {
-          BASE_API_URL = "http://chibisafe_server:${toString cfg.server-port}";
+          BASE_API_URL = "http://chibisafe_server:8000";
         };
       };
 
       chibisafe_server = {
         image = "chibisafe/chibisafe-server:${cfg.version}";
-        ports = [ "${toString cfg.server-port}:8000" ];
+        #ports = [ "${toString cfg.server-port}:8000" ];
         volumes = [
           "${cfg.pathOverride.database}:/app/database:rw"
           "${cfg.pathOverride.uploads}:/app/uploads:rw"
