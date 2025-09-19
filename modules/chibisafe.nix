@@ -93,8 +93,6 @@ in {
     virtualisation.docker.enable = true;
     virtualisation.oci-containers.backend = "docker";
 
-    virtualisation.oci-containers.networks.chibinet = {};
-
     virtualisation.oci-containers.containers = {
       chibisafe = {
         image = "chibisafe/chibisafe:${cfg.version}";
@@ -126,6 +124,11 @@ in {
         ];
         extraOptions = [ "--network=chibinet" ];
       };
+    };
+
+    systemd.services = helpers.mkDockerNetworkService {
+      networkName = "chibinet";
+      dockerCli = "${config.virtualisation.docker.package}/bin/docker";
     };
   };
 }
