@@ -93,6 +93,8 @@ in {
     virtualisation.docker.enable = true;
     virtualisation.oci-containers.backend = "docker";
 
+    virtualisation.oci-containers.networks.chibinet = {};
+
     virtualisation.oci-containers.containers = {
       chibisafe = {
         image = "chibisafe/chibisafe:${cfg.version}";
@@ -100,6 +102,7 @@ in {
         environment = {
           BASE_API_URL = "http://chibisafe_server:8000";
         };
+        extraOptions = [ "--network=chibinet" ];
       };
 
       chibisafe_server = {
@@ -110,6 +113,7 @@ in {
           "${cfg.pathOverride.uploads}:/app/uploads:rw"
           "${cfg.pathOverride.logs}:/app/logs:rw"
         ];
+        extraOptions = [ "--network=chibinet" ];
       };
 
       chibisafe_caddy = {
@@ -120,6 +124,7 @@ in {
           "${cfg.pathOverride.uploads}:/app/uploads:ro"
           "${Caddyfile}:/etc/caddy/Caddyfile:ro"
         ];
+        extraOptions = [ "--network=chibinet" ];
       };
     };
   };
