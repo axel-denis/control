@@ -4,7 +4,7 @@ with lib;
 let
   cfg = config.homeserver.chibisafe;
   Caddyfile = pkgs.writeText "Caddyfile" ''
-    {$BASE_URL} {
+    {:80} {
       route {
         file_server * {
             root /app/uploads
