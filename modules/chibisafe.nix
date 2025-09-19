@@ -1,7 +1,37 @@
 { config, helpers, lib, pkgs, ... }:
 
 with lib;
-let cfg = config.homeserver.chibisafe;
+let
+  cfg = config.homeserver.chibisafe;
+  CaddyFile = pkgs.writeText "Caddyfile" ''
+    {$BASE_URL} {
+      route {
+        file_server * {
+            root /app/uploads
+            pass_thru
+        }
+
+        @api path /api/*
+        reverse_proxy @api http://chibisafe_server:${toString cfg.server-port} {
+            header_up Host {http.reverse_proxy.upstream.hostport}
+            header_up X-Real-IP {http.request.header.X-Real-IP}
+        }
+
+        @docs path /docs*
+        reverse_proxy @docs http://chibisafe_server:${
+          toString cfg.server-port
+        } {
+            header_up Host {http.reverse_proxy.upstream.hostport}
+            header_up X-Real-IP {http.request.header.X-Real-IP}
+        }
+
+        reverse_proxy http://chibisafe:${toString cfg.port} {
+            header_up Host {http.reverse_proxy.upstream.hostport}
+            header_up X-Real-IP {http.request.header.X-Real-IP}
+        }
+      }
+    }
+  '';
 in {
   options.homeserver.chibisafe = {
     enable = mkEnableOption "Enable chibisafe";
@@ -61,41 +91,9 @@ in {
     };
   };
 
-  config = mkIf cfg.enable rec {
+  config = mkIf cfg.enable {
     virtualisation.docker.enable = true;
     virtualisation.oci-containers.backend = "docker";
-
-    caddyFile = pkgs.writeText "Caddyfile" ''
-      {$BASE_URL} {
-        route {
-          file_server * {
-              root /app/uploads
-              pass_thru
-          }
-
-          @api path /api/*
-          reverse_proxy @api http://chibisafe_server:${
-            toString cfg.server-port
-          } {
-              header_up Host {http.reverse_proxy.upstream.hostport}
-              header_up X-Real-IP {http.request.header.X-Real-IP}
-          }
-
-          @docs path /docs*
-          reverse_proxy @docs http://chibisafe_server:${
-            toString cfg.server-port
-          } {
-              header_up Host {http.reverse_proxy.upstream.hostport}
-              header_up X-Real-IP {http.request.header.X-Real-IP}
-          }
-
-          reverse_proxy http://chibisafe:${toString cfg.port} {
-              header_up Host {http.reverse_proxy.upstream.hostport}
-              header_up X-Real-IP {http.request.header.X-Real-IP}
-          }
-        }
-      }
-    '';
 
     virtualisation.oci-containers.containers = {
       chibisafe = {
@@ -122,7 +120,7 @@ in {
         environment = { BASE_URL = ":80"; };
         volumes = [
           "${cfg.pathOverride.uploads}:/app/uploads:ro"
-          "${self.Caddyfile}:/etc/caddy/Caddyfile:ro"
+          "${Caddyfile}:/etc/caddy/Caddyfile:ro"
         ];
       };
     };
