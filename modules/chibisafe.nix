@@ -43,8 +43,8 @@ in {
 
     port = mkOption {
       type = types.int;
-      default = 100004;
-      defaultText = "100004";
+      default = 10004;
+      defaultText = "10004";
       description = "Port to use for chibisafe";
     };
 

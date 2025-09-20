@@ -42,8 +42,8 @@ in {
 
     port = mkOption {
       type = types.int;
-      default = 100003;
-      defaultText = "100003";
+      default = 10003;
+      defaultText = "10003";
       description = "Port to use for Transmission";
     };
   };
