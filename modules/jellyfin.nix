@@ -15,8 +15,8 @@ in {
 
     port = mkOption {
       type = types.int;
-      default = 8096;
-      defaultText = "8096";
+      default = 100002;
+      defaultText = "100002";
       description = "Port to use for Jellyfin";
     };
 
