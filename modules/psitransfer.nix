@@ -44,6 +44,8 @@ in {
         image = "psitrax/psitransfer:${cfg.version}";
         ports = [ "${toString cfg.port}:3000" ];
         environment = {
+          PUID="0";
+          PGID="0";
           PSITRANSFER_ADMIN_PASS = cfg.admin-password;
         };
         volumes = [
