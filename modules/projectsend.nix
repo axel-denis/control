@@ -58,8 +58,8 @@ in {
         image = "psitrax/projectsend:${cfg.version}";
         ports = [ "${toString cfg.port}:80" ];
         environment = {
-          PUID=1000;
-          PGID=1000;
+          PUID="1000";
+          PGID="1000";
           TZ="Etc/UTC";
         };
         volumes = [
