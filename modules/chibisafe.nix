@@ -41,11 +41,6 @@ in {
       description = "Version name to use for chibisafe images";
     };
 
-    rootPath = mkOption {
-      type = types.path;
-      description = "Root path for chibisafe media and appdata (required)";
-    };
-
     port = mkOption {
       type = types.int;
       default = 8777;
@@ -53,24 +48,29 @@ in {
       description = "Port to use for chibisafe";
     };
 
-    pathOverride = {
+    paths = {
+      default = mkOption {
+        type = types.path;
+        description = "Root path for chibisafe media and appdata (required)";
+      };
+
       database = helpers.mkInheritedPathOption {
-        parentName = "rootPath";
-        parent = cfg.rootPath;
+        parentName = "paths.default";
+        parent = cfg.default;
         defaultSubpath = "database";
         description = "Path for chibisafe database.";
       };
 
       uploads = helpers.mkInheritedPathOption {
-        parentName = "rootPath";
-        parent = cfg.rootPath;
+        parentName = "paths.default";
+        parent = cfg.default;
         defaultSubpath = "uploads";
         description = "Path for chibisafe uploads.";
       };
 
       logs = helpers.mkInheritedPathOption {
-        parentName = "rootPath";
-        parent = cfg.rootPath;
+        parentName = "paths.default";
+        parent = cfg.default;
         defaultSubpath = "logs";
         description = "Path for chibisafe logs.";
       };
@@ -93,9 +93,9 @@ in {
       chibisafe_server = {
         image = "chibisafe/chibisafe-server:${cfg.version}";
         volumes = [
-          "${cfg.pathOverride.database}:/app/database:rw"
-          "${cfg.pathOverride.uploads}:/app/uploads:rw"
-          "${cfg.pathOverride.logs}:/app/logs:rw"
+          "${cfg.paths.database}:/app/database:rw"
+          "${cfg.paths.uploads}:/app/uploads:rw"
+          "${cfg.paths.logs}:/app/logs:rw"
         ];
         extraOptions = [ "--network=chibinet" ];
       };
@@ -105,7 +105,7 @@ in {
         ports = [ "${toString cfg.port}:80" ];
         environment = { BASE_URL = ":80"; };
         volumes = [
-          "${cfg.pathOverride.uploads}:/app/uploads:ro"
+          "${cfg.paths.uploads}:/app/uploads:ro"
           "${Caddyfile}:/etc/caddy/Caddyfile:ro"
         ];
         extraOptions = [ "--network=chibinet" ];
