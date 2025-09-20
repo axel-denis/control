@@ -36,25 +36,16 @@ in {
   };
 
   config = mkIf cfg.enable {
-    virtualisation.containers.enable = true;
-    virtualisation.oci-containers.backend = "podman";
-    virtualisation = {
-      podman = {
-        enable = true;
-
-        # Create a `docker` alias for podman, to use it as a drop-in replacement
-        dockerCompat = true;
-
-        # Required for containers under podman-compose to be able to talk to each other.
-        defaultNetwork.settings.dns_enabled = true;
-      };
-    };
+    virtualisation.docker.enable = true;
+    virtualisation.oci-containers.backend = "docker";
 
     virtualisation.oci-containers.containers = {
       psitransfer = {
         image = "psitrax/psitransfer:${cfg.version}";
         ports = [ "${toString cfg.port}:3000" ];
         environment = {
+          PUID="0";
+          PGID="0";
           PSITRANSFER_ADMIN_PASS = cfg.admin-password;
         };
         volumes = [
