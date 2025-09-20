@@ -30,22 +30,15 @@ in {
         parentName = "paths.default";
         parent = cfg.paths.default;
         defaultSubpath = "data";
-        description = "Path for ProjectSend data (movies).";
+        description = "Path for ProjectSend data.";
       };
 
       config = helpers.mkInheritedPathOption {
         parentName = "paths.default";
         parent = cfg.paths.default;
         defaultSubpath = "config";
-        description = "Path for ProjectSend config (config).";
+        description = "Path for ProjectSend config.";
       };
-    };
-
-    admin-password = mkOption {
-      type = types.string;
-      default = "secret"; # REVIEW - maybe remove default to force user to specify
-      defaultText = "secret";
-      description = "Base password for ProjectSend admin user (change this!)";
     };
   };
 
