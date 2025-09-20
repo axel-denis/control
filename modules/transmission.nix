@@ -14,22 +14,22 @@ in {
       description = "Version name to use for Transmission images";
     };
 
-    rootPath = mkOption {
-      type = types.path;
-      description = "Root path for Transmission data (required)";
-    };
+    paths = {
+      default = mkOption {
+        type = types.path;
+        description = "Root path for Transmission data (required)";
+      };
 
-    pathOverride = {
       download = helpers.mkInheritedPathOption {
-        parentName = "rootPath";
-        parent = cfg.rootPath;
+        parentName = "paths.default";
+        parent = cfg.paths.default;
         defaultSubpath = "downloads";
         description = "Path for Transmission downloads.";
       };
 
       config = helpers.mkInheritedPathOption {
-        parentName = "rootPath";
-        parent = cfg.rootPath;
+        parentName = "paths.default";
+        parent = cfg.paths.default;
         defaultSubpath = "config";
         description = "Path for Transmission config.";
       };
@@ -42,8 +42,8 @@ in {
 
     port = mkOption {
       type = types.int;
-      default = 9091;
-      defaultText = "9091";
+      default = 10003;
+      defaultText = "10003";
       description = "Port to use for Transmission";
     };
   };
@@ -57,8 +57,8 @@ in {
       extraOptions = [ "--cap-add=NET_ADMIN" ];
 
       volumes = [
-        "${cfg.pathOverride.download}:/data"
-        "${cfg.pathOverride.config}:/config"
+        "${cfg.paths.download}:/data"
+        "${cfg.paths.config}:/config"
       ];
 
       environmentFiles = [ cfg.environmentFile ];
