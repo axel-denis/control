@@ -39,6 +39,10 @@ in {
     virtualisation.docker.enable = true;
     virtualisation.oci-containers.backend = "docker";
 
+    # Creating directory with the user id asked by the container
+    systemd.tmpfiles.rules = [
+      "d ${cfg.paths.default} 0755 1000 1000"
+    ];
     virtualisation.oci-containers.containers = {
       psitransfer = {
         image = "psitrax/psitransfer:${cfg.version}";
