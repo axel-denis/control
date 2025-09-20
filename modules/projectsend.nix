@@ -53,13 +53,18 @@ in {
     virtualisation.docker.enable = true;
     virtualisation.oci-containers.backend = "docker";
 
+    # Creating directory with the user id asked by the container
+    systemd.tmpfiles.rules = [
+      "d ${cfg.paths.data} 0755 1000 1000"
+      "d ${cfg.paths.config} 0755 1000 1000"
+    ];
     virtualisation.oci-containers.containers = {
       projectsend = {
         image = "psitrax/projectsend:${cfg.version}";
         ports = [ "${toString cfg.port}:80" ];
         environment = {
-          PUID="0";
-          PGID="0";
+          PUID="1000";
+          PGID="1000";
           TZ="Etc/UTC";
         };
         volumes = [
