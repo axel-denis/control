@@ -35,21 +35,21 @@ in {
 
       database = helpers.mkInheritedPathOption {
         parentName = "paths.default";
-        parent = cfg.default;
+        parent = cfg.paths.default;
         defaultSubpath = "db";
         description = "Path for Immich database.";
       };
 
       uploads = helpers.mkInheritedPathOption {
         parentName = "paths.default";
-        parent = cfg.default;
+        parent = cfg.paths.default;
         defaultSubpath = "pictures";
         description = "Path for Immich uploads (pictures).";
       };
 
       machineLearning = helpers.mkInheritedPathOption {
         parentName = "paths.default";
-        parent = cfg.default;
+        parent = cfg.paths.default;
         defaultSubpath = "machine_learning";
         description = "Path for Immich appdata (machine learning model cache).";
       };

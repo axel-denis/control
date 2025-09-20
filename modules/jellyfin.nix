@@ -28,14 +28,14 @@ in {
 
       media = helpers.mkInheritedPathOption {
         parentName = "paths.default";
-        parent = cfg.default;
+        parent = cfg.paths.default;
         defaultSubpath = "media";
         description = "Path for Jellyfin media (movies).";
       };
 
       config = helpers.mkInheritedPathOption {
         parentName = "paths.default";
-        parent = cfg.default;
+        parent = cfg.paths.default;
         defaultSubpath = "config";
         description = "Path for Jellyfin appdata (config).";
       };

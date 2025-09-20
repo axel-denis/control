@@ -22,14 +22,14 @@ in {
 
       download = helpers.mkInheritedPathOption {
         parentName = "paths.default";
-        parent = cfg.default;
+        parent = cfg.paths.default;
         defaultSubpath = "downloads";
         description = "Path for Transmission downloads.";
       };
 
       config = helpers.mkInheritedPathOption {
         parentName = "paths.default";
-        parent = cfg.default;
+        parent = cfg.paths.default;
         defaultSubpath = "config";
         description = "Path for Transmission config.";
       };

@@ -56,21 +56,21 @@ in {
 
       database = helpers.mkInheritedPathOption {
         parentName = "paths.default";
-        parent = cfg.default;
+        parent = cfg.paths.default;
         defaultSubpath = "database";
         description = "Path for chibisafe database.";
       };
 
       uploads = helpers.mkInheritedPathOption {
         parentName = "paths.default";
-        parent = cfg.default;
+        parent = cfg.paths.default;
         defaultSubpath = "uploads";
         description = "Path for chibisafe uploads.";
       };
 
       logs = helpers.mkInheritedPathOption {
         parentName = "paths.default";
-        parent = cfg.default;
+        parent = cfg.paths.default;
         defaultSubpath = "logs";
         description = "Path for chibisafe logs.";
       };
