@@ -60,7 +60,7 @@ in {
     ];
     virtualisation.oci-containers.containers = {
       projectsend = {
-        image = "psitrax/projectsend:${cfg.version}";
+        image = "lscr.io/linuxserver/projectsend:${cfg.version}";
         ports = [ "${toString cfg.port}:80" ];
         environment = {
           PUID="1000";
