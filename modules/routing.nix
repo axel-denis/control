@@ -6,7 +6,7 @@ let
 
   # collect all enabled web-services
   webservices = filter (module:
-    module ? enable && module.enable && module ? subdomain && module ? port
+    module ? subdomain && module ? port
   ) (attrsets.mapAttrsToList (name: value: value) config.homeserver);
 
 in
