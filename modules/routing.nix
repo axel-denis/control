@@ -38,7 +38,7 @@ in
         (value:
           attrsets.nameValuePair "${value.subdomain}.${cfg.domain}" {
             forceSSL = true;
-            enableACME = true;
+            enableACME = cfg.letsencrypt;
             locations."/" = {
               proxyPass = "http://127.0.0.1:${toString value.port}";
             };
