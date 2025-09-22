@@ -34,9 +34,9 @@ in
       enable = true;
 
       # TODO - filter out disabled services
-      virtualHosts = listToAttrs (lib.lists.forEach webservices
+      virtualHosts = listToAttrs (lists.forEach webservices
         (value:
-          lib.attrs.nameValuePair "${value.subdomain}.${cfg.domain}" {
+          attrsets.nameValuePair "${value.subdomain}.${cfg.domain}" {
             forceSSL = true;
             enableACME = true;
             locations."/" = {
