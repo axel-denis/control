@@ -45,46 +45,6 @@ in
             };
           }
         ));
-      # virtual hosts — TLS termination, ACME handled per vhost
-      /*virtualHosts = {
-        "photos.${cfg.domain}" = {
-          forceSSL = true;
-          enableACME = true;
-          locations."/" = {
-            proxyPass = "http://127.0.0.1:10001"; # Immich (container/local port)
-          };
-        };
-
-        "films.${cfg.domain}" = {
-          forceSSL = true;
-          enableACME = true;
-          locations."/" = {
-            proxyPass = "http://127.0.0.1:10002"; # Jellyfin
-          };
-        };
-
-        # speedtest as single-level subdomain (avoids Cloudflare 2-level wildcard problem)
-        "speedtest.${cfg.domain}" = {
-          forceSSL = true;
-          enableACME = true;
-          locations."/" = {
-            proxyPass = "http://127.0.0.1:10004"; # Speedtest container (HTTP)
-          };
-        };
-
-        # transmission — protected with HTTP Basic auth; hash is bcrypt (example)
-        "transmission.${cfg.domain}" = {
-          forceSSL = true;
-          enableACME = true;
-          basicAuth = {
-            # map username -> bcrypt hashed password (example hash from earlier conversation)
-            "transmission" = "$2y$05$1I2UVRbeafHLRl8RNUJZ6.e97IjGf/HkhCt898pnxVZ03PrxNgXOO";
-          };
-          locations."/" = {
-            proxyPass = "http://127.0.0.1:10003"; # Transmission webui
-          };
-        };
-      };*/
     };
 
     # Let's Encrypt (ACME)
