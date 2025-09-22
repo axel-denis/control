@@ -4,13 +4,11 @@ with lib;
 let
   cfg = config.homeserver.routing;
 
-  webservices = [ # TODO find programatically
-   config.homeserver.immich
-   config.homeserver.jellyfin
-   config.homeserver.transmission
-   config.homeserver.psitransfer
-   config.homeserver.chibisafe
-  ];
+  # collect all enabled web-services
+  webservices = filter (module:
+    module ? enable && module.enable && module ? subdomain && module ? port
+  ) (attrsets.mapAttrsToList (name: value: value) config.homeserver);
+
 in
 {
   options.homeserver.routing = {
@@ -34,7 +32,7 @@ in
     services.nginx = {
       enable = true;
 
-      virtualHosts = listToAttrs (lists.forEach (filter (module: module.enable) webservices)
+      virtualHosts = listToAttrs (lists.forEach webservices
         (module:
           attrsets.nameValuePair "${module.subdomain}.${cfg.domain}" {
             forceSSL = cfg.letsencrypt;
