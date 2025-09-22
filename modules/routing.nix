@@ -4,11 +4,11 @@ with lib;
 let
   cfg = config.homeserver.routing;
   webservices = [
-   config.homeserver.immich;
-   config.homeserver.jellyfin;
-   config.homeserver.transmission;
-   config.homeserver.psitransfer;
-   config.homeserver.chibisafe;
+   config.homeserver.immich
+   config.homeserver.jellyfin
+   config.homeserver.transmission
+   config.homeserver.psitransfer
+   config.homeserver.chibisafe
   ];
 in
 {
@@ -33,6 +33,7 @@ in
     services.nginx = {
       enable = true;
 
+      # TODO - filter out disabled services
       virtualHosts = listToAttrs (lib.lists.forEach webservices
         (value: lib.attrs.nameValuePair "${value.subdomain}.${cfg.domain}" {
           forceSSL = true;
