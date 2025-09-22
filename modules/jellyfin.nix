@@ -13,6 +13,13 @@ in {
       description = "Version name to use for Jellyfin images";
     };
 
+    subdomain = mkOption {
+      type = types.string;
+      default = "jellyfin";
+      defaultText = "jellyfin";
+      description = "Subdomain to use for Jellyfin";
+    };
+
     port = mkOption {
       type = types.int;
       default = 10002;

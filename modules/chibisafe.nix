@@ -41,6 +41,13 @@ in {
       description = "Version name to use for chibisafe images";
     };
 
+    subdomain = mkOption {
+      type = types.string;
+      default = "chibisafe";
+      defaultText = "chibisafe";
+      description = "Subdomain to use for Chibisafe";
+    };
+
     port = mkOption {
       type = types.int;
       default = 10004;

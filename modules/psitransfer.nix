@@ -13,6 +13,13 @@ in {
       description = "Version name to use for Psitransfer images";
     };
 
+    subdomain = mkOption {
+      type = types.string;
+      default = "psitransfer";
+      defaultText = "psitransfer";
+      description = "Subdomain to use for Psitransfer";
+    };
+
     port = mkOption {
       type = types.int;
       default = 10005;

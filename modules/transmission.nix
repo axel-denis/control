@@ -14,6 +14,13 @@ in {
       description = "Version name to use for Transmission images";
     };
 
+    subdomain = mkOption {
+      type = types.string;
+      default = "transmission";
+      defaultText = "transmission";
+      description = "Subdomain to use for Transmission";
+    };
+
     paths = {
       default = mkOption {
         type = types.path;

@@ -27,6 +27,13 @@ in {
       description = "Port to use for Immich";
     };
 
+    subdomain = mkOption {
+      type = types.string;
+      default = "immich";
+      defaultText = "immich";
+      description = "Subdomain to use for Immich";
+    };
+
     paths = {
       default = mkOption {
         type = types.path;
