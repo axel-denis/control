@@ -23,6 +23,7 @@
         chibisafe = mkModule ./modules/chibisafe.nix;
         hdd-spindown = mkModule ./modules/hdd-spindown.nix;
         psitransfer = mkModule ./modules/psitransfer.nix;
+        routing = mkModule ./modules/routing.nix;
 
         default = { ... }: {
           imports = [
@@ -33,6 +34,7 @@
             self.nixosModules.chibisafe
             self.nixosModules.hdd-spindown
             self.nixosModules.psitransfer
+            self.nixosModules.routing
           ];
         };
       };
