@@ -22,6 +22,7 @@
         terminal = mkModule ./modules/terminal.nix;
         chibisafe = mkModule ./modules/chibisafe.nix;
         hdd-spindown = mkModule ./modules/hdd-spindown.nix;
+        psitransfer = mkModule ./modules/psitransfer.nix;
 
         default = { ... }: {
           imports = [
@@ -31,6 +32,7 @@
             self.nixosModules.terminal
             self.nixosModules.chibisafe
             self.nixosModules.hdd-spindown
+            self.nixosModules.psitransfer
           ];
         };
       };
