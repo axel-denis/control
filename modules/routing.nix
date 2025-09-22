@@ -4,9 +4,9 @@ with lib;
 let
   cfg = config.homeserver.routing;
 
-  # collect all enabled web-services
+  # collect all (enabled) web-services
   webservices = filter (module:
-    module ? subdomain && module ? port
+    module ? enable && module.enable && module ? subdomain && module ? port
   ) (attrsets.mapAttrsToList (name: value: value) config.homeserver);
 
 in
