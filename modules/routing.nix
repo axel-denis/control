@@ -27,6 +27,7 @@ in
         type = types.string;
         description = "Email address used for Let's Encrypt";
       };
+      test-mode = mkEnableOption "Enable test server for Let's Encrypt";
     };
   };
 
@@ -37,8 +38,8 @@ in
       virtualHosts = listToAttrs (lists.forEach webservices
         (module:
           attrsets.nameValuePair "${module.subdomain}.${cfg.domain}" {
-            forceSSL = cfg.letsencrypt;
-            enableACME = cfg.letsencrypt;
+            forceSSL = cfg.letsencrypt.enable;
+            enableACME = cfg.letsencrypt.enable;
             locations."/" = {
               proxyPass = "http://127.0.0.1:${toString module.port}";
             };
@@ -87,11 +88,11 @@ in
     };
 
     # Let's Encrypt (ACME)
-    security.acme = mkIf cfg.letsencrypt {
+    security.acme = mkIf cfg.letsencrypt.enable {
       acceptTerms = true;
-      defaults.email = cfg.letsencryptEmail;
+      defaults.email = cfg.letsencrypt.email;
       # NOTE - for testing, use staging CA to avoid rate limits:
-      defaults.server = "https://acme-staging-v02.api.letsencrypt.org/directory";
+      defaults.server = mkIf cfg.letsencrypt.test-mode "https://acme-staging-v02.api.letsencrypt.org/directory";
     };
 
     networking.firewall = {
