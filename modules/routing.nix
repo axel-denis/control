@@ -51,16 +51,12 @@ in
     security.acme = mkIf cfg.letsencrypt.enable {
       acceptTerms = true;
       defaults.email = cfg.letsencrypt.email;
-      # NOTE - for testing, use staging CA to avoid rate limits:
+      # NOTE - for testing: uses staging CA to avoid rate limits:
       defaults.server = mkIf cfg.letsencrypt.test-mode "https://acme-staging-v02.api.letsencrypt.org/directory";
     };
 
     networking.firewall = {
-      # only allow http/https globally
       allowedTCPPorts = [ 80 443 ];
-
-      # allow SSH only on the LAN interface enp2s0
-      #interfaces."enp2s0".allowedTCPPorts = [ 22 ];
     };
   };
 }
