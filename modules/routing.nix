@@ -86,19 +86,20 @@ in
       };*/
     };
 
-  # Let's Encrypt (ACME)
-  security.acme = mkIf cfg.letsencrypt {
-    acceptTerms = true;
-    defaults.email = cfg.letsencryptEmail;
-    # NOTE - for testing, use staging CA to avoid rate limits:
-    defaults.server = "https://acme-staging-v02.api.letsencrypt.org/directory";
-  };
+    # Let's Encrypt (ACME)
+    security.acme = mkIf cfg.letsencrypt {
+      acceptTerms = true;
+      defaults.email = cfg.letsencryptEmail;
+      # NOTE - for testing, use staging CA to avoid rate limits:
+      defaults.server = "https://acme-staging-v02.api.letsencrypt.org/directory";
+    };
 
-  networking.firewall = {
-    # only allow http/https globally
-    allowedTCPPorts = [ 80 443 ];
+    networking.firewall = {
+      # only allow http/https globally
+      allowedTCPPorts = [ 80 443 ];
 
-    # allow SSH only on the LAN interface enp2s0
-    #interfaces."enp2s0".allowedTCPPorts = [ 22 ];
+      # allow SSH only on the LAN interface enp2s0
+      #interfaces."enp2s0".allowedTCPPorts = [ 22 ];
+    };
   };
 }
