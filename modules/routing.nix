@@ -3,7 +3,8 @@
 with lib;
 let
   cfg = config.homeserver.routing;
-  webservices = [
+
+  webservices = [ # TODO find programatically
    config.homeserver.immich
    config.homeserver.jellyfin
    config.homeserver.transmission
@@ -33,14 +34,13 @@ in
     services.nginx = {
       enable = true;
 
-      # TODO - filter out disabled services
-      virtualHosts = listToAttrs (lists.forEach webservices
-        (value:
-          attrsets.nameValuePair "${value.subdomain}.${cfg.domain}" {
+      virtualHosts = listToAttrs (lists.forEach (filter (module: module.enable) webservices)
+        (module:
+          attrsets.nameValuePair "${module.subdomain}.${cfg.domain}" {
             forceSSL = cfg.letsencrypt;
             enableACME = cfg.letsencrypt;
             locations."/" = {
-              proxyPass = "http://127.0.0.1:${toString value.port}";
+              proxyPass = "http://127.0.0.1:${toString module.port}";
             };
           }
         ));
