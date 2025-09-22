@@ -35,12 +35,15 @@ in
 
       # TODO - filter out disabled services
       virtualHosts = listToAttrs (lib.lists.forEach webservices
-        (value: lib.attrs.nameValuePair "${value.subdomain}.${cfg.domain}" {
-          forceSSL = true;
-          enableACME = true;
-          locations."/" = {
-            proxyPass = "http://127.0.0.1:${value.port}";
-        }));
+        (value:
+          lib.attrs.nameValuePair "${value.subdomain}.${cfg.domain}" {
+            forceSSL = true;
+            enableACME = true;
+            locations."/" = {
+              proxyPass = "http://127.0.0.1:${value.port}";
+            };
+          }
+        ));
       # virtual hosts — TLS termination, ACME handled per vhost
       /*virtualHosts = {
         "photos.${cfg.domain}" = {
