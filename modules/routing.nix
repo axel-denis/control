@@ -21,10 +21,12 @@ in
       description = "Your domain name (example.com)";
     };
 
-    letsencrypt = mkEnableOption "Enable Let's Encrypt (ACME) support";
-    letsencryptEmail = mkOption {
-      type = types.string;
-      description = "Email address used for Let's Encrypt";
+    letsencrypt = {
+      enable = mkEnableOption "Enable Let's Encrypt (ACME) support";
+      email = mkOption {
+        type = types.string;
+        description = "Email address used for Let's Encrypt";
+      };
     };
   };
 
