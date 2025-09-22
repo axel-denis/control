@@ -37,7 +37,7 @@ in
       virtualHosts = listToAttrs (lists.forEach webservices
         (value:
           attrsets.nameValuePair "${value.subdomain}.${cfg.domain}" {
-            forceSSL = true;
+            forceSSL = cfg.letsencrypt;
             enableACME = cfg.letsencrypt;
             locations."/" = {
               proxyPass = "http://127.0.0.1:${toString value.port}";
