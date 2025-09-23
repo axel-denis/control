@@ -14,6 +14,13 @@ in
   options.homeserver.routing = {
     enable = mkEnableOption "Enable Nginx routing";
 
+    lan = mkOption {
+      type = types.bool;
+      default = !cfg.enable;
+      defaultText = "Disabled if routing is enabled, else enabled";
+      description = "Enable LAN access of services (bypassing Nginx)";
+    };
+
     domain = mkOption {
       type = types.string;
       default = "localhost";

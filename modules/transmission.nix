@@ -69,7 +69,7 @@ in {
       ];
 
       environmentFiles = [ cfg.environmentFile ];
-      ports = [ "127.0.0.1:${toString cfg.port}:9091" ];
+      ports = [ "${mkIf config.homeserver.routing.lan "127.0.0.1:"}${toString cfg.port}:9091" ];
     };
   };
 }

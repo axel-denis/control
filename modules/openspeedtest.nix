@@ -42,7 +42,7 @@ in {
     virtualisation.oci-containers.containers = {
       openspeedtest = {
         image = "openspeedtest/${cfg.version}";
-        ports = [ "127.0.0.1:${toString cfg.port}:3000" ];
+        ports = [ "${mkIf config.homeserver.routing.lan "127.0.0.1:"}${toString cfg.port}:3000" ];
       };
     };
   };
