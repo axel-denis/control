@@ -34,4 +34,12 @@
       description =
         ''${parentName} (default to ${parentName} + "/${defaultSubpath}")'';
     };
+
+  mkInheritedIntOption = { parentName, parent, description }:
+    lib.mkOption {
+      type = lib.types.int;
+      default = parent + 1;
+      defaultText = "${parent + 1}";
+      description = "(default to ${parentName} + 1)";
+    };
 }

@@ -13,29 +13,36 @@ in {
       description = "Version name to use for Jellyfin images";
     };
 
-    rootPath = mkOption {
-      type = types.path;
-      description = "Root path for Jellyfin media and appdata (required)";
+    subdomain = mkOption {
+      type = types.string;
+      default = "jellyfin";
+      defaultText = "jellyfin";
+      description = "Subdomain to use for Jellyfin";
     };
 
     port = mkOption {
       type = types.int;
-      default = 8096;
-      defaultText = "8096";
+      default = 10002;
+      defaultText = "10002";
       description = "Port to use for Jellyfin";
     };
 
-    pathOverride = {
+    paths = {
+      default = mkOption {
+        type = types.path;
+        description = "Root path for Jellyfin media and appdata (required)";
+      };
+
       media = helpers.mkInheritedPathOption {
-        parentName = "rootPath";
-        parent = cfg.rootPath;
+        parentName = "paths.default";
+        parent = cfg.paths.default;
         defaultSubpath = "media";
         description = "Path for Jellyfin media (movies).";
       };
 
       config = helpers.mkInheritedPathOption {
-        parentName = "rootPath";
-        parent = cfg.rootPath;
+        parentName = "paths.default";
+        parent = cfg.paths.default;
         defaultSubpath = "config";
         description = "Path for Jellyfin appdata (config).";
       };
@@ -52,8 +59,8 @@ in {
         ports = [ "${toString cfg.port}:8096" ];
         volumes = [
           #"${jellyfinRoot}/media:/media"
-          "${cfg.pathOverride.media}:/media"
-          "${cfg.pathOverride.config}:/config"
+          "${cfg.paths.media}:/media"
+          "${cfg.paths.config}:/config"
         ];
       };
     };

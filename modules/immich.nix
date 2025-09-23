@@ -6,15 +6,10 @@ in {
   options.homeserver.immich = {
     enable = mkEnableOption "Enable Immich container";
 
-    rootPath = mkOption {
-      type = types.path;
-      description = "Root path for Immich data (required)";
-    };
-
     dbPasswordFile = mkOption {
       type = types.path;
       description = ''
-        Postgres password file for Immich.
+        Path of Postgres password file for Immich.
       '';
     };
 
@@ -27,29 +22,41 @@ in {
 
     port = mkOption {
       type = types.int;
-      default = 2283;
-      defaultText = "2283";
+      default = 10001;
+      defaultText = "10001";
       description = "Port to use for Immich";
     };
 
-    pathOverride = {
+    subdomain = mkOption {
+      type = types.string;
+      default = "immich";
+      defaultText = "immich";
+      description = "Subdomain to use for Immich";
+    };
+
+    paths = {
+      default = mkOption {
+        type = types.path;
+        description = "Default path for Immich data (required)";
+      };
+
       database = helpers.mkInheritedPathOption {
-        parentName = "rootPath";
-        parent = cfg.rootPath;
+        parentName = "paths.default";
+        parent = cfg.paths.default;
         defaultSubpath = "db";
         description = "Path for Immich database.";
       };
 
       uploads = helpers.mkInheritedPathOption {
-        parentName = "rootPath";
-        parent = cfg.rootPath;
+        parentName = "paths.default";
+        parent = cfg.paths.default;
         defaultSubpath = "pictures";
         description = "Path for Immich uploads (pictures).";
       };
 
       machineLearning = helpers.mkInheritedPathOption {
-        parentName = "rootPath";
-        parent = cfg.rootPath;
+        parentName = "paths.default";
+        parent = cfg.paths.default;
         defaultSubpath = "machine_learning";
         description = "Path for Immich appdata (machine learning model cache).";
       };
@@ -74,7 +81,7 @@ in {
           REDIS_HOSTNAME = "immich_redis";
         };
         volumes = [
-          "${cfg.pathOverride.uploads}:/usr/src/app/upload"
+          "${cfg.paths.uploads}:/usr/src/app/upload"
           "/etc/localtime:/etc/localtime:ro"
           "${cfg.dbPasswordFile}:/run/secrets/immich-db-password:ro"
         ];
@@ -85,7 +92,7 @@ in {
         image =
           "ghcr.io/immich-app/immich-machine-learning:${toString cfg.version}";
         environment = { IMMICH_VERSION = toString cfg.version; };
-        volumes = [ "${cfg.pathOverride.machineLearning}/model-cache:/cache" ];
+        volumes = [ "${cfg.paths.machineLearning}/model-cache:/cache" ];
         extraOptions = [ "--network=immich-net" ];
       };
 
@@ -104,7 +111,7 @@ in {
           POSTGRES_DB = "immich";
         };
         volumes = [
-          "${cfg.pathOverride.database}:/var/lib/postgresql/data"
+          "${cfg.paths.database}:/var/lib/postgresql/data"
           "${cfg.dbPasswordFile}:/run/secrets/immich-db-password:ro"
         ];
         extraOptions = [ "--network=immich-net" ];
