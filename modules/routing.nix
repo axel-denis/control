@@ -45,7 +45,7 @@ in
             };
             # TODO - make for speedtest only:
             extraConfig = ''
-              client_max_body_size 100M;
+              client_max_body_size 35M;
             '';
           }
         ));
