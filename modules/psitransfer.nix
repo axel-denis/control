@@ -53,7 +53,7 @@ in {
     virtualisation.oci-containers.containers = {
       psitransfer = {
         image = "psitrax/psitransfer:${cfg.version}";
-        ports = [ "${mkIf config.homeserver.routing.lan "127.0.0.1:"}${toString cfg.port}:3000" ];
+        ports = [ "${optionals config.homeserver.routing.lan "127.0.0.1:"}${toString cfg.port}:3000" ];
         environment = {
           PUID="0";
           PGID="0";
