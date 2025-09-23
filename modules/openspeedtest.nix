@@ -13,13 +13,6 @@ in {
       description = "Version name to use for openspeedtest images";
     };
 
-    # httpPort = mkOption {
-    #   type = types.int;
-    #   default = 3000;
-    #   defaultText = "3000";
-    #   description = "Port to use for OpenSpeedTest";
-    # };
-
     port = mkOption {
       type = types.int;
       default = 10006;
