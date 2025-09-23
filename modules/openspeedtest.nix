@@ -22,8 +22,8 @@ in {
 
     subdomain = mkOption {
       type = types.string;
-      default = "speedtest";
-      defaultText = "speedtest";
+      default = "openspeedtest";
+      defaultText = "openspeedtest";
       description = "Subdomain to use for OpenSpeedTest";
     };
   };
