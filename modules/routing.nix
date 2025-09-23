@@ -43,7 +43,7 @@ in
             locations."/" = {
               proxyPass = "http://127.0.0.1:${toString module.port}";
             };
-            # TODO - make for speedtest only:
+            # TODO - tune values
             extraConfig = ''
               client_max_body_size 35M;
             '';
@@ -59,7 +59,6 @@ in
       defaults.server = mkIf cfg.letsencrypt.test-mode "https://acme-staging-v02.api.letsencrypt.org/directory";
     };
 
-    # FIXME - why only accessible in local ?
     networking.firewall = {
       allowedTCPPorts = [ 80 443 ];
     };
