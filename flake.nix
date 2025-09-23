@@ -19,6 +19,7 @@
         immich = mkModule ./modules/immich.nix;
         jellyfin = mkModule ./modules/jellyfin.nix;
         transmission = mkModule ./modules/transmission.nix;
+        openspeedtest = mkModule ./modules/openspeedtest.nix;
         terminal = mkModule ./modules/terminal.nix;
         chibisafe = mkModule ./modules/chibisafe.nix;
         hdd-spindown = mkModule ./modules/hdd-spindown.nix;
@@ -30,6 +31,7 @@
             self.nixosModules.immich
             self.nixosModules.jellyfin
             self.nixosModules.transmission
+            self.nixosModules.openspeedtest
             self.nixosModules.terminal
             self.nixosModules.chibisafe
             self.nixosModules.hdd-spindown

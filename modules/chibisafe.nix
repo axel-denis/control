@@ -109,7 +109,7 @@ in {
 
       chibisafe_caddy = {
         image = "caddy:2-alpine";
-        ports = [ "${toString cfg.port}:80" ];
+        ports = [ "${if config.homeserver.routing.lan then "" else "127.0.0.1:"}${toString cfg.port}:80" ];
         environment = { BASE_URL = ":80"; };
         volumes = [
           "${cfg.paths.uploads}:/app/uploads:ro"
