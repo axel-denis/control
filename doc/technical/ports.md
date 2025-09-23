@@ -5,3 +5,5 @@
 | Jellyfin | 10002 |
 | Transmission | 10003 |
 | Chibisafe | 10004 |
+| Psitransfer | 10005 |
+| Speedtest | 10006 |

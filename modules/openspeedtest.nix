@@ -13,18 +13,25 @@ in {
       description = "Version name to use for openspeedtest images";
     };
 
-    httpPort = mkOption {
+    # httpPort = mkOption {
+    #   type = types.int;
+    #   default = 3000;
+    #   defaultText = "3000";
+    #   description = "Port to use for OpenSpeedTest";
+    # };
+
+    port = mkOption {
       type = types.int;
-      default = 3000;
-      defaultText = "3000";
+      default = 10006;
+      defaultText = "10006";
       description = "Port to use for OpenSpeedTest";
     };
 
-    httpsPort = mkOption {
-      type = types.int;
-      default = 3001;
-      defaultText = "3001";
-      description = "Port to use for OpenSpeedTest";
+    subdomain = mkOption {
+      type = types.string;
+      default = "speedtest";
+      defaultText = "speedtest";
+      description = "Subdomain to use for OpenSpeedTest";
     };
   };
 
@@ -35,16 +42,7 @@ in {
     virtualisation.oci-containers.containers = {
       openspeedtest = {
         image = "openspeedtest/${cfg.version}";
-        labels = {
-          "traefik.enable" = "true";
-          "traefik.http.routers.openspeedtest.rule" = "Host(`192.168.1.128`)";
-          "traefik.http.routers.openspeedtest.entrypoints" = "web";
-          "traefik.http.middlewares.limit.buffering.maxRequestBodyBytes" =
-            "10000000000";
-          "traefik.http.routers.openspeedtest.middlewares" = "limit";
-        };
-        ports =
-          [ "${toString cfg.httpPort}:3000" "${toString cfg.httpsPort}:3001" ];
+        ports = [ "${toString cfg.httpsPort}:3001" ];
       };
     };
   };
