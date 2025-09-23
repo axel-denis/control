@@ -69,7 +69,7 @@ in {
       ];
 
       environmentFiles = [ cfg.environmentFile ];
-      ports = [ "${optionals (!config.homeserver.routing.lan) "127.0.0.1:"}${toString cfg.port}:9091" ];
+      ports = [ "${if config.homeserver.routing.lan then "" else "127.0.0.1:"}${toString cfg.port}:9091" ];
     };
   };
 }
