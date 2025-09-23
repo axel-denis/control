@@ -43,6 +43,10 @@ in
             locations."/" = {
               proxyPass = "http://127.0.0.1:${toString module.port}";
             };
+            # TODO - make for speedtest only:
+            extraConfig = ''
+              client_max_body_size 35M;
+            '';
           }
         ));
     };
