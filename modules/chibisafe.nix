@@ -35,14 +35,14 @@ in {
     enable = mkEnableOption "Enable chibisafe";
 
     version = mkOption {
-      type = types.string;
+      type = types.str;
       default = "latest";
       defaultText = "latest";
       description = "Version name to use for chibisafe images";
     };
 
     subdomain = mkOption {
-      type = types.string;
+      type = types.str;
       default = "chibisafe";
       defaultText = "chibisafe";
       description = "Subdomain to use for Chibisafe";
@@ -56,9 +56,11 @@ in {
     };
 
     paths = {
-      default = mkOption {
-        type = types.path;
-        description = "Root path for chibisafe media and appdata (required)";
+      default = helpers.mkInheritedPathOption {
+        parentName = "home server global default path";
+        parent = config.homeserver.defaultPath;
+        defaultSubpath = "chibisafe";
+        description = "Root path for chibisafe media and appdata";
       };
 
       database = helpers.mkInheritedPathOption {

@@ -8,23 +8,25 @@ in {
     enable = mkEnableOption "Enable Transmission";
 
     version = mkOption {
-      type = types.string;
+      type = types.str;
       default = "latest";
       defaultText = "latest";
       description = "Version name to use for Transmission images";
     };
 
     subdomain = mkOption {
-      type = types.string;
+      type = types.str;
       default = "transmission";
       defaultText = "transmission";
       description = "Subdomain to use for Transmission";
     };
 
     paths = {
-      default = mkOption {
-        type = types.path;
-        description = "Root path for Transmission data (required)";
+      default = helpers.mkInheritedPathOption {
+        parentName = "home server global default path";
+        parent = config.homeserver.defaultPath;
+        defaultSubpath = "transmission";
+        description = "Root path for Transmission data";
       };
 
       download = helpers.mkInheritedPathOption {

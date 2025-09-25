@@ -8,7 +8,7 @@ in {
     enableNeofetchGreet = mkEnableOption "Enable neofetch at the terminal startup (if zsh is enabled)";
 
     ohMyZshTheme = mkOption {
-      type = types.string;
+      type = types.str;
       default = "robbyrussell";
       defaultText = "robbyrussell";
       description = "Theme for oh-my-zsh";

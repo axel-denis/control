@@ -14,7 +14,7 @@ in {
     };
 
     version = mkOption {
-      type = types.string;
+      type = types.str;
       default = "release";
       defaultText = "release";
       description = "Version name to use for Immich images";
@@ -28,16 +28,18 @@ in {
     };
 
     subdomain = mkOption {
-      type = types.string;
+      type = types.str;
       default = "immich";
       defaultText = "immich";
       description = "Subdomain to use for Immich";
     };
 
     paths = {
-      default = mkOption {
-        type = types.path;
-        description = "Default path for Immich data (required)";
+      default = helpers.mkInheritedPathOption {
+        parentName = "home server global default path";
+        parent = config.homeserver.defaultPath;
+        defaultSubpath = "immich";
+        description = "Default path for Immich data";
       };
 
       database = helpers.mkInheritedPathOption {

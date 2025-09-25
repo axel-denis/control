@@ -7,14 +7,14 @@ in {
     enable = mkEnableOption "Enable Jellyfin";
 
     version = mkOption {
-      type = types.string;
+      type = types.str;
       default = "latest";
       defaultText = "latest";
       description = "Version name to use for Jellyfin images";
     };
 
     subdomain = mkOption {
-      type = types.string;
+      type = types.str;
       default = "jellyfin";
       defaultText = "jellyfin";
       description = "Subdomain to use for Jellyfin";
@@ -28,9 +28,11 @@ in {
     };
 
     paths = {
-      default = mkOption {
-        type = types.path;
-        description = "Root path for Jellyfin media and appdata (required)";
+      default = helpers.mkInheritedPathOption {
+        parentName = "home server global default path";
+        parent = config.homeserver.defaultPath;
+        defaultSubpath = "jellyfin";
+        description = "Root path for Jellyfin media and appdata";
       };
 
       media = helpers.mkInheritedPathOption {

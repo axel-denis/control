@@ -26,7 +26,7 @@
         psitransfer = mkModule ./modules/psitransfer.nix;
         routing = mkModule ./modules/routing.nix;
 
-        default = { ... }: {
+        default = { lib, ... }: {
           imports = [
             self.nixosModules.immich
             self.nixosModules.jellyfin
@@ -38,6 +38,15 @@
             self.nixosModules.psitransfer
             self.nixosModules.routing
           ];
+
+          options.homeserver = {
+            defaultPath = lib.mkOption {
+              type = lib.types.str;
+              default = "/homeserverdata";
+              defaultText = "/homeserverdata";
+              description = "Subdomain to use for Jellyfin";
+            };
+          };
         };
       };
     };

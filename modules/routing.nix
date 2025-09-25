@@ -22,7 +22,7 @@ in
     };
 
     domain = mkOption {
-      type = types.string;
+      type = types.str;
       default = "localhost";
       defaultText = "localhost";
       description = "Your domain name (example.com)";
@@ -31,7 +31,7 @@ in
     letsencrypt = {
       enable = mkEnableOption "Enable Let's Encrypt (ACME) support";
       email = mkOption {
-        type = types.string;
+        type = types.str;
         description = "Email address used for Let's Encrypt";
       };
       test-mode = mkEnableOption "Enable test server for Let's Encrypt";

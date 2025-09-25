@@ -7,14 +7,14 @@ in {
     enable = mkEnableOption "Enable Psitransfer";
 
     version = mkOption {
-      type = types.string;
+      type = types.str;
       default = "latest";
       defaultText = "latest";
       description = "Version name to use for Psitransfer images";
     };
 
     subdomain = mkOption {
-      type = types.string;
+      type = types.str;
       default = "psitransfer";
       defaultText = "psitransfer";
       description = "Subdomain to use for Psitransfer";
@@ -28,14 +28,16 @@ in {
     };
 
     paths = {
-      default = mkOption {
-        type = types.path;
-        description = "Root path for Psitransfer media and appdata (required)";
+      default = helpers.mkInheritedPathOption {
+        parentName = "home server global default path";
+        parent = config.homeserver.defaultPath;
+        defaultSubpath = "psitransfer";
+        description = "Root path for Psitransfer media and appdata";
       };
     };
 
     admin-password = mkOption {
-      type = types.string;
+      type = types.str;
       default = "secret"; # REVIEW - maybe remove default to force user to specify
       defaultText = "secret";
       description = "Base password for Psitransfer admin user (change this!)";
