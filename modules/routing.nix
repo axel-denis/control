@@ -42,6 +42,7 @@ in
     services.nginx = {
       enable = true;
 
+      # TODO - can listen on lan by listening to 0.0.0.0
       virtualHosts = listToAttrs (lists.forEach webservices
         (module:
           attrsets.nameValuePair "${module.subdomain}.${cfg.domain}" {
@@ -66,6 +67,7 @@ in
       defaults.server = mkIf cfg.letsencrypt.test-mode "https://acme-staging-v02.api.letsencrypt.org/directory";
     };
 
+    # FIXME - why still accessible with containers ports ?
     networking.firewall = {
       allowedTCPPorts = [ 80 443 ];
     };
