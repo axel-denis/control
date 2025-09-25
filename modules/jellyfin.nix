@@ -28,9 +28,11 @@ in {
     };
 
     paths = {
-      default = mkOption {
-        type = types.path;
-        description = "Root path for Jellyfin media and appdata (required)";
+      default = helpers.mkInheritedPathOption {
+        parentName = "home server global default path";
+        parent = config.homeserver.defaultPath;
+        defaultSubpath = "jellyfin";
+        description = "Root path for Jellyfin media and appdata";
       };
 
       media = helpers.mkInheritedPathOption {

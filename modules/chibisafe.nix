@@ -56,9 +56,11 @@ in {
     };
 
     paths = {
-      default = mkOption {
-        type = types.path;
-        description = "Root path for chibisafe media and appdata (required)";
+      default = helpers.mkInheritedPathOption {
+        parentName = "home server global default path";
+        parent = config.homeserver.defaultPath;
+        defaultSubpath = "chibisafe";
+        description = "Root path for chibisafe media and appdata";
       };
 
       database = helpers.mkInheritedPathOption {

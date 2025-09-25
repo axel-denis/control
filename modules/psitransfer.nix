@@ -28,9 +28,11 @@ in {
     };
 
     paths = {
-      default = mkOption {
-        type = types.path;
-        description = "Root path for Psitransfer media and appdata (required)";
+      default = helpers.mkInheritedPathOption {
+        parentName = "home server global default path";
+        parent = config.homeserver.defaultPath;
+        defaultSubpath = "psitransfer";
+        description = "Root path for Psitransfer media and appdata";
       };
     };
 

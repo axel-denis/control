@@ -35,9 +35,11 @@ in {
     };
 
     paths = {
-      default = mkOption {
-        type = types.path;
-        description = "Default path for Immich data (required)";
+      default = helpers.mkInheritedPathOption {
+        parentName = "home server global default path";
+        parent = config.homeserver.defaultPath;
+        defaultSubpath = "immich";
+        description = "Default path for Immich data";
       };
 
       database = helpers.mkInheritedPathOption {

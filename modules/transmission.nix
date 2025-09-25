@@ -22,9 +22,11 @@ in {
     };
 
     paths = {
-      default = mkOption {
-        type = types.path;
-        description = "Root path for Transmission data (required)";
+      default = helpers.mkInheritedPathOption {
+        parentName = "home server global default path";
+        parent = config.homeserver.defaultPath;
+        defaultSubpath = "transmission";
+        description = "Root path for Transmission data";
       };
 
       download = helpers.mkInheritedPathOption {

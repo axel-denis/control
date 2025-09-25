@@ -38,6 +38,15 @@
             self.nixosModules.psitransfer
             self.nixosModules.routing
           ];
+
+          options.homeserver = {
+            defaultPath = mkOption {
+              type = types.string;
+              default = "/homeserverdata";
+              defaultText = "/homeserverdata";
+              description = "Subdomain to use for Jellyfin";
+            };
+          };
         };
       };
     };
