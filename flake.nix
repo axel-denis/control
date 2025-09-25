@@ -26,7 +26,7 @@
         psitransfer = mkModule ./modules/psitransfer.nix;
         routing = mkModule ./modules/routing.nix;
 
-        default = { ... }: {
+        default = { lib, ... }: {
           imports = [
             self.nixosModules.immich
             self.nixosModules.jellyfin
@@ -40,7 +40,7 @@
           ];
 
           options.homeserver = {
-            defaultPath = mkOption {
+            defaultPath = lib.mkOption {
               type = types.string;
               default = "/homeserverdata";
               defaultText = "/homeserverdata";
