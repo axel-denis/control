@@ -7,14 +7,14 @@ in {
     enable = mkEnableOption "Enable Jellyfin";
 
     version = mkOption {
-      type = types.string;
+      type = types.str;
       default = "latest";
       defaultText = "latest";
       description = "Version name to use for Jellyfin images";
     };
 
     subdomain = mkOption {
-      type = types.string;
+      type = types.str;
       default = "jellyfin";
       defaultText = "jellyfin";
       description = "Subdomain to use for Jellyfin";

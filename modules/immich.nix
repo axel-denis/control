@@ -14,7 +14,7 @@ in {
     };
 
     version = mkOption {
-      type = types.string;
+      type = types.str;
       default = "release";
       defaultText = "release";
       description = "Version name to use for Immich images";
@@ -28,7 +28,7 @@ in {
     };
 
     subdomain = mkOption {
-      type = types.string;
+      type = types.str;
       default = "immich";
       defaultText = "immich";
       description = "Subdomain to use for Immich";

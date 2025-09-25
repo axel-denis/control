@@ -7,7 +7,7 @@ in {
     enable = mkEnableOption "Enable OpenSpeedTest";
 
     version = mkOption {
-      type = types.string;
+      type = types.str;
       default = "latest";
       defaultText = "latest";
       description = "Version name to use for openspeedtest images";
@@ -21,7 +21,7 @@ in {
     };
 
     subdomain = mkOption {
-      type = types.string;
+      type = types.str;
       default = "openspeedtest";
       defaultText = "openspeedtest";
       description = "Subdomain to use for OpenSpeedTest";

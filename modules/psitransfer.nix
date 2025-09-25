@@ -7,14 +7,14 @@ in {
     enable = mkEnableOption "Enable Psitransfer";
 
     version = mkOption {
-      type = types.string;
+      type = types.str;
       default = "latest";
       defaultText = "latest";
       description = "Version name to use for Psitransfer images";
     };
 
     subdomain = mkOption {
-      type = types.string;
+      type = types.str;
       default = "psitransfer";
       defaultText = "psitransfer";
       description = "Subdomain to use for Psitransfer";
@@ -37,7 +37,7 @@ in {
     };
 
     admin-password = mkOption {
-      type = types.string;
+      type = types.str;
       default = "secret"; # REVIEW - maybe remove default to force user to specify
       defaultText = "secret";
       description = "Base password for Psitransfer admin user (change this!)";
