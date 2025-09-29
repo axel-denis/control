@@ -9,6 +9,11 @@ let
     module ? enable && module.enable && module ? subdomain && module ? port
   ) (attrsets.mapAttrsToList (name: value: value) config.homeserver);
 
+  # Certificate to ensure requests come from Cloudflare:
+  cloudflareCertificate = fetchurl {
+    url = "https://developers.cloudflare.com/ssl/static/authenticated_origin_pull_ca.pem";
+    sha256 = fakeHash;
+  };
 in
 {
   options.homeserver.routing = {
@@ -36,11 +41,46 @@ in
       };
       test-mode = mkEnableOption "Enable test server for Let's Encrypt";
     };
+
+    checkClientCertificate = mkEnableOption
+    ''
+      Checks that the incoming requests present a specific client certificate.
+      This is mainly useful to ensure that requests come to a trusted proxy (e.g. Cloudflare).
+      The default certificate is Cloudflare's Authenticated Origin Pulls CA. You can replace it by setting
+      the `clientCertificateFile` option.
+    '';
+
+    clientCertificateFile = mkOption {
+      type = types.path;
+      default = cloudflareCertificate;
+      defaultText = "Cloudflare's Authenticated Origin Pulls CA";
+      description = ''
+        Path to a PEM file containing the client certificate to check for. If `checkClientCertificate` is enabled.
+        Will only accept requests presenting this certificate. (At Nginx level)
+        Defaults to Cloudflare's Authenticated Origin Pulls CA certificate.
+      '';
   };
 
   config = mkIf cfg.enable {
     services.nginx = {
       enable = true;
+
+      # TODO: also enable without letsencrypt ?
+      appendHttpConfig = mkIf cfg.letsencrypt.enable strings.concatStringSep "\n" [
+      ''
+        add_header X-Frame-Options "SAMEORIGIN";
+        add_header X-Content-Type-Options "nosniff";
+        add_header Referrer-Policy "strict-origin-when-cross-origin";
+        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+      ''
+      mkIf checkClientCertificate "ssl_client_certificate ${clientCertificateFile};"
+      mkIf checkClientCertificate "ssl_verify_client on;"
+      ];
+
+      recommendedGzipSettings = true;
+      recommendedOptimisation = true;
+      recommendedProxySettings = true;
+      recommendedTlsSettings = true;
 
       virtualHosts = listToAttrs (lists.forEach webservices
         (module:
