@@ -27,14 +27,10 @@ in {
       description = "Port to use for Psitransfer";
     };
 
-    forceLan = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
+    forceLan = mkEnableOption ''
         Force LAN access, ignoring router configuration.
         You will be able to access this container on <lan_ip>:${toString cfg.port} regardless of your router configuration.
-      '';
-    };
+    '';
 
     paths = {
       default = helpers.mkInheritedPathOption {

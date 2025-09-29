@@ -56,14 +56,10 @@ in {
       description = "Port to use for Transmission";
     };
 
-    forceLan = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
+    forceLan = mkEnableOption ''
         Force LAN access, ignoring router configuration.
         You will be able to access this container on <lan_ip>:${toString cfg.port} regardless of your router configuration.
-      '';
-    };
+    '';
   };
 
   config = mkIf cfg.enable {
