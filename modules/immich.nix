@@ -82,7 +82,7 @@ in {
     virtualisation.oci-containers.containers = {
       immich = {
         image = "ghcr.io/immich-app/immich-server:${cfg.version}";
-        ports = [ "${if (config.homeserver.routing.lan || cfg.forceLan) then "" else "127.0.0.1:"}${toString cfg.port}:2283" ];
+        ports = [ "${if (config.homeserver.routing.lan || cfg.forceLan) then "" else "127.0.0.1:"}${toString cfg.port}2283" ];
         environment = {
           IMMICH_VERSION = toString cfg.version;
           DB_HOSTNAME = "immich_postgres";
