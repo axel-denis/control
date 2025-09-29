@@ -12,7 +12,7 @@ let
   # Certificate to ensure requests come from Cloudflare:
   cloudflareCertificate = pkgs.fetchurl {
     url = "https://developers.cloudflare.com/ssl/static/authenticated_origin_pull_ca.pem";
-    sha256 = fakeHash;
+    sha256 = "sha256-wU/tDOUhDbBxn+oR0fELM3UNwX1gmur0fHXp7/DXuEM=";
   };
 in
 {
