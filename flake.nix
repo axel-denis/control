@@ -25,6 +25,7 @@
         hdd-spindown = mkModule ./modules/hdd-spindown.nix;
         psitransfer = mkModule ./modules/psitransfer.nix;
         routing = mkModule ./modules/routing.nix;
+        wakeonlan = mkModule ./modules/wakeonlan.nix;
 
         default = { lib, ... }: {
           imports = [
@@ -37,6 +38,7 @@
             self.nixosModules.hdd-spindown
             self.nixosModules.psitransfer
             self.nixosModules.routing
+            self.nixosModules.wakeonlan
           ];
 
           options.homeserver = {
