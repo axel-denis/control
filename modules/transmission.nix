@@ -55,6 +55,11 @@ in {
       defaultText = "10003";
       description = "Port to use for Transmission";
     };
+
+    forceLan = mkEnableOption ''
+        Force LAN access, ignoring router configuration.
+        You will be able to access this container on <lan_ip>:${toString cfg.port} regardless of your router configuration.
+    '';
   };
 
   config = mkIf cfg.enable {
@@ -71,7 +76,7 @@ in {
       ];
 
       environmentFiles = [ cfg.environmentFile ];
-      ports = [ "${if config.homeserver.routing.lan then "" else "127.0.0.1:"}${toString cfg.port}:9091" ];
+      ports = [ "${if (config.homeserver.routing.lan || cfg.forceLan) then "" else "127.0.0.1:"}${toString cfg.port}:9091" ];
     };
   };
 }

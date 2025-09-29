@@ -20,6 +20,11 @@ in {
       description = "Port to use for OpenSpeedTest";
     };
 
+    forceLan = mkEnableOption ''
+        Force LAN access, ignoring router configuration.
+        You will be able to access this container on <lan_ip>:${toString cfg.port} regardless of your router configuration.
+    '';
+
     subdomain = mkOption {
       type = types.str;
       default = "openspeedtest";
@@ -35,7 +40,7 @@ in {
     virtualisation.oci-containers.containers = {
       openspeedtest = {
         image = "openspeedtest/${cfg.version}";
-        ports = [ "${if config.homeserver.routing.lan then "" else "127.0.0.1:"}${toString cfg.port}:3000" ];
+        ports = [ "${if (config.homeserver.routing.lan || cfg.forceLan) then "" else "127.0.0.1:"}${toString cfg.port}:3000" ];
       };
     };
   };

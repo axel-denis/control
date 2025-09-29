@@ -55,6 +55,11 @@ in {
       description = "Port to use for chibisafe";
     };
 
+    forceLan = mkEnableOption ''
+        Force LAN access, ignoring router configuration.
+        You will be able to access this container on <lan_ip>:${toString cfg.port} regardless of your router configuration.
+    '';
+
     paths = {
       default = helpers.mkInheritedPathOption {
         parentName = "home server global default path";
@@ -111,7 +116,7 @@ in {
 
       chibisafe_caddy = {
         image = "caddy:2-alpine";
-        ports = [ "${if config.homeserver.routing.lan then "" else "127.0.0.1:"}${toString cfg.port}:80" ];
+        ports = [ "${if (config.homeserver.routing.lan || cfg.forceLan) then "" else "127.0.0.1:"}${toString cfg.port}:80" ];
         environment = { BASE_URL = ":80"; };
         volumes = [
           "${cfg.paths.uploads}:/app/uploads:ro"

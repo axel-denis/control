@@ -1,4 +1,4 @@
-{ config, helpers, lib, ... }:
+{ config, helpers, lib, pkgs, ... }:
 
 with lib;
 let
@@ -9,6 +9,11 @@ let
     module ? enable && module.enable && module ? subdomain && module ? port
   ) (attrsets.mapAttrsToList (name: value: value) config.homeserver);
 
+  # Cloudflare's Authenticated Origin Pulls CA certificate
+  cloudflareCertificate = pkgs.fetchurl {
+    url = "https://developers.cloudflare.com/ssl/static/authenticated_origin_pull_ca.pem";
+    sha256 = "sha256-wU/tDOUhDbBxn+oR0fELM3UNwX1gmur0fHXp7/DXuEM=";
+  };
 in
 {
   options.homeserver.routing = {
@@ -36,13 +41,47 @@ in
       };
       test-mode = mkEnableOption "Enable test server for Let's Encrypt";
     };
+
+    checkClientCertificate = mkEnableOption
+    ''
+      Checks that the incoming requests present a specific client certificate.
+      This is mainly useful to ensure that requests come to a trusted proxy (e.g. Cloudflare).
+      The default certificate is Cloudflare's Authenticated Origin Pulls CA. You can replace it by setting
+      the `clientCertificateFile` option.
+    '';
+
+    clientCertificateFile = mkOption {
+      type = types.path;
+      default = cloudflareCertificate;
+      defaultText = "Cloudflare's Authenticated Origin Pulls CA";
+      description = ''
+        Path to a PEM file containing the client certificate to check for. If `checkClientCertificate` is enabled.
+        Will only accept requests presenting this certificate. (At Nginx level)
+        Defaults to Cloudflare's Authenticated Origin Pulls CA certificate.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
     services.nginx = {
       enable = true;
 
-      # TODO - can listen on lan by listening to 0.0.0.0
+      appendHttpConfig = strings.concatStringsSep "\n" [
+      ''
+        add_header X-Frame-Options "SAMEORIGIN";
+        add_header X-Content-Type-Options "nosniff";
+        add_header Referrer-Policy "strict-origin-when-cross-origin";
+        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+      ''
+      (if cfg.checkClientCertificate then "ssl_client_certificate ${cfg.clientCertificateFile};" else "")
+      (if cfg.checkClientCertificate then "ssl_verify_client on;" else "")
+      ];
+
+      recommendedGzipSettings = true;
+      recommendedOptimisation = true;
+      recommendedProxySettings = true;
+      recommendedTlsSettings = true;
+
       virtualHosts = listToAttrs (lists.forEach webservices
         (module:
           attrsets.nameValuePair "${module.subdomain}.${cfg.domain}" {
@@ -51,7 +90,6 @@ in
             locations."/" = {
               proxyPass = "http://127.0.0.1:${toString module.port}";
             };
-            # TODO - tune values
             extraConfig = ''
               client_max_body_size 35M;
             '';
@@ -67,7 +105,6 @@ in
       defaults.server = mkIf cfg.letsencrypt.test-mode "https://acme-staging-v02.api.letsencrypt.org/directory";
     };
 
-    # FIXME - why still accessible with containers ports ?
     networking.firewall = {
       allowedTCPPorts = [ 80 443 ];
     };

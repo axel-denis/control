@@ -27,6 +27,11 @@ in {
       description = "Port to use for Psitransfer";
     };
 
+    forceLan = mkEnableOption ''
+        Force LAN access, ignoring router configuration.
+        You will be able to access this container on <lan_ip>:${toString cfg.port} regardless of your router configuration.
+    '';
+
     paths = {
       default = helpers.mkInheritedPathOption {
         parentName = "home server global default path";
@@ -55,7 +60,7 @@ in {
     virtualisation.oci-containers.containers = {
       psitransfer = {
         image = "psitrax/psitransfer:${cfg.version}";
-        ports = [ "${if config.homeserver.routing.lan then "" else "127.0.0.1:"}${toString cfg.port}:3000" ];
+        ports = [ "${if (config.homeserver.routing.lan || cfg.forceLan) then "" else "127.0.0.1:"}${toString cfg.port}:3000" ];
         environment = {
           PUID="0";
           PGID="0";
