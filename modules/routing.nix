@@ -59,6 +59,7 @@ in
         Will only accept requests presenting this certificate. (At Nginx level)
         Defaults to Cloudflare's Authenticated Origin Pulls CA certificate.
       '';
+    };
   };
 
   config = mkIf cfg.enable {
