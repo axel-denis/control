@@ -65,8 +65,7 @@ in
     services.nginx = {
       enable = true;
 
-      # TODO: also enable without letsencrypt ?
-      appendHttpConfig = mkIf cfg.letsencrypt.enable strings.concatStringSep "\n" [
+      appendHttpConfig = strings.concatStringSep "\n" [
       ''
         add_header X-Frame-Options "SAMEORIGIN";
         add_header X-Content-Type-Options "nosniff";
