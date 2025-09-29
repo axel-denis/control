@@ -66,12 +66,16 @@ in
     services.nginx = {
       enable = true;
 
-      appendHttpConfig = ''
+      appendHttpConfig = strings.concatStringsSep "\n" [
+      ''
         add_header X-Frame-Options "SAMEORIGIN";
         add_header X-Content-Type-Options "nosniff";
         add_header Referrer-Policy "strict-origin-when-cross-origin";
         add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-      '';
+      ''
+      (if cfg.checkClientCertificate then "ssl_client_certificate ${cfg.clientCertificateFile};" else "")
+      (if cfg.checkClientCertificate then "ssl_verify_client on;" else "")
+      ];
 
       recommendedGzipSettings = true;
       recommendedOptimisation = true;
@@ -86,11 +90,9 @@ in
             locations."/" = {
               proxyPass = "http://127.0.0.1:${toString module.port}";
             };
-            extraConfig = strings.concatStringsSep "\n" [
-              "client_max_body_size 35M;"
-              (if cfg.checkClientCertificate then "ssl_client_certificate ${cfg.clientCertificateFile};" else "")
-              (if cfg.checkClientCertificate then "ssl_verify_client on;" else "")
-            ];
+            extraConfig = ''
+              client_max_body_size 35M;
+            '';
           }
         ));
     };
