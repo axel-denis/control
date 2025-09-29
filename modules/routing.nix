@@ -1,4 +1,4 @@
-{ config, helpers, lib, ... }:
+{ config, helpers, lib, pkgs, ... }:
 
 with lib;
 let
@@ -10,7 +10,7 @@ let
   ) (attrsets.mapAttrsToList (name: value: value) config.homeserver);
 
   # Certificate to ensure requests come from Cloudflare:
-  cloudflareCertificate = fetchurl {
+  cloudflareCertificate = pkgs.fetchurl {
     url = "https://developers.cloudflare.com/ssl/static/authenticated_origin_pull_ca.pem";
     sha256 = fakeHash;
   };
