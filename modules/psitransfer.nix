@@ -27,6 +27,12 @@ in {
       description = "Port to use for Psitransfer";
     };
 
+    forceLan = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Force LAN access, ignoring router configuration.";
+    };
+
     paths = {
       default = helpers.mkInheritedPathOption {
         parentName = "home server global default path";
@@ -55,7 +61,7 @@ in {
     virtualisation.oci-containers.containers = {
       psitransfer = {
         image = "psitrax/psitransfer:${cfg.version}";
-        ports = [ "${if config.homeserver.routing.lan then "" else "127.0.0.1:"}${toString cfg.port}:3000" ];
+        ports = [ "${if (config.homeserver.routing.lan || cfg.forceLan) then "" else "127.0.0.1:"}${toString cfg.port}:3000" ];
         environment = {
           PUID="0";
           PGID="0";
