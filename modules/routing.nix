@@ -73,8 +73,8 @@ in
         add_header Referrer-Policy "strict-origin-when-cross-origin";
         add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
       ''
-      (if checkClientCertificate then "ssl_client_certificate ${clientCertificateFile};")
-      (if checkClientCertificate then "ssl_verify_client on;")
+      (if checkClientCertificate then "ssl_client_certificate ${clientCertificateFile};" else "")
+      (if checkClientCertificate then "ssl_verify_client on;" else "")
       ];
 
       recommendedGzipSettings = true;
