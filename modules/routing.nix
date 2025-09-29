@@ -66,7 +66,7 @@ in
     services.nginx = {
       enable = true;
 
-      appendHttpConfig = strings.concatStringSep "\n" [
+      appendHttpConfig = strings.concatStringsSep "\n" [
       ''
         add_header X-Frame-Options "SAMEORIGIN";
         add_header X-Content-Type-Options "nosniff";
