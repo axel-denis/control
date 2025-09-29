@@ -77,10 +77,10 @@ in
       (if cfg.checkClientCertificate then "ssl_verify_client on;" else "")
       ];
 
-      recommendedGzipSettings = true;
-      recommendedOptimisation = true;
-      recommendedProxySettings = true;
-      recommendedTlsSettings = true;
+      #recommendedGzipSettings = true;
+      #recommendedOptimisation = true;
+      #recommendedProxySettings = true;
+      #recommendedTlsSettings = true;
 
       virtualHosts = listToAttrs (lists.forEach webservices
         (module:
