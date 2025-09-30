@@ -1,6 +1,7 @@
 # Easy NixOS homeserver
-Despite being one of the best linux distribution choice to setup a server, NixOS can be tough for beginners, which makes it rarely used in practice.
+[Get started.](#ready-to-dive-in--check-one-of-the-guides)
 
+Despite being one of the best linux distribution choice to setup a server, NixOS can be tough for beginners, which makes it rarely used in practice.<br>
 **This repo aims to fix this !**
 
 This package does all the heavy lifting for you, and let you with a "can't be simpler" configuration. See yourself:

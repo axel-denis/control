@@ -2,6 +2,9 @@
 
 To keep configurations files simple, a lot of settings are optionnal. Unless expressly specified, they fallback to nicely set default values.
 
+## Enable
+Needless to say, all modules and tools are disabled by default. To enable something, you must always set `<module>.enable = true;`.
+
 ## Paths
 
 
