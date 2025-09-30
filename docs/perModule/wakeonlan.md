@@ -1,8 +1,10 @@
 # Wake on Lan
 ###### Allows your server to be started from anywhere.
 
-> [!TIP]
-> Learn about wake on lan on [wikipedia](https://en.wikipedia.org/wiki/Wake-on-LAN).
+> [!CAUTION]
+> $\color{red} Deprecated.$
+> This module will soon be removed as it does not add any value compared to <br>
+> `networking.interfaces.<name>.wakeOnLan.enable = true;`
 
 ---
 
@@ -30,3 +32,6 @@ wakeonlan {
 
 > [!WARNING]
 > Some motherboards configure wake on lan from BIOS/UEFI. This makes this setting irrelevant. It's advised to check your motherboard manual or options and configure wake on lan directly on it.
+
+> [!TIP]
+> Learn about wake on lan on [wikipedia](https://en.wikipedia.org/wiki/Wake-on-LAN).
