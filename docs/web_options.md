@@ -29,5 +29,5 @@ They are the same accross the web services.
 
   The container version to use.
   `latest` (or equivalent) by default
-  > [!WARNING]
-  > You should not set it unless you know what you are doing
+> [!WARNING]
+> You should not set it unless you know what you are doing
