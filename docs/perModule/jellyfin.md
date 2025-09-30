@@ -2,19 +2,22 @@
 ###### The Free Software Media System.
 
 ### Info
-> Jellyfin enables you to collect, manage, and stream your media. Run the Jellyfin server on your system and gain access to the leading free-software entertainment system
+> "Jellyfin enables you to collect, manage, and stream your media. Run the Jellyfin server on your system and gain access to the leading free-software entertainment system"
 
 ### Options
-`jellyfin.<option>`
-| Option name | Description       |
-| ----------- | ----------------- |
-| enable      | Enable Jellyfin   |
-| version[^1] | Container version |
-| subdomain   | App subdomain     |
-| ----------- | ----------------- |
-| ----------- | ----------------- |
-| ----------- | ----------------- |
-| ----------- | ----------------- |
+
+#### 1. Firstly check the [common web services options](../web_options.md)
+#### 2. Specific options for this module:
+
+`jellyfin.paths`
+| Name    | Description                                | Default                        |
+| ------- | ------------------------------------------ | ------------------------------ |
+| default | The main path of the app                   | `<main path>/jellyfin`         |
+| media   | Path for Jellyfin media (movies, music...) | `<main path>/<default>/media`  |
+| config  | Path for Jellyfin appdata (config)         | `<main path>/<default>/config` |
+
+- `<main path>` - Main path for all the apps. See [defaults](../defaults.md#paths).
+- `<default>` - `jellyfin.paths.default`
 
 ---
 
@@ -27,14 +30,23 @@ jellyfin.enable = true;
 
 This example enables Jellyfin, using [default](../defaults.md) values for port and location of the app data.
 
----
+Complete example :
+```nix
+jellyfin = {
+    enable = true;
 
-> [!IMPORTANT]
-> For wake on lan to receive your requests, your router needs to be properly configured to let [magic packets](https://en.wikipedia.org/wiki/Wake-on-LAN#Magic_packet) in. This configuration differs from router to router but generally is just an option to enable.
+    subdomain = "movies"; # -> movies.yourdomain.com (if routing module enabled)
+    port = 8080; # -> server_ip:8080 (if routing module NOT enabled)
 
-> [!WARNING]
-> Some motherboards configure wake on lan from BIOS/UEFI. This makes this setting irrelevant. It's advised to check your motherboard manual or options and configure wake on lan directly on it.
+    paths = {
+        # if unset, would default to the global main path (ex. /homeserverdata/jellyfin)
+        default = "/mnt/my_other_disk/my_jellyfin";
 
-> [!TIP]
-> Learn about wake on lan on [wikipedia](https://en.wikipedia.org/wiki/Wake-on-LAN).
+        # if unset, would default to "<default>/media" -> /mnt/my_other_disk/my_jellyfin/media
+        media = "/mnt/movies_disk/"; # useful if your media is on a separate disk
 
+        # if unset, would default to "<default>/config" -> /mnt/my_other_disk/my_jellyfin/config
+        config = "/mnt/movies_disk/jellyfin_data"; # generally useless to set
+    };
+};
+```
