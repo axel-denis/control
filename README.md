@@ -38,7 +38,7 @@ You can now access
 - [https://psitransfer.yourdomain.com](https://www.youtube.com/watch?v=E4WlUXrJgy4)
   <sub><br>... and other enabled services as well</sub>
 
-> [!TIP] Batteries included
+> [!TIP]Test
 > Getting https certificates configuration can't be easier as we support [Let's Encrypt](https://letsencrypt.org/).
 
 ---
@@ -54,7 +54,8 @@ jellyfin = {
 };
 ```
 
-> [!NOTE] The same properties can be used for other webservices as well.
+> [!NOTE]
+> The same properties can be used for other webservices as well.
 
 ---
 
