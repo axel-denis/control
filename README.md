@@ -38,7 +38,7 @@ You can now access
 - [https://psitransfer.yourdomain.com](https://www.youtube.com/watch?v=E4WlUXrJgy4)
   <sub><br>... and other enabled services as well</sub>
 
-> [!TIP]Test
+> [!TIP]
 > Getting https certificates configuration can't be easier as we support [Let's Encrypt](https://letsencrypt.org/).
 
 ---
@@ -62,10 +62,6 @@ jellyfin = {
 <br>
 
 *Oh, and we also provide tools like terminal configuration [(oh my zsh)](https://ohmyz.sh/) and hdd-spindown. You'll see that later in the docs* :)
-
----
-
-<br>
 
 ## Ready to dive in ? Check one of the guides:
 - [For NixOS beginner]()
