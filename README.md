@@ -67,6 +67,6 @@ jellyfin = {
 ## Ready to dive in ? Check one of the guides:
 - Installation guide [for NixOS beginner]()
 - Installation guide [for NixOS regular user]()
-- [Get started](./docs/get_started.md)
+- [Getting started](./docs/getting_started.md)
 
 Or check the <u>[list of supported services and tools](./docs/modules_list.md)</u>.
