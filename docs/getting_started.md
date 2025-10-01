@@ -10,6 +10,8 @@ However, if you wish to customize a bit your server (choose where the data is st
 > [!IMPORTANT] 
 > You just have to keep in mind that all of those options are **not required to be set if not specifically needed**. Don't let yourself be overwhelmed by all the options specified in the other documentation pages.
 
+<br>
+
 ## Our first apps
 Let's enable our first apps by creating a simple config file that imports this flake (check the installation guide):
 ```nix
@@ -106,6 +108,30 @@ With this setup, the media will be stored on the specified disk, while `path.con
 
 <br>
 
+## Add some tools
+Not everything is a webservice. We also provide some tools.
+
+A cool quality of life is the [terminal](./perModule/terminal.md) module, that allows us to enable [Oh My ZSH](https://ohmyz.sh/). (We already enabled it earlier)
+
+Another one is [hdd-spindown](./perModule/hdd-spindown.md), through which we can define a set amount of time after what HDD disks stop spinning if idle. This is very common to reduce noise and save power.
+
+Let's add them:
+```nix
+{ homeserver, ...}
+{
+  homeserver = {
+    immich.enable = true;
+    jellyfin.enable = true;
+    terminal.enableOhMyZsh = true;
+    hdd-spindown.enable = true; # Default time is 20min
+  }
+}
+```
+
+Please check the documentation for these two modules if you wish to customize them further !
+
+<br>
+
 ## Customize network
 If your homeserver is accessible through internet, you can bind a domain and subdomains to it.<br>
 We will not cover the "how to get a domain here", and proceed like you already have one.
@@ -146,28 +172,3 @@ With router enabled, all usual containers ports are closed (you can't access by 
 > Apps default subdomain are their name. Ex. `immich.yourdomain.com`, `jellyfin.yourdomain.com`...
 >
 > A lot more configuration options can be managed. Please check the complete [routing module doc](../docs/perModule/routing.md).
-
-
-## Add some tools
-Not everything is a webservice. We also provide some tools.
-
-A cool quality of life is the [terminal](./perModule/terminal.md) module, that allows us to enable [Oh My ZSH](https://ohmyz.sh/).
-
-Another one is [hdd-spindown](./perModule/hdd-spindown.md), through which we can define a set amount of time after what HDD disks stop spinning if idle. This is very common to reduce noise and save power.
-
-Let's add them:
-```nix
-{ homeserver, ...}
-{
-  homeserver = {
-    immich.enable = true;
-    jellyfin.enable = true;
-    terminal.enableOhMyZsh = true;
-
-    terminal.enableOhMyZsh = true;
-    hdd-spindown.enable = true; # Default time is 60 seconds
-  }
-}
-```
-
-Please check the documentation for these two modules if you wish to customize them further !
