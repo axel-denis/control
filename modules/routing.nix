@@ -89,6 +89,7 @@ in
             enableACME = cfg.letsencrypt.enable;
             locations."/" = {
               proxyPass = "http://127.0.0.1:${toString module.port}";
+              basicAuth = module.basicAuth;
             };
             extraConfig = ''
               client_max_body_size 35M;

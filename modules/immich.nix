@@ -32,6 +32,19 @@ in {
         You will be able to access this container on <lan_ip>:${toString cfg.port} regardless of your router configuration.
     '';
 
+    basicAuth = mkOption {
+      type = with types; attrsOf str;
+      default = { };
+      description = ''
+        If set, enable Nginx basic authentication for this service.
+        The value should be an attribute set of username-password pairs, e.g.
+        { user1 = "password1"; user2 = "password2"; }
+        Keep in mind that basic authentication works for web pages but can break dependant services (e.g. mobile apps).
+      '';
+    };
+
+    # ANCHOR - simple ctrl-shift-f insert for all webservices
+
     subdomain = mkOption {
       type = types.str;
       default = "immich";
