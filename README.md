@@ -1,4 +1,6 @@
-<img align="center" src="./docs/assets/control_logo.svg" style="width:100%;" />
+<p align="center">
+  <img src="./docs/assets/control_logo.svg" style="width:75%;" />
+</p>
 
 # Control; An easy NixOS homeserver
 [Get started.](#ready-to-dive-in--check-one-of-the-guides)
