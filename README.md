@@ -1,4 +1,6 @@
-# Easy NixOS homeserver
+<img align="center" src="./docs/assets/control_logo.svg" style="width:100%;" />
+
+# Control; An easy NixOS homeserver
 [Get started.](#ready-to-dive-in--check-one-of-the-guides)
 
 Despite being one of the best linux distribution choice to setup a server, NixOS can be tough for beginners, which makes it rarely used in practice.<br>
