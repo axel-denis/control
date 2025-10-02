@@ -88,8 +88,23 @@ in {
         "${cfg.paths.config}:/config"
       ];
 
+      logging = {
+        driver = "json-file";
+        options = {
+          "max-size" = "10m";
+        };
+      };
       environmentFiles = [ cfg.environmentFile ];
       ports = [ "${if (config.homeserver.routing.lan || cfg.forceLan) then "" else "127.0.0.1:"}${toString cfg.port}:9091" ];
     };
   };
 }
+
+/*
+example env file for transmission-openvpn:
+OPENVPN_PROVIDER=PIA
+OPENVPN_CONFIG=france
+OPENVPN_USERNAME=user
+OPENVPN_PASSWORD=pass
+LOCAL_NETWORK=192.168.0.0/16 # or 127.0.0.0/8 ? 0.0.0.0/0 ?
+*/
