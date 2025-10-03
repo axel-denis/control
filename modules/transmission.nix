@@ -88,12 +88,6 @@ in {
         "${cfg.paths.config}:/config"
       ];
 
-      logging = {
-        driver = "json-file";
-        options = {
-          "max-size" = "10m";
-        };
-      };
       environmentFiles = [ cfg.environmentFile ];
       ports = [ "${if (config.homeserver.routing.lan || cfg.forceLan) then "" else "127.0.0.1:"}${toString cfg.port}:9091" ];
     };
