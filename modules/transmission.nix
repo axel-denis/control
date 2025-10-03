@@ -57,8 +57,10 @@ in {
     };
 
     forceLan = mkEnableOption ''
-        Force LAN access, ignoring router configuration.
-        You will be able to access this container on <lan_ip>:${toString cfg.port} regardless of your router configuration.
+      Force LAN access, ignoring router configuration.
+      You will be able to access this container on <lan_ip>:${
+        toString cfg.port
+      } regardless of your router configuration.
     '';
 
     basicAuth = mkOption {
@@ -81,24 +83,27 @@ in {
 
     virtualisation.oci-containers.containers.transmission = {
       image = "haugene/transmission-openvpn:${cfg.version}";
-      extraOptions = [ "--cap-add=NET_ADMIN" ];
+      # extraOptions = [ "--cap-add=NET_ADMIN" ]; // FIXME - disabled because seems dangerous
 
-      volumes = [
-        "${cfg.paths.download}:/data"
-        "${cfg.paths.config}:/config"
-      ];
+      volumes = [ "${cfg.paths.download}:/data" "${cfg.paths.config}:/config" ];
 
       environmentFiles = [ cfg.environmentFile ];
-      ports = [ "${if (config.homeserver.routing.lan || cfg.forceLan) then "" else "127.0.0.1:"}${toString cfg.port}:9091" ];
+      ports = [
+        "${
+          if (config.homeserver.routing.lan || cfg.forceLan) then
+            ""
+          else
+            "127.0.0.1:"
+        }${toString cfg.port}:9091"
+      ];
     };
   };
 }
 
-/*
-example env file for transmission-openvpn:
-OPENVPN_PROVIDER=PIA
-OPENVPN_CONFIG=france
-OPENVPN_USERNAME=user
-OPENVPN_PASSWORD=pass
-LOCAL_NETWORK=192.168.0.0/16 # or 127.0.0.0/8 ? 0.0.0.0/0 ?
+/* example env file for transmission-openvpn:
+   OPENVPN_PROVIDER=PIA
+   OPENVPN_CONFIG=france
+   OPENVPN_USERNAME=user
+   OPENVPN_PASSWORD=pass
+   LOCAL_NETWORK=192.168.0.0/16 # or 127.0.0.0/8 ? 0.0.0.0/0 ?
 */
