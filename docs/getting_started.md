@@ -1,5 +1,7 @@
 # Getting started
 
+If not installed, please [install](./install_guide.md) this flake.
+
 ## Before we start
 It's important to understand the philosophy behind this flake: it aims to provides the **simplest** configuration possible for setting up a homeserver.
 

@@ -69,8 +69,7 @@ jellyfin = {
 *Oh, and we also provide tools like terminal configuration [(oh my zsh)](https://ohmyz.sh/) and hdd-spindown. You'll see that later in the docs* :)
 
 ## Ready to dive in ? Check one of the guides:
-- Installation guide [for NixOS beginner]()
-- Installation guide [for NixOS regular user]()
+- [Installation guide](./docs/install_guide.md)
 - [Getting started](./docs/getting_started.md)
 
 Or check the <u>[list of supported services and tools](./docs/modules_list.md)</u>.
