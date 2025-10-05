@@ -9,7 +9,7 @@
 #### 1. Firstly check the [common web services options](../web_options.md)
 #### 2. Specific options for this module:
 
-`jellyfin.paths`
+`jellyfin.paths`:
 | Name    | Description                                | Default                        |
 | ------- | ------------------------------------------ | ------------------------------ |
 | default | The main path of the app                   | `<main path>/jellyfin`         |
