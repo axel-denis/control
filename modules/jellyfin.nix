@@ -32,6 +32,10 @@ in {
         You will be able to access this container on <lan_ip>:${toString cfg.port} regardless of your router configuration.
     '';
 
+    lanOnly = mkEnableOption ''
+      Disable routing for this service. You will only be able to access it on your LAN.
+    '';
+
     basicAuth = mkOption {
       type = with types; attrsOf str;
       default = { };
@@ -76,7 +80,7 @@ in {
     virtualisation.oci-containers.containers = {
       jellyfin = {
         image = "jellyfin/jellyfin:${cfg.version}";
-        ports = [ "${if (config.homeserver.routing.lan || cfg.forceLan) then "" else "127.0.0.1:"}${toString cfg.port}:8096" ];
+        ports = [ "${if (config.homeserver.routing.lan || cfg.forceLan || cfg.lanOnly) then "" else "127.0.0.1:"}${toString cfg.port}:8096" ];
         volumes = [
           #"${jellyfinRoot}/media:/media"
           "${cfg.paths.media}:/media"

@@ -57,10 +57,12 @@ in {
     };
 
     forceLan = mkEnableOption ''
-      Force LAN access, ignoring router configuration.
-      You will be able to access this container on <lan_ip>:${
-        toString cfg.port
-      } regardless of your router configuration.
+        Force LAN access, ignoring router configuration.
+        You will be able to access this container on <lan_ip>:${toString cfg.port} regardless of your router configuration.
+    '';
+
+    lanOnly = mkEnableOption ''
+      Disable routing for this service. You will only be able to access it on your LAN.
     '';
 
     basicAuth = mkOption {
@@ -83,14 +85,14 @@ in {
 
     virtualisation.oci-containers.containers.transmission = {
       image = "haugene/transmission-openvpn:${cfg.version}";
-      # extraOptions = [ "--cap-add=NET_ADMIN" ]; // FIXME - disabled because seems dangerous
+      extraOptions = [ "--cap-add=NET_ADMIN" ];
 
       volumes = [ "${cfg.paths.download}:/data" "${cfg.paths.config}:/config" ];
 
       environmentFiles = [ cfg.environmentFile ];
       ports = [
         "${
-          if (config.homeserver.routing.lan || cfg.forceLan) then
+          if (config.homeserver.routing.lan || cfg.forceLan || cfg.lanOnly) then
             ""
           else
             "127.0.0.1:"

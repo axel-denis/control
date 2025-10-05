@@ -6,7 +6,10 @@ let
 
   # collect all (enabled) web-services
   webservices = filter (module:
-    module ? enable && module.enable && module ? subdomain && module ? port
+    module ? enable && module.enable
+    && module ? subdomain
+    && module ? port
+    && module ? lanOnly && !module.lanOnly
   ) (attrsets.mapAttrsToList (name: value: value) config.homeserver);
 
   # Cloudflare's Authenticated Origin Pulls CA certificate
