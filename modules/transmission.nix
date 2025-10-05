@@ -60,6 +60,23 @@ in {
         Force LAN access, ignoring router configuration.
         You will be able to access this container on <lan_ip>:${toString cfg.port} regardless of your router configuration.
     '';
+
+    lanOnly = mkEnableOption ''
+      Disable routing for this service. You will only be able to access it on your LAN.
+    '';
+
+    basicAuth = mkOption {
+      type = with types; attrsOf str;
+      default = { };
+      description = ''
+        If set, enable Nginx basic authentication for this service.
+        The value should be an attribute set of username-password pairs, e.g.
+        { user1 = "password1"; user2 = "password2"; }
+        Keep in mind that basic authentication works for web pages but can break dependant services (e.g. mobile apps).
+      '';
+    };
+
+    # ANCHOR - simple ctrl-shift-f insert for all webservices
   };
 
   config = mkIf cfg.enable {
@@ -70,13 +87,25 @@ in {
       image = "haugene/transmission-openvpn:${cfg.version}";
       extraOptions = [ "--cap-add=NET_ADMIN" ];
 
-      volumes = [
-        "${cfg.paths.download}:/data"
-        "${cfg.paths.config}:/config"
-      ];
+      volumes = [ "${cfg.paths.download}:/data" "${cfg.paths.config}:/config" ];
 
       environmentFiles = [ cfg.environmentFile ];
-      ports = [ "${if (config.homeserver.routing.lan || cfg.forceLan) then "" else "127.0.0.1:"}${toString cfg.port}:9091" ];
+      ports = [
+        "${
+          if (config.homeserver.routing.lan || cfg.forceLan || cfg.lanOnly) then
+            ""
+          else
+            "127.0.0.1:"
+        }${toString cfg.port}:9091"
+      ];
     };
   };
 }
+
+/* example env file for transmission-openvpn:
+   OPENVPN_PROVIDER=PIA
+   OPENVPN_CONFIG=france
+   OPENVPN_USERNAME=user
+   OPENVPN_PASSWORD=pass
+   LOCAL_NETWORK=192.168.0.0/16 # or 127.0.0.0/8 ? 0.0.0.0/0 ?
+*/

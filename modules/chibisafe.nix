@@ -60,6 +60,23 @@ in {
         You will be able to access this container on <lan_ip>:${toString cfg.port} regardless of your router configuration.
     '';
 
+    lanOnly = mkEnableOption ''
+      Disable routing for this service. You will only be able to access it on your LAN.
+    '';
+
+    basicAuth = mkOption {
+      type = with types; attrsOf str;
+      default = { };
+      description = ''
+        If set, enable Nginx basic authentication for this service.
+        The value should be an attribute set of username-password pairs, e.g.
+        { user1 = "password1"; user2 = "password2"; }
+        Keep in mind that basic authentication works for web pages but can break dependant services (e.g. mobile apps).
+      '';
+    };
+
+    # ANCHOR - simple ctrl-shift-f insert for all webservices
+
     paths = {
       default = helpers.mkInheritedPathOption {
         parentName = "home server global default path";
@@ -116,7 +133,7 @@ in {
 
       chibisafe_caddy = {
         image = "caddy:2-alpine";
-        ports = [ "${if (config.homeserver.routing.lan || cfg.forceLan) then "" else "127.0.0.1:"}${toString cfg.port}:80" ];
+        ports = [ "${if (config.homeserver.routing.lan || cfg.forceLan || cfg.lanOnly) then "" else "127.0.0.1:"}${toString cfg.port}:80" ];
         environment = { BASE_URL = ":80"; };
         volumes = [
           "${cfg.paths.uploads}:/app/uploads:ro"

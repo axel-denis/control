@@ -6,7 +6,10 @@ let
 
   # collect all (enabled) web-services
   webservices = filter (module:
-    module ? enable && module.enable && module ? subdomain && module ? port
+    module ? enable && module.enable
+    && module ? subdomain
+    && module ? port
+    && module ? lanOnly && !module.lanOnly
   ) (attrsets.mapAttrsToList (name: value: value) config.homeserver);
 
   # Cloudflare's Authenticated Origin Pulls CA certificate
@@ -89,6 +92,7 @@ in
             enableACME = cfg.letsencrypt.enable;
             locations."/" = {
               proxyPass = "http://127.0.0.1:${toString module.port}";
+              basicAuth = module.basicAuth;
             };
             extraConfig = ''
               client_max_body_size 35M;

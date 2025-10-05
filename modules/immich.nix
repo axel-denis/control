@@ -32,6 +32,23 @@ in {
         You will be able to access this container on <lan_ip>:${toString cfg.port} regardless of your router configuration.
     '';
 
+    lanOnly = mkEnableOption ''
+      Disable routing for this service. You will only be able to access it on your LAN.
+    '';
+
+    basicAuth = mkOption {
+      type = with types; attrsOf str;
+      default = { };
+      description = ''
+        If set, enable Nginx basic authentication for this service.
+        The value should be an attribute set of username-password pairs, e.g.
+        { user1 = "password1"; user2 = "password2"; }
+        Keep in mind that basic authentication works for web pages but can break dependant services (e.g. mobile apps).
+      '';
+    };
+
+    # ANCHOR - simple ctrl-shift-f insert for all webservices
+
     subdomain = mkOption {
       type = types.str;
       default = "immich";
@@ -78,7 +95,7 @@ in {
     virtualisation.oci-containers.containers = {
       immich = {
         image = "ghcr.io/immich-app/immich-server:${cfg.version}";
-        ports = [ "${if (config.homeserver.routing.lan || cfg.forceLan) then "" else "127.0.0.1:"}${toString cfg.port}:2283" ];
+        ports = [ "${if (config.homeserver.routing.lan || cfg.forceLan || cfg.lanOnly) then "" else "127.0.0.1:"}${toString cfg.port}:2283" ];
         environment = {
           IMMICH_VERSION = toString cfg.version;
           DB_HOSTNAME = "immich_postgres";
