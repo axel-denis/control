@@ -44,8 +44,8 @@
           options.homeserver = {
             defaultPath = lib.mkOption {
               type = lib.types.str;
-              default = "/homeserverdata";
-              defaultText = "/homeserverdata";
+              default = "/control_appdata";
+              defaultText = "/control_appdata";
               description = "Subdomain to use for Jellyfin";
             };
           };

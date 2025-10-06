@@ -41,7 +41,7 @@ jellyfin = {
     # if you must change the path, in most case you should only change paths.default and let the flake
     # handle the rest. This extensive example shows a more complex but complete configuration
     paths = {
-        # if unset, would default to the global main path (ex. /homeserverdata/jellyfin)
+        # if unset, would default to the global main path (ex. /control_appdata/jellyfin)
         default = "/mnt/my_other_disk/my_jellyfin";
 
         # if unset, would default to "<default>/media" -> /mnt/my_other_disk/my_jellyfin/media

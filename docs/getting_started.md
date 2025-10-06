@@ -45,7 +45,7 @@ If needed, we can directly change the default path for all apps in one go:
 { homeserver, ...}
 {
   homeserver = {
-    defaultPath = "/other_disk"; # if not specified, default to /homeserverdata
+    defaultPath = "/other_disk"; # if not specified, default to /control_appdata
 
     immich.enable = true;
     jellyfin.enable = true;
