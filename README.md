@@ -73,3 +73,17 @@ jellyfin = {
 - [Getting started](./docs/getting_started.md)
 
 Or check the <u>[list of supported services and tools](./docs/modules_list.md)</u>.
+
+> [!CAUTION]
+> This module is in heavy developement, and subject to change. We are only on v1, but future updates could break your current configuration, so please be sure to read the update docs when it releases !
+
+## Contribute ?
+We don't have proper contribute documentation yet, but contributions are always welcome !
+
+We are looking for more modules to add. If you are using one on your own config, why not add it here ?
+
+If you're already a Nix developer, just have a look on how other modules are built and do the same for your module :smile:
+
+Keypoints (for webservices):
+- Please use the same common options as other webservices
+- Please run the service in a docker (soon podman, but docker for now) container. (better security wise)
