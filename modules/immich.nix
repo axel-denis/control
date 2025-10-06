@@ -1,9 +1,9 @@
 { config, helpers, lib, ... }:
 
 with lib;
-let cfg = config.homeserver.immich; # (gets the config values the user has set)
+let cfg = config.control.immich; # (gets the config values the user has set)
 in {
-  options.homeserver.immich = {
+  options.control.immich = {
     enable = mkEnableOption "Enable Immich container";
 
     # TODO - set a defaut location and generate password if not existing
@@ -60,7 +60,7 @@ in {
     paths = {
       default = helpers.mkInheritedPathOption {
         parentName = "home server global default path";
-        parent = config.homeserver.defaultPath;
+        parent = config.control.defaultPath;
         defaultSubpath = "immich";
         description = "Default path for Immich data";
       };
@@ -98,8 +98,7 @@ in {
         image = "ghcr.io/immich-app/immich-server:${cfg.version}";
         ports = [
           "${
-            if (config.homeserver.routing.lan || cfg.forceLan
-              || cfg.lanOnly) then
+            if (config.control.routing.lan || cfg.forceLan || cfg.lanOnly) then
               ""
             else
               "127.0.0.1:"

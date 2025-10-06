@@ -2,13 +2,13 @@
 
 with lib;
 let
-  cfg = config.homeserver.routing;
+  cfg = config.control.routing;
 
   # collect all (enabled) web-services
   webservices = filter (module:
     module ? enable && module.enable && module ? subdomain && module ? port
     && module ? lanOnly && !module.lanOnly)
-    (attrsets.mapAttrsToList (name: value: value) config.homeserver);
+    (attrsets.mapAttrsToList (name: value: value) config.control);
 
   # Cloudflare's Authenticated Origin Pulls CA certificate
   cloudflareCertificate = pkgs.fetchurl {
@@ -17,7 +17,7 @@ let
     sha256 = "sha256-wU/tDOUhDbBxn+oR0fELM3UNwX1gmur0fHXp7/DXuEM=";
   };
 in {
-  options.homeserver.routing = {
+  options.control.routing = {
     enable = mkEnableOption "Enable Nginx routing";
 
     lan = mkOption {

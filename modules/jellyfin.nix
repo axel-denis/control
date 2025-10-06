@@ -1,9 +1,9 @@
 { config, helpers, lib, ... }:
 
 with lib;
-let cfg = config.homeserver.jellyfin;
+let cfg = config.control.jellyfin;
 in {
-  options.homeserver.jellyfin = {
+  options.control.jellyfin = {
     enable = mkEnableOption "Enable Jellyfin";
 
     version = mkOption {
@@ -54,7 +54,7 @@ in {
     paths = {
       default = helpers.mkInheritedPathOption {
         parentName = "home server global default path";
-        parent = config.homeserver.defaultPath;
+        parent = config.control.defaultPath;
         defaultSubpath = "jellyfin";
         description = "Root path for Jellyfin media and appdata";
       };
@@ -84,8 +84,7 @@ in {
         image = "jellyfin/jellyfin:${cfg.version}";
         ports = [
           "${
-            if (config.homeserver.routing.lan || cfg.forceLan
-              || cfg.lanOnly) then
+            if (config.control.routing.lan || cfg.forceLan || cfg.lanOnly) then
               ""
             else
               "127.0.0.1:"

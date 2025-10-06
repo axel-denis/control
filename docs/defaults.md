@@ -8,7 +8,7 @@ Needless to say, all modules and tools are disabled by default. To enable someth
 ## Paths
 
 
-**If not set, every path is created under the *main path* `/homeserverdata/`**
+**If not set, every path is created under the *main path* `/control_appdata/`**
 
 All services requiring one (or many) folders to store data are assigned to the default path:
 ```
@@ -18,7 +18,7 @@ All services requiring one (or many) folders to store data are assigned to the d
 Example for [Jellyfin](./perModule/jellyfin.md):
 ```
 /
-└── homeserverdata
+└── control_appdata
     └── jellyfin
         ├── # specific folders required by the app:
         ├── config
@@ -28,7 +28,7 @@ Example for [Jellyfin](./perModule/jellyfin.md):
 > [!TIP]
 > You can change the **main path** with the variable `defaultPath`
 > ```nix
-> homeserver {
+> control {
 >     defaultPath = "/somewhere/else";
 >     # ... other modules ...
 > };

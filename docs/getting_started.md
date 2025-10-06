@@ -17,9 +17,9 @@ However, if you wish to customize a bit your server (choose where the data is st
 ## Our first apps
 Let's enable our first apps by creating a simple config file that imports this flake (check the installation guide):
 ```nix
-{ homeserver, ...}
+{ control, ...}
 {
-  homeserver = {
+  control = {
     immich.enable = true;
     jellyfin.enable = true;
     terminal.enableOhMyZsh = true;
@@ -42,10 +42,10 @@ In our case, we can access Immich on `0.0.0.0:10001` and jellyfin on `0.0.0.0:10
 ### Move all apps
 If needed, we can directly change the default path for all apps in one go:
 ```nix
-{ homeserver, ...}
+{ control, ...}
 {
-  homeserver = {
-    defaultPath = "/other_disk"; # if not specified, default to /homeserverdata
+  control = {
+    defaultPath = "/other_disk"; # if not specified, default to /control_appdata
 
     immich.enable = true;
     jellyfin.enable = true;
@@ -57,9 +57,9 @@ If needed, we can directly change the default path for all apps in one go:
 ### Move one app
 Sometime, we would like to have some app's data stored in another disk or location. You can do so by editing `<app>.paths.default`:
 ```nix
-{ homeserver, ...}
+{ control, ...}
 {
-  homeserver = {
+  control = {
     jellyfin.enable = true;
     terminal.enableOhMyZsh = true;
 
@@ -83,9 +83,9 @@ Jellyfin allows us to customize
 
 It's a common use case scenario to store the media on a different disk:
 ```nix
-{ homeserver, ...}
+{ control, ...}
 {
-  homeserver = {
+  control = {
     immich.enable = true;
     terminal.enableOhMyZsh = true;
     jellyfin = {
@@ -119,9 +119,9 @@ Another one is [hdd-spindown](./perModule/hdd-spindown.md), through which we can
 
 Let's add them:
 ```nix
-{ homeserver, ...}
+{ control, ...}
 {
-  homeserver = {
+  control = {
     immich.enable = true;
     jellyfin.enable = true;
     terminal.enableOhMyZsh = true;
@@ -141,9 +141,9 @@ We will not cover the "how to get a domain here", and proceed like you already h
 Let's enable the routing module:
 
 ```nix
-{ homeserver, ...}
+{ control, ...}
 {
-  homeserver = {
+  control = {
     immich.enable = true;
     jellyfin.enable = true;
     terminal.enableOhMyZsh = true;

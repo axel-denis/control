@@ -1,9 +1,9 @@
 { config, helpers, lib, ... }:
 
 with lib;
-let cfg = config.homeserver.psitransfer;
+let cfg = config.control.psitransfer;
 in {
-  options.homeserver.psitransfer = {
+  options.control.psitransfer = {
     enable = mkEnableOption "Enable Psitransfer";
 
     version = mkOption {
@@ -54,7 +54,7 @@ in {
     paths = {
       default = helpers.mkInheritedPathOption {
         parentName = "home server global default path";
-        parent = config.homeserver.defaultPath;
+        parent = config.control.defaultPath;
         defaultSubpath = "psitransfer";
         description = "Root path for Psitransfer media and appdata";
       };
@@ -80,8 +80,7 @@ in {
         image = "psitrax/psitransfer:${cfg.version}";
         ports = [
           "${
-            if (config.homeserver.routing.lan || cfg.forceLan
-              || cfg.lanOnly) then
+            if (config.control.routing.lan || cfg.forceLan || cfg.lanOnly) then
               ""
             else
               "127.0.0.1:"

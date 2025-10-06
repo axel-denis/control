@@ -2,9 +2,9 @@
 
 with lib;
 
-let cfg = config.homeserver.transmission;
+let cfg = config.control.transmission;
 in {
-  options.homeserver.transmission = {
+  options.control.transmission = {
     enable = mkEnableOption "Enable Transmission";
 
     version = mkOption {
@@ -24,7 +24,7 @@ in {
     paths = {
       default = helpers.mkInheritedPathOption {
         parentName = "home server global default path";
-        parent = config.homeserver.defaultPath;
+        parent = config.control.defaultPath;
         defaultSubpath = "transmission";
         description = "Root path for Transmission data";
       };
@@ -94,7 +94,7 @@ in {
       environmentFiles = [ cfg.environmentFile ];
       ports = [
         "${
-          if (config.homeserver.routing.lan || cfg.forceLan || cfg.lanOnly) then
+          if (config.control.routing.lan || cfg.forceLan || cfg.lanOnly) then
             ""
           else
             "127.0.0.1:"
