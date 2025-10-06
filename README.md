@@ -15,8 +15,8 @@ This package does all the heavy lifting for you, and let you with a "can't be si
 
 {
   control = {
-    jellyfin.enable = true; # self hosted google photos
-    immich.enable = true; # self hosted netflix
+    jellyfin.enable = true; # self hosted netflix
+    immich.enable = true; # self hosted google photos
     psitransfer.enable = true; # self hosted wetransfer
     # ...there's more if you want
   };
