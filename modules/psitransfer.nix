@@ -28,8 +28,10 @@ in {
     };
 
     forceLan = mkEnableOption ''
-        Force LAN access, ignoring router configuration.
-        You will be able to access this container on <lan_ip>:${toString cfg.port} regardless of your router configuration.
+      Force LAN access, ignoring router configuration.
+      You will be able to access this container on <lan_ip>:${
+        toString cfg.port
+      } regardless of your router configuration.
     '';
 
     lanOnly = mkEnableOption ''
@@ -60,7 +62,8 @@ in {
 
     admin-password = mkOption {
       type = types.str;
-      default = "secret"; # REVIEW - maybe remove default to force user to specify
+      default =
+        "secret"; # REVIEW - maybe remove default to force user to specify
       defaultText = "secret";
       description = "Base password for Psitransfer admin user (change this!)";
     };
@@ -71,21 +74,25 @@ in {
     virtualisation.oci-containers.backend = "docker";
 
     # Creating directory with the user id asked by the container
-    systemd.tmpfiles.rules = [
-      "d ${cfg.paths.default} 0755 1000 1000"
-    ];
+    systemd.tmpfiles.rules = [ "d ${cfg.paths.default} 0755 1000 1000" ];
     virtualisation.oci-containers.containers = {
       psitransfer = {
         image = "psitrax/psitransfer:${cfg.version}";
-        ports = [ "${if (config.homeserver.routing.lan || cfg.forceLan || cfg.lanOnly) then "" else "127.0.0.1:"}${toString cfg.port}:3000" ];
+        ports = [
+          "${
+            if (config.homeserver.routing.lan || cfg.forceLan
+              || cfg.lanOnly) then
+              ""
+            else
+              "127.0.0.1:"
+          }${toString cfg.port}:3000"
+        ];
         environment = {
-          PUID="0";
-          PGID="0";
+          PUID = "0";
+          PGID = "0";
           PSITRANSFER_ADMIN_PASS = cfg.admin-password;
         };
-        volumes = [
-          "${cfg.paths.default}:/data"
-        ];
+        volumes = [ "${cfg.paths.default}:/data" ];
       };
     };
   };

@@ -6,19 +6,17 @@ let
 
   # collect all (enabled) web-services
   webservices = filter (module:
-    module ? enable && module.enable
-    && module ? subdomain
-    && module ? port
-    && module ? lanOnly && !module.lanOnly
-  ) (attrsets.mapAttrsToList (name: value: value) config.homeserver);
+    module ? enable && module.enable && module ? subdomain && module ? port
+    && module ? lanOnly && !module.lanOnly)
+    (attrsets.mapAttrsToList (name: value: value) config.homeserver);
 
   # Cloudflare's Authenticated Origin Pulls CA certificate
   cloudflareCertificate = pkgs.fetchurl {
-    url = "https://developers.cloudflare.com/ssl/static/authenticated_origin_pull_ca.pem";
+    url =
+      "https://developers.cloudflare.com/ssl/static/authenticated_origin_pull_ca.pem";
     sha256 = "sha256-wU/tDOUhDbBxn+oR0fELM3UNwX1gmur0fHXp7/DXuEM=";
   };
-in
-{
+in {
   options.homeserver.routing = {
     enable = mkEnableOption "Enable Nginx routing";
 
@@ -45,8 +43,7 @@ in
       test-mode = mkEnableOption "Enable test server for Let's Encrypt";
     };
 
-    checkClientCertificate = mkEnableOption
-    ''
+    checkClientCertificate = mkEnableOption ''
       Checks that the incoming requests present a specific client certificate.
       This is mainly useful to ensure that requests come to a trusted proxy (e.g. Cloudflare).
       The default certificate is Cloudflare's Authenticated Origin Pulls CA. You can replace it by setting
@@ -70,14 +67,17 @@ in
       enable = true;
 
       appendHttpConfig = strings.concatStringsSep "\n" [
-      ''
-        add_header X-Frame-Options "SAMEORIGIN";
-        add_header X-Content-Type-Options "nosniff";
-        add_header Referrer-Policy "strict-origin-when-cross-origin";
-        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-      ''
-      (if cfg.checkClientCertificate then "ssl_client_certificate ${cfg.clientCertificateFile};" else "")
-      (if cfg.checkClientCertificate then "ssl_verify_client on;" else "")
+        ''
+          add_header X-Frame-Options "SAMEORIGIN";
+          add_header X-Content-Type-Options "nosniff";
+          add_header Referrer-Policy "strict-origin-when-cross-origin";
+          add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+        ''
+        (if cfg.checkClientCertificate then
+          "ssl_client_certificate ${cfg.clientCertificateFile};"
+        else
+          "")
+        (if cfg.checkClientCertificate then "ssl_verify_client on;" else "")
       ];
 
       recommendedGzipSettings = true;
@@ -85,20 +85,18 @@ in
       recommendedProxySettings = true;
       recommendedTlsSettings = true;
 
-      virtualHosts = listToAttrs (lists.forEach webservices
-        (module:
-          attrsets.nameValuePair "${module.subdomain}.${cfg.domain}" {
-            forceSSL = cfg.letsencrypt.enable;
-            enableACME = cfg.letsencrypt.enable;
-            locations."/" = {
-              proxyPass = "http://127.0.0.1:${toString module.port}";
-              basicAuth = module.basicAuth;
-            };
-            extraConfig = ''
-              client_max_body_size 35M;
-            '';
-          }
-        ));
+      virtualHosts = listToAttrs (lists.forEach webservices (module:
+        attrsets.nameValuePair "${module.subdomain}.${cfg.domain}" {
+          forceSSL = cfg.letsencrypt.enable;
+          enableACME = cfg.letsencrypt.enable;
+          locations."/" = {
+            proxyPass = "http://127.0.0.1:${toString module.port}";
+            basicAuth = module.basicAuth;
+          };
+          extraConfig = ''
+            client_max_body_size 35M;
+          '';
+        }));
     };
 
     # Let's Encrypt (ACME)
@@ -106,11 +104,10 @@ in
       acceptTerms = true;
       defaults.email = cfg.letsencrypt.email;
       # NOTE - for testing: uses staging CA to avoid rate limits:
-      defaults.server = mkIf cfg.letsencrypt.test-mode "https://acme-staging-v02.api.letsencrypt.org/directory";
+      defaults.server = mkIf cfg.letsencrypt.test-mode
+        "https://acme-staging-v02.api.letsencrypt.org/directory";
     };
 
-    networking.firewall = {
-      allowedTCPPorts = [ 80 443 ];
-    };
+    networking.firewall = { allowedTCPPorts = [ 80 443 ]; };
   };
 }

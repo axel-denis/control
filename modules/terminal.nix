@@ -5,7 +5,8 @@ let cfg = config.homeserver.terminal;
 in {
   options.homeserver.terminal = {
     enableOhMyZsh = mkEnableOption "Enable and activate Zsh";
-    enableNeofetchGreet = mkEnableOption "Enable neofetch at the terminal startup (if zsh is enabled)";
+    enableNeofetchGreet = mkEnableOption
+      "Enable neofetch at the terminal startup (if zsh is enabled)";
 
     ohMyZshTheme = mkOption {
       type = types.str;

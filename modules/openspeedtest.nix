@@ -21,8 +21,10 @@ in {
     };
 
     forceLan = mkEnableOption ''
-        Force LAN access, ignoring router configuration.
-        You will be able to access this container on <lan_ip>:${toString cfg.port} regardless of your router configuration.
+      Force LAN access, ignoring router configuration.
+      You will be able to access this container on <lan_ip>:${
+        toString cfg.port
+      } regardless of your router configuration.
     '';
 
     lanOnly = mkEnableOption ''
@@ -57,7 +59,15 @@ in {
     virtualisation.oci-containers.containers = {
       openspeedtest = {
         image = "openspeedtest/${cfg.version}";
-        ports = [ "${if (config.homeserver.routing.lan || cfg.forceLan || cfg.lanOnly) then "" else "127.0.0.1:"}${toString cfg.port}:3000" ];
+        ports = [
+          "${
+            if (config.homeserver.routing.lan || cfg.forceLan
+              || cfg.lanOnly) then
+              ""
+            else
+              "127.0.0.1:"
+          }${toString cfg.port}:3000"
+        ];
       };
     };
   };
