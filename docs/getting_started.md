@@ -3,7 +3,7 @@
 If not installed, please [install](./install_guide.md) this flake.
 
 ## Before we start
-It's important to understand the philosophy behind this flake: it aims to provides the **simplest** configuration possible for setting up a control.
+It's important to understand the philosophy behind this flake: it aims to provides the **simplest** configuration possible for setting up a homeserver.
 
 That's why this flake can run on it's own with almost no configuration. You just have to enable desired services and tools (ex. `immich.enable = true;`) and you're good to go.
 
@@ -135,7 +135,7 @@ Please check the documentation for these two modules if you wish to customize th
 <br>
 
 ## Customize network
-If your control is accessible through internet, you can bind a domain and subdomains to it.<br>
+If your homeserver is accessible through internet, you can bind a domain and subdomains to it.<br>
 We will not cover the "how to get a domain here", and proceed like you already have one.
 
 Let's enable the routing module:

@@ -5,7 +5,7 @@ You need to add this flake into your main flakes inputs:
 inputs = {
   nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05"; # (example)
   # ...
-  control.url = "github:axel-denis/nixos-control";
+  control.url = "github:axel-denis/control/v1.0";
   control.inputs.nixpkgs.follows = "nixpkgs";
 };
 ```
@@ -27,7 +27,7 @@ Here is an example of a complete flake:
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
-    control.url = "github:axel-denis/nixos-control/cecb846e46539d76ab33acbd3d26eafe1a83b4ba"; # hash to point a specific version
+    control.url = "github:axel-denis/control/v1.0"; # don't forget to point a specific version
     control.inputs.nixpkgs.follows = "nixpkgs";
   };
 
