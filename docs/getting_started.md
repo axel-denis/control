@@ -3,7 +3,7 @@
 If not installed, please [install](./install_guide.md) this flake.
 
 ## Before we start
-It's important to understand the philosophy behind this flake: it aims to provides the **simplest** configuration possible for setting up a homeserver.
+It's important to understand the philosophy behind this flake: it aims to provides the **simplest** configuration possible for setting up a control.
 
 That's why this flake can run on it's own with almost no configuration. You just have to enable desired services and tools (ex. `immich.enable = true;`) and you're good to go.
 
@@ -17,9 +17,9 @@ However, if you wish to customize a bit your server (choose where the data is st
 ## Our first apps
 Let's enable our first apps by creating a simple config file that imports this flake (check the installation guide):
 ```nix
-{ homeserver, ...}
+{ control, ...}
 {
-  homeserver = {
+  control = {
     immich.enable = true;
     jellyfin.enable = true;
     terminal.enableOhMyZsh = true;
@@ -42,9 +42,9 @@ In our case, we can access Immich on `0.0.0.0:10001` and jellyfin on `0.0.0.0:10
 ### Move all apps
 If needed, we can directly change the default path for all apps in one go:
 ```nix
-{ homeserver, ...}
+{ control, ...}
 {
-  homeserver = {
+  control = {
     defaultPath = "/other_disk"; # if not specified, default to /control_appdata
 
     immich.enable = true;
@@ -57,9 +57,9 @@ If needed, we can directly change the default path for all apps in one go:
 ### Move one app
 Sometime, we would like to have some app's data stored in another disk or location. You can do so by editing `<app>.paths.default`:
 ```nix
-{ homeserver, ...}
+{ control, ...}
 {
-  homeserver = {
+  control = {
     jellyfin.enable = true;
     terminal.enableOhMyZsh = true;
 
@@ -83,9 +83,9 @@ Jellyfin allows us to customize
 
 It's a common use case scenario to store the media on a different disk:
 ```nix
-{ homeserver, ...}
+{ control, ...}
 {
-  homeserver = {
+  control = {
     immich.enable = true;
     terminal.enableOhMyZsh = true;
     jellyfin = {
@@ -119,9 +119,9 @@ Another one is [hdd-spindown](./perModule/hdd-spindown.md), through which we can
 
 Let's add them:
 ```nix
-{ homeserver, ...}
+{ control, ...}
 {
-  homeserver = {
+  control = {
     immich.enable = true;
     jellyfin.enable = true;
     terminal.enableOhMyZsh = true;
@@ -135,15 +135,15 @@ Please check the documentation for these two modules if you wish to customize th
 <br>
 
 ## Customize network
-If your homeserver is accessible through internet, you can bind a domain and subdomains to it.<br>
+If your control is accessible through internet, you can bind a domain and subdomains to it.<br>
 We will not cover the "how to get a domain here", and proceed like you already have one.
 
 Let's enable the routing module:
 
 ```nix
-{ homeserver, ...}
+{ control, ...}
 {
-  homeserver = {
+  control = {
     immich.enable = true;
     jellyfin.enable = true;
     terminal.enableOhMyZsh = true;

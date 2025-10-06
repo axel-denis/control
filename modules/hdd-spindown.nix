@@ -1,9 +1,9 @@
 { config, helpers, lib, pkgs, ... }:
 
 with lib;
-let cfg = config.homeserver.hdd-spindown;
+let cfg = config.control.hdd-spindown;
 in {
-  options.homeserver.hdd-spindown = {
+  options.control.hdd-spindown = {
     enable = mkEnableOption "Enable HDD spindown";
 
     timeoutSeconds = mkOption {

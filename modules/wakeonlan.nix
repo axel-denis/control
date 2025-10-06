@@ -1,9 +1,9 @@
 { config, helpers, lib, pkgs, ... }:
 
 with lib;
-let cfg = config.homeserver.wakeonlan;
+let cfg = config.control.wakeonlan;
 in {
-  options.homeserver.wakeonlan = {
+  options.control.wakeonlan = {
     enable = mkEnableOption "Enable wake on lan";
 
     interface = mkOption {

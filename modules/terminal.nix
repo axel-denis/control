@@ -1,9 +1,9 @@
 { config, helpers, lib, pkgs, ... }:
 
 with lib;
-let cfg = config.homeserver.terminal;
+let cfg = config.control.terminal;
 in {
-  options.homeserver.terminal = {
+  options.control.terminal = {
     enableOhMyZsh = mkEnableOption "Enable and activate Zsh";
     enableNeofetchGreet = mkEnableOption
       "Enable neofetch at the terminal startup (if zsh is enabled)";

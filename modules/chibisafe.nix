@@ -2,7 +2,7 @@
 
 with lib;
 let
-  cfg = config.homeserver.chibisafe;
+  cfg = config.control.chibisafe;
   Caddyfile = pkgs.writeText "Caddyfile" ''
     {$BASE_URL} {
       route {
@@ -31,7 +31,7 @@ let
     }
   '';
 in {
-  options.homeserver.chibisafe = {
+  options.control.chibisafe = {
     enable = mkEnableOption "Enable chibisafe";
 
     version = mkOption {
@@ -82,7 +82,7 @@ in {
     paths = {
       default = helpers.mkInheritedPathOption {
         parentName = "home server global default path";
-        parent = config.homeserver.defaultPath;
+        parent = config.control.defaultPath;
         defaultSubpath = "chibisafe";
         description = "Root path for chibisafe media and appdata";
       };
@@ -135,8 +135,7 @@ in {
         image = "caddy:2-alpine";
         ports = [
           "${
-            if (config.homeserver.routing.lan || cfg.forceLan
-              || cfg.lanOnly) then
+            if (config.control.routing.lan || cfg.forceLan || cfg.lanOnly) then
               ""
             else
               "127.0.0.1:"

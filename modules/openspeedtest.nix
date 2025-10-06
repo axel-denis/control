@@ -1,9 +1,9 @@
 { config, helpers, lib, ... }:
 
 with lib;
-let cfg = config.homeserver.openspeedtest;
+let cfg = config.control.openspeedtest;
 in {
-  options.homeserver.openspeedtest = {
+  options.control.openspeedtest = {
     enable = mkEnableOption "Enable OpenSpeedTest";
 
     version = mkOption {
@@ -61,8 +61,7 @@ in {
         image = "openspeedtest/${cfg.version}";
         ports = [
           "${
-            if (config.homeserver.routing.lan || cfg.forceLan
-              || cfg.lanOnly) then
+            if (config.control.routing.lan || cfg.forceLan || cfg.lanOnly) then
               ""
             else
               "127.0.0.1:"

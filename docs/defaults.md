@@ -28,7 +28,7 @@ Example for [Jellyfin](./perModule/jellyfin.md):
 > [!TIP]
 > You can change the **main path** with the variable `defaultPath`
 > ```nix
-> homeserver {
+> control {
 >     defaultPath = "/somewhere/else";
 >     # ... other modules ...
 > };

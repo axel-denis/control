@@ -31,9 +31,9 @@ In this first part, we will see how to edit default ports, then bind your webser
 
 If you followed the [Getting Started](../getting_started.md) guide, you should be left with a config similar to this one. Please edit it like this to focus more on this guide's subject:
 ```nix
-{ homeserver, ... }
+{ control, ... }
 {
-  homeserver = {
+  control = {
     immich.enable = true;
     jellyfin.enable = true;
     psitransfer.enable = true;
@@ -46,9 +46,9 @@ Right now, you can access services on your local network, by using `<server_ip>:
 
 If you want to set a custom port for an app, that's possible:
 ```nix
-{ homeserver, ... }
+{ control, ... }
 {
-  homeserver = {
+  control = {
     immich.enable = true;
     jellyfin.enable = true;
     psitransfer.enable = true;
@@ -62,9 +62,9 @@ If you want to set a custom port for an app, that's possible:
 
 Let's now enable the router to bind everything to it's respective subdomain (don't rebuild it yet, you could get an error):
 ```nix
-{ homeserver, ... }
+{ control, ... }
 {
-  homeserver = {
+  control = {
     immich.enable = true;
     jellyfin.enable = true;
     psitransfer.enable = true;
@@ -120,9 +120,9 @@ Now that we have a basic configuration of the routing module, let's see some cus
 
 
 ```nix
-{ homeserver, ... }
+{ control, ... }
 {
-  homeserver = {
+  control = {
     immich = {
         enable = true;
         subdomain = "photos";
@@ -157,9 +157,9 @@ Now that we have a basic configuration of the routing module, let's see some cus
 <summary>See more</summary>
 
 ```nix
-{ homeserver, ... }
+{ control, ... }
 {
-  homeserver = {
+  control = {
     immich = {
         enable = true;
         subdomain = "photos";
@@ -207,9 +207,9 @@ If the client uses your domain name (and your domain name points your proxy), no
 Thats why this flake has options to filter incoming requests, **ensuring only those comming from your proxy are accepted.**
 
 ```nix
-{ homeserver, ... }
+{ control, ... }
 {
-  homeserver = {
+  control = {
     immich.enable = true;
     jellyfin.enable = true;
     psitransfer.enable = true;

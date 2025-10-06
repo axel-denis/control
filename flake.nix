@@ -41,7 +41,7 @@
             self.nixosModules.wakeonlan
           ];
 
-          options.homeserver = {
+          options.control = {
             defaultPath = lib.mkOption {
               type = lib.types.str;
               default = "/control_appdata";

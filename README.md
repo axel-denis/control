@@ -11,10 +11,10 @@ Despite being one of the best linux distribution choice to setup a server, NixOS
 This package does all the heavy lifting for you, and let you with a "can't be simpler" configuration. See yourself:
 
 ```nix
-{ homeserver, ...}
+{ control, ...}
 
 {
-  homeserver = {
+  control = {
     jellyfin.enable = true; # self hosted google photos
     immich.enable = true; # self hosted netflix
     psitransfer.enable = true; # self hosted wetransfer
@@ -23,7 +23,7 @@ This package does all the heavy lifting for you, and let you with a "can't be si
 }
 ```
 
-**That's all you need to have a homeserver hosting Jellyfin, Immich and Psitransfer !**
+**That's all you need to have a control hosting Jellyfin, Immich and Psitransfer !**
 
 ---
 
