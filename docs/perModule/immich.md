@@ -9,6 +9,9 @@
 #### 1. Firstly check the [common web services options](../web_options.md)
 #### 2. Specific options for this module:
 
+`dbPasswordFile`:
+A file containing a password for the internal database of Immich. (Required)
+
 `immich.paths`:
 | Name            | Description                             | Default                        |
 | --------------- | --------------------------------------- | ------------------------------ |
