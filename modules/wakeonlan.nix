@@ -8,7 +8,8 @@ in {
 
     interface = mkOption {
       type = types.str;
-      description = "Network interface name (ex. enp3s0)";
+      description = "Network interface name";
+      example = "enp3s0";
     };
   };
 

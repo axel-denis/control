@@ -57,8 +57,10 @@ in {
     };
 
     forceLan = mkEnableOption ''
-        Force LAN access, ignoring router configuration.
-        You will be able to access this container on <lan_ip>:${toString cfg.port} regardless of your router configuration.
+      Force LAN access, ignoring router configuration.
+      You will be able to access this container on <lan_ip>:${
+        toString cfg.port
+      } regardless of your router configuration.
     '';
 
     lanOnly = mkEnableOption ''
