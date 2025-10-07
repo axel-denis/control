@@ -55,7 +55,7 @@ in {
     virtualisation.oci-containers.containers = {
       pihole = {
         image = "pihole/pihole:${cfg.version}";
-        ports = [ "${toString cfg.port}:443" "53:53/tcp" "53:53/udp" ];
+        ports = [ "${toString cfg.port}:80" "53:53/tcp" "53:53/udp" ];
         environment = {
           TZ = cfg.timezone;
           FTLCONF_webserver_api_password = cfg.password;
