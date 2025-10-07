@@ -23,7 +23,7 @@ Environment file to configure transmission-openvpn. Please check the [official r
 | download | Path for Transmission downloads        | `<main path>/<default>/download` |
 | config   | Path for Transmission appdata (config) | `<main path>/<default>/config`   |
 
-- `<main path>` - Main path for all the apps. See [defaults](../defaults.md#paths).
+- `<main path>` = Main path for all the apps. See [defaults](../defaults.md#paths).
 - `<default>` - `transmission.paths.default`
 
 ---

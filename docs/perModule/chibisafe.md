@@ -16,5 +16,5 @@
 | uploads  | Path for Chibisafe uploads (photos/videos) | `<main path>/<default>/uploads`  |
 | logs     | Path for Chibisafe logs                    | `<main path>/<default>/logs`     |
 
-- `<main path>` - Main path for all the apps. See [defaults](../defaults.md#paths).
+- `<main path>` = Main path for all the apps. See [defaults](../defaults.md#paths).
 - `<default>` - `chibisafe.paths.default`
