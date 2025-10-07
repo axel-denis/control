@@ -13,18 +13,12 @@
 
 ### Options
 
-`pihole.dbPasswordFile`:
-A file containing a password for the internal database of Immich. (Required)
-
-`pihole.paths`:
-
-| Name                   | Description                            | Default                                  |
-|------------------------|----------------------------------------|------------------------------------------|
-| port                   | Port for the web interface             | `10007`                                  |
-| `pihole.paths.default` | Path for the app's data                | `<main path>/pihole`                     |
-| timezone               | Timezone                               | `config.time.timeZone` of your system    |
-| password               | First account password                 | $\color{red} *$                          |
-| machineLearning        | Path for Immich machine learning cache | `<main path>/<default>/machine_learning` |
+| Name                   | Description                | Default                               |
+|------------------------|----------------------------|---------------------------------------|
+| `port`                 | Port for the web interface | `10007`                               |
+| `pihole.paths.default` | Path for the app's data    | `<main path>/pihole`                  |
+| `timezone`             | Timezone                   | `config.time.timeZone` of your system |
+| `password`             | First account password     | $\color{red} *$                       |
 
 - `<main path>` = Main path for all the apps. See [defaults](../defaults.md#paths).
 
