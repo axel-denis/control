@@ -19,7 +19,7 @@ in {
       type = types.int;
       default = 10007;
       defaultText = "10007";
-      description = "Http port to use for Pi-hole";
+      description = "Http port to use for the Pi-hole web interface";
     };
 
     paths = {
@@ -33,12 +33,12 @@ in {
 
     timezone = mkOption {
       type = types.str;
-      default =
-        "Europe/Paris"; # REVIEW - maybe remove default to force user to specify
-      defaultText = "Europe/Paris";
+      default = config.time.timeZone;
+      defaultText = "Your system timezone";
       description = ''
         Set the appropriate timezone for your location from
         https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+        Defaults to your system configuration (config.time.timeZone).
       '';
     };
 
@@ -55,7 +55,7 @@ in {
     virtualisation.oci-containers.containers = {
       pihole = {
         image = "pihole/pihole:${cfg.version}";
-        ports = [ "${toString cfg.port}:80" "53:53/tcp" "53:53/udp" ];
+        ports = [ "${toString cfg.port}:443" "53:53/tcp" "53:53/udp" ];
         environment = {
           TZ = cfg.timezone;
           FTLCONF_webserver_api_password = cfg.password;
