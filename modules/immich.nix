@@ -120,7 +120,7 @@ in {
         extraOptions = [ "--network=immich-net" ];
       };
 
-      immich_machine_learning = {
+      immich-machine-learning = {
         image =
           "ghcr.io/immich-app/immich-machine-learning:${cfg.version}";
         environment = {
