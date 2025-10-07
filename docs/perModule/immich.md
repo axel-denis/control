@@ -19,5 +19,5 @@ A file containing a password for the internal database of Immich. (Required)
 | uploads         | Path for Immich uploads (photos/videos) | `<main path>/<default>/uploads`          |
 | machineLearning | Path for Immich machine learning cache  | `<main path>/<default>/machine_learning` |
 
-- `<main path>` - Main path for all the apps. See [defaults](../defaults.md#paths).
+- `<main path>` = Main path for all the apps. See [defaults](../defaults.md#paths).
 - `<default>` - `immich.paths.default`

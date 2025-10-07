@@ -16,7 +16,7 @@
 | media   | Path for Jellyfin media (movies, music...) | `<main path>/<default>/media`  |
 | config  | Path for Jellyfin appdata (config)         | `<main path>/<default>/config` |
 
-- `<main path>` - Main path for all the apps. See [defaults](../defaults.md#paths).
+- `<main path>` = Main path for all the apps. See [defaults](../defaults.md#paths).
 - `<default>` - `jellyfin.paths.default`
 
 ---

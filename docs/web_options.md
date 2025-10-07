@@ -33,6 +33,7 @@ Default:
 | Chibisafe    | 10004        |
 | Psitransfer  | 10005        |
 | Speedtest    | 10006        |
+| Pi-Hole http | 10007        |
 
 ## `<service>.forceLan`
 Keeps LAN access, even if the [routing](./perModule/routing.md) module is enabled.<br>
