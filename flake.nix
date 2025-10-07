@@ -26,6 +26,7 @@
         psitransfer = mkModule ./modules/psitransfer.nix;
         routing = mkModule ./modules/routing.nix;
         wakeonlan = mkModule ./modules/wakeonlan.nix;
+        pihole = mkModule ./modules/pihole.nix;
 
         default = { lib, ... }: {
           imports = [
@@ -39,6 +40,7 @@
             self.nixosModules.psitransfer
             self.nixosModules.routing
             self.nixosModules.wakeonlan
+            self.nixosModules.pihole
           ];
 
           options.control = {
