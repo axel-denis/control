@@ -6,11 +6,10 @@ in {
   options.control.immich = {
     enable = mkEnableOption "Enable Immich container";
 
-    # TODO - set a defaut location and generate password if not existing
-    dbPasswordFile = mkOption {
-      type = types.path;
+    dbPassword = mkOption {
+      type = types.str;
       description = ''
-        Path of Postgres password file for Immich.
+        Postgres password for Immich.
       '';
     };
 
@@ -57,6 +56,10 @@ in {
       description = "Subdomain to use for Immich";
     };
 
+    dbIsHdd = mkEnableOption ''
+      Enable if `paths.database`points to an HDD drive.
+    '';
+
     paths = {
       default = helpers.mkInheritedPathOption {
         parentName = "home server global default path";
@@ -94,7 +97,7 @@ in {
     virtualisation.oci-containers.backend = "docker";
 
     virtualisation.oci-containers.containers = {
-      immich = {
+      immich_server = {
         image = "ghcr.io/immich-app/immich-server:${cfg.version}";
         ports = [
           "${
@@ -105,46 +108,49 @@ in {
           }${toString cfg.port}:2283"
         ];
         environment = {
-          IMMICH_VERSION = toString cfg.version;
-          DB_HOSTNAME = "immich_postgres";
-          DB_USERNAME = "immich";
+          DB_USERNAME = "postgres";
           DB_DATABASE_NAME = "immich";
-          DB_PASSWORD_FILE = "/run/secrets/immich-db-password";
-          REDIS_HOSTNAME = "immich_redis";
+          DB_PASSWORD = cfg.dbPassword;
+          IMMICH_VERSION = cfg.version;
         };
         volumes = [
-          "${cfg.paths.uploads}:/usr/src/app/upload"
+          "${cfg.paths.uploads}:/data"
           "/etc/localtime:/etc/localtime:ro"
-          "${cfg.dbPasswordFile}:/run/secrets/immich-db-password:ro"
         ];
         extraOptions = [ "--network=immich-net" ];
       };
 
       immich_machine_learning = {
         image =
-          "ghcr.io/immich-app/immich-machine-learning:${toString cfg.version}";
-        environment = { IMMICH_VERSION = toString cfg.version; };
-        volumes = [ "${cfg.paths.machineLearning}/model-cache:/cache" ];
+          "ghcr.io/immich-app/immich-machine-learning:${cfg.version}";
+        environment = {
+          DB_USERNAME = "postgres";
+          DB_DATABASE_NAME = "immich";
+          DB_PASSWORD = cfg.dbPassword;
+          IMMICH_VERSION = cfg.version;
+        };
+        volumes = [ "${cfg.paths.machineLearning}:/cache" ];
         extraOptions = [ "--network=immich-net" ];
       };
 
       immich_redis = {
         image =
-          "redis:6.2-alpine@sha256:905c4ee67b8e0aa955331960d2aa745781e6bd89afc44a8584bfd13bc890f0ae";
+          "docker.io/valkey/valkey:8-bookworm@sha256:fea8b3e67b15729d4bb70589eb03367bab9ad1ee89c876f54327fc7c6e618571";
         extraOptions = [ "--network=immich-net" ];
       };
 
       immich_postgres = {
         image =
-          "tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0";
+          "ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0@sha256:41eacbe83eca995561fe43814fd4891e16e39632806253848efaf04d3c8a8b84";
         environment = {
-          POSTGRES_PASSWORD_FILE = "/run/secrets/immich-db-password";
-          POSTGRES_USER = "immich";
+          POSTGRES_PASSWORD = cfg.dbPassword;
+          POSTGRES_USER = "postgres";
           POSTGRES_DB = "immich";
+          POSTGRES_INITDB_ARGS = "--data-checksums";
+          DB_STORAGE_TYPE = mkIf cfg.dbIsHdd "HDD";
         };
         volumes = [
           "${cfg.paths.database}:/var/lib/postgresql/data"
-          "${cfg.dbPasswordFile}:/run/secrets/immich-db-password:ro"
         ];
         extraOptions = [ "--network=immich-net" ];
       };
