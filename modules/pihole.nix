@@ -41,6 +41,11 @@ in {
         https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
       '';
     };
+
+    password = mkOption {
+      type = types.str;
+      description = "Base password for Pi-hole";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -53,6 +58,7 @@ in {
         ports = [ "${toString cfg.port}:80" "53:53/tcp" "53:53/udp" ];
         environment = {
           TZ = cfg.timezone;
+          FTLCONF_webserver_api_password = cfg.password
           FTLCONF_dns_listeningMode = "all";
         };
         volumes = [ "${cfg.paths.default}:/etc/pihole" ];
