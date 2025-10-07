@@ -16,4 +16,4 @@ Default password for the admin (will be changed on first login)
 | ------- | ------------------------ | ------------------------- |
 | default | The main path of the app | `<main path>/psitransfer` |
 
-- `<main path>` - Main path for all the apps. See [defaults](../defaults.md#paths).
+- `<main path>` = Main path for all the apps. See [defaults](../defaults.md#paths).
