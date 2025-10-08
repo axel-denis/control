@@ -54,4 +54,3 @@ Click on any of them to see detailed documentation.
 - [Terminal](./perModule/terminal.md)
 
   Terminal presets to enable tools like OhMyZsh.
-
