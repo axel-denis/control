@@ -1,8 +1,16 @@
-{ config, helpers, lib, pkgs, ... }:
+{
+  config,
+  helpers,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
-let cfg = config.control.wakeonlan;
-in {
+let
+  cfg = config.control.wakeonlan;
+in
+{
   options.control.wakeonlan = {
     enable = mkEnableOption "Enable wake on lan";
 

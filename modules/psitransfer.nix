@@ -1,8 +1,15 @@
-{ config, helpers, lib, ... }:
+{
+  config,
+  helpers,
+  lib,
+  ...
+}:
 
 with lib;
-let cfg = config.control.psitransfer;
-in {
+let
+  cfg = config.control.psitransfer;
+in
+{
   options.control.psitransfer =
     (helpers.webServiceDefaults {
       name = "Psitransfer";
@@ -10,8 +17,7 @@ in {
       subdomain = "psitransfer";
       port = 10005;
     })
-    //
-    {
+    // {
       paths = {
         default = helpers.mkInheritedPathOption {
           parentName = "home server global default path";
@@ -23,8 +29,7 @@ in {
 
       admin-password = mkOption {
         type = types.str;
-        default =
-          "secret"; # REVIEW - maybe remove default to force user to specify
+        default = "secret"; # REVIEW - maybe remove default to force user to specify
         defaultText = "secret";
         description = "Base password for Psitransfer admin user (change this!)";
       };
@@ -51,4 +56,3 @@ in {
     };
   };
 }
-

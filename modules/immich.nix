@@ -1,8 +1,15 @@
-{ config, helpers, lib, ... }:
+{
+  config,
+  helpers,
+  lib,
+  ...
+}:
 
 with lib;
-let cfg = config.control.immich; # (gets the config values the user has set)
-in {
+let
+  cfg = config.control.immich; # (gets the config values the user has set)
+in
+{
   options.control.immich = {
     enable = mkEnableOption "Enable Immich container";
 
@@ -101,10 +108,7 @@ in {
         image = "ghcr.io/immich-app/immich-server:${cfg.version}";
         ports = [
           "${
-            if (config.control.routing.lan || cfg.forceLan || cfg.lanOnly) then
-              ""
-            else
-              "127.0.0.1:"
+            if (config.control.routing.lan || cfg.forceLan || cfg.lanOnly) then "" else "127.0.0.1:"
           }${toString cfg.port}:2283"
         ];
         environment = {

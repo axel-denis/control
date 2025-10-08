@@ -1,4 +1,10 @@
-{ config, helpers, lib, pkgs, ... }:
+{
+  config,
+  helpers,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
@@ -30,7 +36,8 @@ let
       }
     }
   '';
-in {
+in
+{
   options.control.chibisafe = {
     enable = mkEnableOption "Enable chibisafe";
 
@@ -57,9 +64,7 @@ in {
 
     forceLan = mkEnableOption ''
       Force LAN access, ignoring router configuration.
-      You will be able to access this container on <lan_ip>:${
-        toString cfg.port
-      } regardless of your router configuration.
+      You will be able to access this container on <lan_ip>:${toString cfg.port} regardless of your router configuration.
     '';
 
     lanOnly = mkEnableOption ''
@@ -117,7 +122,9 @@ in {
     virtualisation.oci-containers.containers = {
       chibisafe = {
         image = "chibisafe/chibisafe:${cfg.version}";
-        environment = { BASE_API_URL = "http://chibisafe_server:8000"; };
+        environment = {
+          BASE_API_URL = "http://chibisafe_server:8000";
+        };
         extraOptions = [ "--network=chibinet" ];
       };
 
@@ -135,13 +142,12 @@ in {
         image = "caddy:2-alpine";
         ports = [
           "${
-            if (config.control.routing.lan || cfg.forceLan || cfg.lanOnly) then
-              ""
-            else
-              "127.0.0.1:"
+            if (config.control.routing.lan || cfg.forceLan || cfg.lanOnly) then "" else "127.0.0.1:"
           }${toString cfg.port}:80"
         ];
-        environment = { BASE_URL = ":80"; };
+        environment = {
+          BASE_URL = ":80";
+        };
         volumes = [
           "${cfg.paths.uploads}:/app/uploads:ro"
           "${Caddyfile}:/etc/caddy/Caddyfile:ro"

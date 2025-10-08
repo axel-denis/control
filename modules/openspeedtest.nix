@@ -1,8 +1,15 @@
-{ config, helpers, lib, ... }:
+{
+  config,
+  helpers,
+  lib,
+  ...
+}:
 
 with lib;
-let cfg = config.control.openspeedtest;
-in {
+let
+  cfg = config.control.openspeedtest;
+in
+{
   options.control.openspeedtest = {
     enable = mkEnableOption "Enable OpenSpeedTest";
 
@@ -22,9 +29,7 @@ in {
 
     forceLan = mkEnableOption ''
       Force LAN access, ignoring router configuration.
-      You will be able to access this container on <lan_ip>:${
-        toString cfg.port
-      } regardless of your router configuration.
+      You will be able to access this container on <lan_ip>:${toString cfg.port} regardless of your router configuration.
     '';
 
     lanOnly = mkEnableOption ''
@@ -61,14 +66,10 @@ in {
         image = "openspeedtest/${cfg.version}";
         ports = [
           "${
-            if (config.control.routing.lan || cfg.forceLan || cfg.lanOnly) then
-              ""
-            else
-              "127.0.0.1:"
+            if (config.control.routing.lan || cfg.forceLan || cfg.lanOnly) then "" else "127.0.0.1:"
           }${toString cfg.port}:3000"
         ];
       };
     };
   };
 }
-

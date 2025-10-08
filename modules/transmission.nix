@@ -1,9 +1,16 @@
-{ config, helpers, lib, ... }:
+{
+  config,
+  helpers,
+  lib,
+  ...
+}:
 
 with lib;
 
-let cfg = config.control.transmission;
-in {
+let
+  cfg = config.control.transmission;
+in
+{
   options.control.transmission = {
     enable = mkEnableOption "Enable Transmission";
 
@@ -58,9 +65,7 @@ in {
 
     forceLan = mkEnableOption ''
       Force LAN access, ignoring router configuration.
-      You will be able to access this container on <lan_ip>:${
-        toString cfg.port
-      } regardless of your router configuration.
+      You will be able to access this container on <lan_ip>:${toString cfg.port} regardless of your router configuration.
     '';
 
     lanOnly = mkEnableOption ''
@@ -89,25 +94,26 @@ in {
       image = "haugene/transmission-openvpn:${cfg.version}";
       extraOptions = [ "--cap-add=NET_ADMIN" ];
 
-      volumes = [ "${cfg.paths.download}:/data" "${cfg.paths.config}:/config" ];
+      volumes = [
+        "${cfg.paths.download}:/data"
+        "${cfg.paths.config}:/config"
+      ];
 
       environmentFiles = [ cfg.environmentFile ];
       ports = [
         "${
-          if (config.control.routing.lan || cfg.forceLan || cfg.lanOnly) then
-            ""
-          else
-            "127.0.0.1:"
+          if (config.control.routing.lan || cfg.forceLan || cfg.lanOnly) then "" else "127.0.0.1:"
         }${toString cfg.port}:9091"
       ];
     };
   };
 }
 
-/* example env file for transmission-openvpn:
-   OPENVPN_PROVIDER=PIA
-   OPENVPN_CONFIG=france
-   OPENVPN_USERNAME=user
-   OPENVPN_PASSWORD=pass
-   LOCAL_NETWORK=192.168.0.0/16 # or 127.0.0.0/8 ? 0.0.0.0/0 ?
+/*
+  example env file for transmission-openvpn:
+  OPENVPN_PROVIDER=PIA
+  OPENVPN_CONFIG=france
+  OPENVPN_USERNAME=user
+  OPENVPN_PASSWORD=pass
+  LOCAL_NETWORK=192.168.0.0/16 # or 127.0.0.0/8 ? 0.0.0.0/0 ?
 */
