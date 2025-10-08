@@ -40,9 +40,9 @@ in
     virtualisation.oci-containers.backend = "docker";
 
     warnings = (
-      optionals (
-        cfg.admin-password == "secret"
-      ) "You should change the default admin password for Psitransfer! psitransfer.admin-password"
+      optionals (cfg.admin-password == "secret") [
+        "You should change the default admin password for Psitransfer! psitransfer.admin-password"
+      ]
     );
 
     # Creating directory with the user id asked by the container
