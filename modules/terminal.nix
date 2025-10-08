@@ -27,7 +27,7 @@ in {
     })
     (mkIf cfg.enableNeofetchGreet {
       environment.etc."zprofile".text = ''
-        neofetch
+        ${pkgs.neofetch}/bin/neofetch
       '';
     })
   ];
