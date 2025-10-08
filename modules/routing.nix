@@ -105,7 +105,7 @@ in
               basicAuth = module.basicAuth;
             };
             extraConfig = '' # TODO -> only for really required apps (immich)
-              client_max_body_size 16G;
+              client_max_body_size 5000M;
             '';
           }
         )
