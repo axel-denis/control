@@ -71,14 +71,14 @@ in {
       database = helpers.mkInheritedPathOption {
         parentName = "paths.default";
         parent = cfg.paths.default;
-        defaultSubpath = "db";
+        defaultSubpath = "database";
         description = "Path for Immich database.";
       };
 
       uploads = helpers.mkInheritedPathOption {
         parentName = "paths.default";
         parent = cfg.paths.default;
-        defaultSubpath = "pictures";
+        defaultSubpath = "uploads";
         description = "Path for Immich uploads (pictures).";
       };
 
