@@ -84,8 +84,16 @@ in
           add_header Referrer-Policy "strict-origin-when-cross-origin";
           add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
         ''
+        ''
+          geo $is_local {
+            default 0;
+            127.0.0.1/32 1;
+            ::1/128 1;
+            192.168.0.0/16 1;
+          }
+        ''
         (if cfg.checkClientCertificate then "ssl_client_certificate ${cfg.clientCertificateFile};" else "")
-        (if cfg.checkClientCertificate then "ssl_verify_client on;" else "")
+        (if cfg.checkClientCertificate then "ssl_verify_client optional;" else "")
       ];
 
       recommendedGzipSettings = true;
@@ -104,9 +112,22 @@ in
               proxyWebsockets = true; # TODO -> only for really required apps (immich)
               basicAuth = module.basicAuth;
             };
-            extraConfig = '' # TODO -> only for really required apps (immich)
-              client_max_body_size 100M;
-            '';
+            extraConfig = strings.concatStringsSep "\n" [
+              # TODO -> large body size only for really required apps (immich)
+              "client_max_body_size 5000M;"
+              (
+                if cfg.checkClientCertificate then
+                  ''
+                    if ($is_local = 0) {
+                      if ($ssl_client_verify != SUCCESS) {
+                        return 403;
+                      }
+                    }
+                  ''
+                else
+                  ""
+              )
+            ];
           }
         )
       );
