@@ -48,21 +48,21 @@
     enable = mkEnableOption "Enable ${name}";
 
     version = lib.mkOption {
-      type = types.str;
+      type = lib.types.str;
       default = version;
       defaultText = version;
       description = "Version name to use for ${name} images";
     };
 
     subdomain = lib.mkOption {
-      type = types.str;
+      type = lib.types.str;
       default = subdomain;
       defaultText = subdomain;
       description = "Subdomain to use for ${name}";
     };
 
     port = lib.mkOption {
-      type = types.int;
+      type = lib.types.int;
       default = port;
       defaultText = toString port;
       description = "Port to use for ${name}";
@@ -78,7 +78,7 @@
     '';
 
     basicAuth = lib.mkOption {
-      type = with types; attrsOf str;
+      type = with lib.types; attrsOf str;
       default = { };
       description = ''
         If set, enable Nginx basic authentication for this service.
