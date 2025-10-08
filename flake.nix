@@ -27,7 +27,6 @@
         hdd-spindown = mkModule ./modules/hdd-spindown.nix;
         psitransfer = mkModule ./modules/psitransfer.nix;
         routing = mkModule ./modules/routing.nix;
-        wakeonlan = mkModule ./modules/wakeonlan.nix;
         pihole = mkModule ./modules/pihole.nix;
 
         default =
@@ -43,7 +42,6 @@
               self.nixosModules.hdd-spindown
               self.nixosModules.psitransfer
               self.nixosModules.routing
-              self.nixosModules.wakeonlan
               self.nixosModules.pihole
             ];
 
