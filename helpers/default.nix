@@ -47,21 +47,21 @@
   webServiceDefaults = { name, version, subdomain, port }: {
     enable = mkEnableOption "Enable ${name}";
 
-    version = mkOption {
+    version = lib.mkOption {
       type = types.str;
       default = version;
       defaultText = version;
       description = "Version name to use for ${name} images";
     };
 
-    subdomain = mkOption {
+    subdomain = lib.mkOption {
       type = types.str;
       default = subdomain;
       defaultText = subdomain;
       description = "Subdomain to use for ${name}";
     };
 
-    port = mkOption {
+    port = lib.mkOption {
       type = types.int;
       default = port;
       defaultText = toString port;
@@ -77,7 +77,7 @@
       Disable routing for this service. You will only be able to access it on your LAN.
     '';
 
-    basicAuth = mkOption {
+    basicAuth = lib.mkOption {
       type = with types; attrsOf str;
       default = { };
       description = ''
