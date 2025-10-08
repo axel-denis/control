@@ -103,7 +103,7 @@ in
 
       chibisafe_caddy = {
         image = "caddy:2-alpine";
-        ports = helpers.webServicePort config cfg;
+        ports = helpers.webServicePort config cfg 80;
         environment = {
           BASE_URL = ":80";
         };

@@ -45,7 +45,7 @@ in
     virtualisation.oci-containers.containers = {
       psitransfer = {
         image = "psitrax/psitransfer:${cfg.version}";
-        ports = helpers.webServicePort config cfg;
+        ports = helpers.webServicePort config cfg 3000;
         environment = {
           PUID = "0";
           PGID = "0";
