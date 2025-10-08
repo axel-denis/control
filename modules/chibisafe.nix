@@ -46,7 +46,6 @@ in
       port = 10004;
     })
     // {
-
       paths = {
         default = helpers.mkInheritedPathOption {
           parentName = "home server global default path";
