@@ -101,6 +101,7 @@ in
             enableACME = cfg.letsencrypt.enable;
             locations."/" = {
               proxyPass = "http://127.0.0.1:${toString module.port}";
+              proxyWebsockets = true;
               basicAuth = module.basicAuth;
             };
             extraConfig = ''
