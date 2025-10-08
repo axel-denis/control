@@ -98,5 +98,5 @@
       else
         "127.0.0.1:"
     }${toString moduleConfig.port}:3000"
-  ]
+  ];
 }
