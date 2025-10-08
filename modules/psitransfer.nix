@@ -3,71 +3,32 @@
 with lib;
 let cfg = config.control.psitransfer;
 in {
-  options.control.psitransfer = {
-    enable = mkEnableOption "Enable Psitransfer";
+  options.control.psitransfer =
+    (helpers.webServiceDefaults {
+      name = "Psitransfer";
+      version = "latest";
+      subdomain = "psitransfer";
+      port = 10005;
+    })
+    //
+    {
+      paths = {
+        default = helpers.mkInheritedPathOption {
+          parentName = "home server global default path";
+          parent = config.control.defaultPath;
+          defaultSubpath = "psitransfer";
+          description = "Root path for Psitransfer media and appdata";
+        };
+      };
 
-    version = mkOption {
-      type = types.str;
-      default = "latest";
-      defaultText = "latest";
-      description = "Version name to use for Psitransfer images";
-    };
-
-    subdomain = mkOption {
-      type = types.str;
-      default = "psitransfer";
-      defaultText = "psitransfer";
-      description = "Subdomain to use for Psitransfer";
-    };
-
-    port = mkOption {
-      type = types.int;
-      default = 10005;
-      defaultText = "10005";
-      description = "Port to use for Psitransfer";
-    };
-
-    forceLan = mkEnableOption ''
-      Force LAN access, ignoring router configuration.
-      You will be able to access this container on <lan_ip>:${
-        toString cfg.port
-      } regardless of your router configuration.
-    '';
-
-    lanOnly = mkEnableOption ''
-      Disable routing for this service. You will only be able to access it on your LAN.
-    '';
-
-    basicAuth = mkOption {
-      type = with types; attrsOf str;
-      default = { };
-      description = ''
-        If set, enable Nginx basic authentication for this service.
-        The value should be an attribute set of username-password pairs, e.g.
-        { user1 = "password1"; user2 = "password2"; }
-        Keep in mind that basic authentication works for web pages but can break dependant services (e.g. mobile apps).
-      '';
-    };
-
-    # ANCHOR - simple ctrl-shift-f insert for all webservices
-
-    paths = {
-      default = helpers.mkInheritedPathOption {
-        parentName = "home server global default path";
-        parent = config.control.defaultPath;
-        defaultSubpath = "psitransfer";
-        description = "Root path for Psitransfer media and appdata";
+      admin-password = mkOption {
+        type = types.str;
+        default =
+          "secret"; # REVIEW - maybe remove default to force user to specify
+        defaultText = "secret";
+        description = "Base password for Psitransfer admin user (change this!)";
       };
     };
-
-    admin-password = mkOption {
-      type = types.str;
-      default =
-        "secret"; # REVIEW - maybe remove default to force user to specify
-      defaultText = "secret";
-      description = "Base password for Psitransfer admin user (change this!)";
-    };
-  };
 
   config = mkIf cfg.enable {
     virtualisation.docker.enable = true;
@@ -79,14 +40,7 @@ in {
     virtualisation.oci-containers.containers = {
       psitransfer = {
         image = "psitrax/psitransfer:${cfg.version}";
-        ports = [
-          "${
-            if (config.control.routing.lan || cfg.forceLan || cfg.lanOnly) then
-              ""
-            else
-              "127.0.0.1:"
-          }${toString cfg.port}:3000"
-        ];
+        ports = webServicePort config cfg;
         environment = {
           PUID = "0";
           PGID = "0";
