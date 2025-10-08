@@ -91,6 +91,16 @@ in
             ::1/128 1;
             192.168.0.0/16 1;
           }
+
+          # Set a variable that marks requests to reject
+          map "$is_local:$ssl_client_verify" $reject_client {
+            # local clients -> always OK
+            "~^1:"           0;
+            # external with verified cert -> OK
+            "~^0:SUCCESS"    0;
+            # everything else -> reject
+            default           1;
+          }
         ''
         (if cfg.checkClientCertificate then "ssl_client_certificate ${cfg.clientCertificateFile};" else "")
         (if cfg.checkClientCertificate then "ssl_verify_client optional;" else "")
@@ -118,10 +128,8 @@ in
               (
                 if cfg.checkClientCertificate then
                   ''
-                    if ($is_local = 0) {
-                      if ($ssl_client_verify != SUCCESS) {
-                        return 403;
-                      }
+                    if ($reject_client) {
+                      return 403;
                     }
                   ''
                 else
