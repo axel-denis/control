@@ -45,7 +45,7 @@
 
   # Automates the creation of defaults for every standardized web service
   webServiceDefaults = { name, version, subdomain, port }: {
-    enable = mkEnableOption "Enable ${name}";
+    enable = lib.mkEnableOption "Enable ${name}";
 
     version = lib.mkOption {
       type = lib.types.str;
@@ -68,12 +68,12 @@
       description = "Port to use for ${name}";
     };
 
-    forceLan = mkEnableOption ''
+    forceLan = lib.mkEnableOption ''
       Force LAN access, ignoring router configuration.
       You will be able to access this container on <lan_ip>:<port> regardless of your router configuration.
     '';
 
-    lanOnly = mkEnableOption ''
+    lanOnly = lib.mkEnableOption ''
       Disable routing for this service. You will only be able to access it on your LAN.
     '';
 
