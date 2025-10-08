@@ -101,11 +101,11 @@ in
             enableACME = cfg.letsencrypt.enable;
             locations."/" = {
               proxyPass = "http://127.0.0.1:${toString module.port}";
-              proxyWebsockets = true;
+              proxyWebsockets = true; # TODO -> only for really required apps (immich)
               basicAuth = module.basicAuth;
             };
-            extraConfig = ''
-              client_max_body_size 35M;
+            extraConfig = '' # TODO -> only for really required apps (immich)
+              client_max_body_size 16G;
             '';
           }
         )
