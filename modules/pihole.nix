@@ -13,14 +13,30 @@ in
   options.control.pihole = {
     enable = mkEnableOption "Enable Pi-hole";
 
+    timezone = mkOption {
+      type = types.str;
+      default = config.time.timeZone;
+      defaultText = "Your system timezone";
+      description = ''
+        Set the appropriate timezone for your location from
+        https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+        Defaults to your system configuration (config.time.timeZone).
+      '';
+    };
+
+    password = mkOption {
+      type = types.str;
+      description = "Base password for Pi-hole";
+    };
+
+    # NOTE - isn't exposed by the router
+
     version = mkOption {
       type = types.str;
       default = "latest";
       defaultText = "latest";
       description = "Version name to use for Pi-hole images";
     };
-
-    # NOTE - isn't exposed by the router
 
     port = mkOption {
       type = types.int;
@@ -36,22 +52,6 @@ in
         defaultSubpath = "pihole";
         description = "Root path for Pi-hole appdata";
       };
-    };
-
-    timezone = mkOption {
-      type = types.str;
-      default = config.time.timeZone;
-      defaultText = "Your system timezone";
-      description = ''
-        Set the appropriate timezone for your location from
-        https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-        Defaults to your system configuration (config.time.timeZone).
-      '';
-    };
-
-    password = mkOption {
-      type = types.str;
-      description = "Base password for Pi-hole";
     };
   };
 
