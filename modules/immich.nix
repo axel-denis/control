@@ -29,6 +29,11 @@ in
         Enable if `paths.database`points to an HDD drive.
       '';
 
+      hwaccel = {
+        vaapi = mkEnableOption "Enables vaapi transcoding support.";
+        # TODO - the others
+      }
+
       paths = {
         default = helpers.mkInheritedPathOption {
           parentName = "home server global default path";
@@ -79,6 +84,9 @@ in
           "${cfg.paths.uploads}:/data"
           "/etc/localtime:/etc/localtime:ro"
         ];
+        devices = (
+          lists.optional cfg.hwaccel.vaapi "/dev/dri:/dev/dri"
+        );
         extraOptions = [ "--network=immich-net" ];
       };
 
