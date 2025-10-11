@@ -32,7 +32,7 @@ in
       hwaccel = {
         vaapi = mkEnableOption "Enables vaapi transcoding support.";
         # TODO - the others
-      }
+      };
 
       paths = {
         default = helpers.mkInheritedPathOption {
