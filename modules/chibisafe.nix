@@ -1,4 +1,10 @@
-{ config, helpers, lib, pkgs, ... }:
+{
+  config,
+  helpers,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
@@ -30,85 +36,46 @@ let
       }
     }
   '';
-in {
-  options.control.chibisafe = {
-    enable = mkEnableOption "Enable chibisafe";
+in
+{
+  options.control.chibisafe =
+    (helpers.webServiceDefaults {
+      name = "Chibisafe";
+      version = "latest";
+      subdomain = "chibisafe";
+      port = 10004;
+    })
+    // {
+      paths = {
+        default = helpers.mkInheritedPathOption {
+          parentName = "home server global default path";
+          parent = config.control.defaultPath;
+          defaultSubpath = "chibisafe";
+          description = "Root path for chibisafe media and appdata";
+        };
 
-    version = mkOption {
-      type = types.str;
-      default = "latest";
-      defaultText = "latest";
-      description = "Version name to use for chibisafe images";
-    };
+        database = helpers.mkInheritedPathOption {
+          parentName = "paths.default";
+          parent = cfg.paths.default;
+          defaultSubpath = "database";
+          description = "Path for chibisafe database.";
+        };
 
-    subdomain = mkOption {
-      type = types.str;
-      default = "chibisafe";
-      defaultText = "chibisafe";
-      description = "Subdomain to use for Chibisafe";
-    };
+        uploads = helpers.mkInheritedPathOption {
+          parentName = "paths.default";
+          parent = cfg.paths.default;
+          defaultSubpath = "uploads";
+          description = "Path for chibisafe uploads.";
+        };
 
-    port = mkOption {
-      type = types.int;
-      default = 10004;
-      defaultText = "10004";
-      description = "Port to use for chibisafe";
-    };
-
-    forceLan = mkEnableOption ''
-      Force LAN access, ignoring router configuration.
-      You will be able to access this container on <lan_ip>:${
-        toString cfg.port
-      } regardless of your router configuration.
-    '';
-
-    lanOnly = mkEnableOption ''
-      Disable routing for this service. You will only be able to access it on your LAN.
-    '';
-
-    basicAuth = mkOption {
-      type = with types; attrsOf str;
-      default = { };
-      description = ''
-        If set, enable Nginx basic authentication for this service.
-        The value should be an attribute set of username-password pairs, e.g.
-        { user1 = "password1"; user2 = "password2"; }
-        Keep in mind that basic authentication works for web pages but can break dependant services (e.g. mobile apps).
-      '';
-    };
-
-    # ANCHOR - simple ctrl-shift-f insert for all webservices
-
-    paths = {
-      default = helpers.mkInheritedPathOption {
-        parentName = "home server global default path";
-        parent = config.control.defaultPath;
-        defaultSubpath = "chibisafe";
-        description = "Root path for chibisafe media and appdata";
-      };
-
-      database = helpers.mkInheritedPathOption {
-        parentName = "paths.default";
-        parent = cfg.paths.default;
-        defaultSubpath = "database";
-        description = "Path for chibisafe database.";
-      };
-
-      uploads = helpers.mkInheritedPathOption {
-        parentName = "paths.default";
-        parent = cfg.paths.default;
-        defaultSubpath = "uploads";
-        description = "Path for chibisafe uploads.";
-      };
-
-      logs = helpers.mkInheritedPathOption {
-        parentName = "paths.default";
-        parent = cfg.paths.default;
-        defaultSubpath = "logs";
-        description = "Path for chibisafe logs.";
+        logs = helpers.mkInheritedPathOption {
+          parentName = "paths.default";
+          parent = cfg.paths.default;
+          defaultSubpath = "logs";
+          description = "Path for chibisafe logs.";
+        };
       };
     };
-  };
 
   config = mkIf cfg.enable {
     virtualisation.docker.enable = true;
@@ -117,7 +84,9 @@ in {
     virtualisation.oci-containers.containers = {
       chibisafe = {
         image = "chibisafe/chibisafe:${cfg.version}";
-        environment = { BASE_API_URL = "http://chibisafe_server:8000"; };
+        environment = {
+          BASE_API_URL = "http://chibisafe_server:8000";
+        };
         extraOptions = [ "--network=chibinet" ];
       };
 
@@ -133,15 +102,10 @@ in {
 
       chibisafe_caddy = {
         image = "caddy:2-alpine";
-        ports = [
-          "${
-            if (config.control.routing.lan || cfg.forceLan || cfg.lanOnly) then
-              ""
-            else
-              "127.0.0.1:"
-          }${toString cfg.port}:80"
-        ];
-        environment = { BASE_URL = ":80"; };
+        ports = helpers.webServicePort config cfg 80;
+        environment = {
+          BASE_URL = ":80";
+        };
         volumes = [
           "${cfg.paths.uploads}:/app/uploads:ro"
           "${Caddyfile}:/etc/caddy/Caddyfile:ro"
