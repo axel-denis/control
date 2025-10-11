@@ -104,8 +104,9 @@ in
               proxyWebsockets = true; # TODO -> only for really required apps (immich)
               basicAuth = module.basicAuth;
             };
-            extraConfig = '' # TODO -> only for really required apps (immich)
-              client_max_body_size 100M;
+            extraConfig = ''
+              # TODO -> only for really required apps (immich)
+                           client_max_body_size 100M;
             '';
           }
         )
