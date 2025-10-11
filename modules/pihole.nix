@@ -1,35 +1,17 @@
-{ config, helpers, lib, ... }:
+{
+  config,
+  helpers,
+  lib,
+  ...
+}:
 
 with lib;
-let cfg = config.control.pihole;
-in {
+let
+  cfg = config.control.pihole;
+in
+{
   options.control.pihole = {
     enable = mkEnableOption "Enable Pi-hole";
-
-    version = mkOption {
-      type = types.str;
-      default = "latest";
-      defaultText = "latest";
-      description = "Version name to use for Pi-hole images";
-    };
-
-    # NOTE - isn't exposed by the router
-
-    port = mkOption {
-      type = types.int;
-      default = 10007;
-      defaultText = "10007";
-      description = "Http port to use for the Pi-hole web interface";
-    };
-
-    paths = {
-      default = helpers.mkInheritedPathOption {
-        parentName = "home server global default path";
-        parent = config.control.defaultPath;
-        defaultSubpath = "pihole";
-        description = "Root path for Pi-hole appdata";
-      };
-    };
 
     timezone = mkOption {
       type = types.str;
@@ -46,6 +28,31 @@ in {
       type = types.str;
       description = "Base password for Pi-hole";
     };
+
+    # NOTE - isn't exposed by the router
+
+    version = mkOption {
+      type = types.str;
+      default = "latest";
+      defaultText = "latest";
+      description = "Version name to use for Pi-hole images";
+    };
+
+    port = mkOption {
+      type = types.int;
+      default = 10007;
+      defaultText = "10007";
+      description = "Http port to use for the Pi-hole web interface";
+    };
+
+    paths = {
+      default = helpers.mkInheritedPathOption {
+        parentName = "home server global default path";
+        parent = config.control.defaultPath;
+        defaultSubpath = "pihole";
+        description = "Root path for Pi-hole appdata";
+      };
+    };
   };
 
   config = mkIf cfg.enable {
@@ -55,7 +62,11 @@ in {
     virtualisation.oci-containers.containers = {
       pihole = {
         image = "pihole/pihole:${cfg.version}";
-        ports = [ "${toString cfg.port}:80" "53:53/tcp" "53:53/udp" ];
+        ports = [
+          "${toString cfg.port}:80"
+          "53:53/tcp"
+          "53:53/udp"
+        ];
         environment = {
           TZ = cfg.timezone;
           FTLCONF_webserver_api_password = cfg.password;
@@ -66,4 +77,3 @@ in {
     };
   };
 }
-
