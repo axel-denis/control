@@ -84,9 +84,7 @@ in
           "${cfg.paths.uploads}:/data"
           "/etc/localtime:/etc/localtime:ro"
         ];
-        devices = (
-          lists.optional cfg.hwaccel.vaapi "/dev/dri:/dev/dri"
-        );
+        devices = (lists.optional cfg.hwaccel.vaapi "/dev/dri:/dev/dri");
         extraOptions = [ "--network=immich-net" ];
       };
 
