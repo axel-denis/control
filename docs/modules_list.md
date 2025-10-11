@@ -51,11 +51,6 @@ Click on any of them to see detailed documentation.
 
   Stops running HDD disks after a set amount of time.
 
-- [Wake on Lan](./perModule/wakeonlan.md)
-
-  Allows your system to be started from internet.
-
 - [Terminal](./perModule/terminal.md)
 
   Terminal presets to enable tools like OhMyZsh.
-
