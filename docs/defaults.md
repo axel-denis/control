@@ -47,3 +47,4 @@ You can check the [routing](./perModule/routing.md) module for more info.
 | Chibisafe    | 10004        |
 | Psitransfer  | 10005        |
 | Speedtest    | 10006        |
+| Pi-Hole http | 10007        |

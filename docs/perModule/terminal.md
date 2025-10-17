@@ -14,3 +14,5 @@ This module brings some quality of life improvements for your terminal.
   -> default: `robbyrussell`
 
 - `enableNeofetchGreet` -> Will print [Neofetch](https://github.com/dylanaraps/neofetch) when you start your terminal. Absolutely useless, but wow how badass it is.
+> [!WARNING]
+> Only works with ZSH enabled for now
