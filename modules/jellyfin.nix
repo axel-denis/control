@@ -26,11 +26,14 @@ in
           description = "Root path for Jellyfin media and appdata";
         };
 
-        media = helpers.mkInheritedPathOption {
-          parentName = "paths.default";
-          parent = cfg.paths.default;
-          defaultSubpath = "media";
-          description = "Path for Jellyfin media (movies).";
+        media = lib.mkOption {
+          type = with types; attrsOf path;
+          default = {mainmedia = parent + "/media"};
+          defaultText = ''{main_media = jellyfin_default_path + "/media"}'';
+          description = ''
+            List of mountpoints giving data to the jellyfin container.
+            Will be mounted under /media/<name> in the container.
+          '';
         };
 
         config = helpers.mkInheritedPathOption {
@@ -51,9 +54,8 @@ in
         image = "jellyfin/jellyfin:${cfg.version}";
         ports = helpers.webServicePort config cfg 8096;
         volumes = [
-          "${cfg.paths.media}:/media"
           "${cfg.paths.config}:/config"
-        ];
+        ] ++ lists.forEach (attrsets.attrsToList cfg.media) (e: "${e.value}:/media/${e.name}");
       };
     };
   };
