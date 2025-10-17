@@ -10,14 +10,25 @@
 #### 2. Specific options for this module:
 
 `jellyfin.paths`:
-| Name    | Description                                | Default                        |
-| ------- | ------------------------------------------ | ------------------------------ |
-| default | The main path of the app                   | `<main path>/jellyfin`         |
-| media   | Path for Jellyfin media (movies, music...) | `<main path>/<default>/media`  |
-| config  | Path for Jellyfin appdata (config)         | `<main path>/<default>/config` |
+| Name    | Description                                                 | Default                        |
+| ------- | ----------------------------------------------------------- | ------------------------------ |
+| default | The main path of the app                                    | `<main path>/jellyfin`         |
+| media   | Path for Jellyfin media (movies, music...). See more below. | `<main path>/<default>/media`  |
+| config  | Path for Jellyfin appdata (config)                          | `<main path>/<default>/config` |
 
 - `<main path>` = Main path for all the apps. See [defaults](../defaults.md#paths).
 - `<default>` - `jellyfin.paths.default`
+---
+- `media` is not a regular path, it's an attribute set to mount many media points:
+```nix
+jellyfin.paths.media = {
+    mount1 = "/path1";
+    mount2 = "/path2";
+}
+```
+-> In the container:
+/media/mount1
+/media/mount2
 
 ---
 
