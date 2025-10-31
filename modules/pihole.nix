@@ -67,6 +67,7 @@ in
           "53:53/tcp"
           "53:53/udp"
         ];
+        extraOptions = [ "--pull=always" ];
         environment = {
           TZ = cfg.timezone;
           FTLCONF_webserver_api_password = cfg.password;
