@@ -87,7 +87,7 @@ in
         environment = {
           BASE_API_URL = "http://chibisafe_server:8000";
         };
-        extraOptions = [ "--network=chibinet" "--pull=newer" ];
+        extraOptions = [ "--network=chibinet" "--pull=always" ];
       };
 
       chibisafe_server = {
@@ -97,7 +97,7 @@ in
           "${cfg.paths.uploads}:/app/uploads:rw"
           "${cfg.paths.logs}:/app/logs:rw"
         ];
-        extraOptions = [ "--network=chibinet" "--pull=newer" ];
+        extraOptions = [ "--network=chibinet" "--pull=always" ];
       };
 
       chibisafe_caddy = {
@@ -110,7 +110,7 @@ in
           "${cfg.paths.uploads}:/app/uploads:ro"
           "${Caddyfile}:/etc/caddy/Caddyfile:ro"
         ];
-        extraOptions = [ "--network=chibinet" "--pull=newer" ];
+        extraOptions = [ "--network=chibinet" "--pull=always" ];
       };
     };
 

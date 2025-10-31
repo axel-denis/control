@@ -44,7 +44,7 @@ in {
       jellyfin = {
         image = "jellyfin/jellyfin:${cfg.version}";
         ports = helpers.webServicePort config cfg 8096;
-        extraOptions = [ "--pull=newer" ];
+        extraOptions = [ "--pull=always" ];
         volumes = [ "${cfg.paths.config}:/config" ]
           ++ lists.forEach (attrsets.attrsToList cfg.paths.media)
           (e: "${e.value}:/media/${e.name}");
