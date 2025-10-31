@@ -25,6 +25,7 @@ in
       openspeedtest = {
         image = "openspeedtest/${cfg.version}";
         ports = helpers.webServicePort config cfg 3000;
+        extraOptions = [ "--pull=newer" ];
       };
     };
   };

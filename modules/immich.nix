@@ -79,7 +79,7 @@ in
           "${cfg.paths.uploads}:/data"
           "/etc/localtime:/etc/localtime:ro"
         ];
-        extraOptions = [ "--network=immich-net" ];
+        extraOptions = [ "--network=immich-net" "--pull=newer" ];
       };
 
       immich-machine-learning = {
@@ -91,12 +91,12 @@ in
           IMMICH_VERSION = cfg.version;
         };
         volumes = [ "${cfg.paths.machineLearning}:/cache" ];
-        extraOptions = [ "--network=immich-net" ];
+        extraOptions = [ "--network=immich-net" "--pull=newer" ];
       };
 
       redis = {
         image = "docker.io/valkey/valkey:8-bookworm@sha256:fea8b3e67b15729d4bb70589eb03367bab9ad1ee89c876f54327fc7c6e618571";
-        extraOptions = [ "--network=immich-net" ];
+        extraOptions = [ "--network=immich-net" "--pull=newer" ];
       };
 
       database = {
@@ -111,7 +111,7 @@ in
         volumes = [
           "${cfg.paths.database}:/var/lib/postgresql/data"
         ];
-        extraOptions = [ "--network=immich-net" ];
+        extraOptions = [ "--network=immich-net" "--pull=newer" ];
       };
     };
 
