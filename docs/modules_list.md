@@ -40,6 +40,10 @@ Click on any of them to see detailed documentation.
 
   Custom DNS to block ads or trackers. See [pi-hole.net](https://pi-hole.net/).
 
+- [SiYuan](./perModule/psitransfer.md)
+
+  Privacy-first personal knowledge management system. See [SiYuan's Github](https://github.com/siyuan-note/siyuan).
+
 ## Tools
 ###### Diverses utilities.
 
