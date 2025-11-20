@@ -41,7 +41,7 @@ in
 
     warnings = (
       optionals (cfg.admin-password == "secret") [
-        "You should change the default admin password for Siyuan! siyuan.admin-password"
+        "You should change the default admin password for Siyuan! control.siyuan.admin-password"
       ]
     );
 
