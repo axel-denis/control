@@ -113,7 +113,7 @@ in {
           locations."/" = {
             proxyPass = "http://127.0.0.1:${toString module.port}";
             proxyWebsockets =
-              true; # TODO -> only for really required apps (immich)
+              true; # TODO -> only for really required apps (immich, siyuan)
             basicAuth = module.basicAuth;
           };
           extraConfig = strings.concatStringsSep "\n" [
