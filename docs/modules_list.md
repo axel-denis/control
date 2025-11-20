@@ -42,7 +42,7 @@ Click on any of them to see detailed documentation.
 
 - [SiYuan](./perModule/psitransfer.md)
 
-  Your own, selfhosted alternative to Wetransfer. See [SiYuan's Github](https://github.com/siyuan-note/siyuan).
+  Privacy-first personal knowledge management system. See [SiYuan's Github](https://github.com/siyuan-note/siyuan).
 
 ## Tools
 ###### Diverses utilities.
