@@ -51,12 +51,15 @@ in
       siyuan = {
         image = "b3log/siyuan:${cfg.version}";
         ports = helpers.webServicePort config cfg 6806;
-        extraOptions = [ "--pull=always" "--workspace=/workspace_dir_container" ("--accessAuthCode=" + cfg.admin-password) ];
+        extraOptions = [ "--pull=always" ];
         environment = {
           PUID = "0";
           PGID = "0";
+          TZ = cfg.timezone;
+          SIYUAN_WORKSPACE_PATH = "/data";
+          SIYUAN_ACCESS_AUTH_CODE = cfg.admin-password;
         };
-        volumes = [ "${cfg.paths.default}:/workspace_dir_container" ];
+        volumes = [ "${cfg.paths.default}:/data" ];
       };
     };
   };
