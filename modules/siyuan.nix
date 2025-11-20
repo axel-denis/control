@@ -33,6 +33,17 @@ in
         defaultText = "secret";
         description = "Base password for Siyuan admin user (change this!)";
       };
+
+      timezone = mkOption {
+        type = types.str;
+        default = config.time.timeZone;
+        defaultText = "Your system timezone";
+        description = ''
+          Set the appropriate timezone for your location from
+          https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+          Defaults to your system configuration (config.time.timeZone).
+        '';
+      };
     };
 
   config = mkIf cfg.enable {
