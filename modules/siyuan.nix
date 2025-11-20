@@ -51,7 +51,7 @@ in
       siyuan = {
         image = "b3log/siyuan:${cfg.version}";
         ports = helpers.webServicePort config cfg 6806;
-        extraOptions = [ "--pull=always" "--workspace=workspace_dir_container" ("--accessAuthCode=" + cfg.admin-password) ];
+        extraOptions = [ "--pull=always" "--workspace=/workspace_dir_container" ("--accessAuthCode=" + cfg.admin-password) ];
         environment = {
           PUID = "0";
           PGID = "0";
