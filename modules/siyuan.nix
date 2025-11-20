@@ -64,8 +64,8 @@ in
         ports = helpers.webServicePort config cfg 6806;
         extraOptions = [ "--pull=always" ];
         environment = {
-          PUID = "0";
-          PGID = "0";
+          #PUID = "1000";
+          #PGID = "1000";
           TZ = cfg.timezone;
           SIYUAN_WORKSPACE_PATH = "/data";
           SIYUAN_ACCESS_AUTH_CODE = cfg.admin-password;
