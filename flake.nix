@@ -27,7 +27,8 @@
         routing = mkModule ./modules/routing.nix;
         pihole = mkModule ./modules/pihole.nix;
         siyuan = mkModule ./modules/siyuan.nix;
-        cloudreve = mkModule ./modules/cloudreve.nix;
+        navidrome = mkModule ./modules/navidrome.nix;
+        navidrome = mkModule ./modules/cloudreve.nix;
 
         default = { lib, ... }: {
           imports = [
@@ -42,6 +43,7 @@
             self.nixosModules.routing
             self.nixosModules.pihole
             self.nixosModules.siyuan
+            self.nixosModules.navidrome
             self.nixosModules.cloudreve
           ];
 
