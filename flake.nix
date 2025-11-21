@@ -28,6 +28,7 @@
         pihole = mkModule ./modules/pihole.nix;
         siyuan = mkModule ./modules/siyuan.nix;
         navidrome = mkModule ./modules/navidrome.nix;
+        slskd = mkModule ./modules/slskd.nix;
 
         default = { lib, ... }: {
           imports = [
@@ -43,6 +44,7 @@
             self.nixosModules.pihole
             self.nixosModules.siyuan
             self.nixosModules.navidrome
+            self.nixosModules.slskd
           ];
 
           options.control = {
