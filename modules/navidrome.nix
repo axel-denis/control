@@ -19,7 +19,7 @@ in {
 
       music = lib.mkOption {
         type = with types; attrsOf path;
-        default = { mymusic = parent + "/music"; };
+        default = { mymusic = cfg.paths.default + "/music"; };
         defaultText = ''{mymusic = paths.default + "/music";}'';
         description = ''
           List of mountpoints giving data to the navidrome container.
