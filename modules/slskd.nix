@@ -54,7 +54,7 @@ in {
         extraOptions = [ "--pull=always" ];
         environment = cfg.configuration;
         volumes = [ "${cfg.paths.data}:/app" ]
-          ++ helpers.readOnly (helpers.multiplesVolumes cfg.paths.music "");
+          ++ helpers.readOnly (helpers.multiplesVolumes cfg.paths.directories "");
       };
     };
   };
