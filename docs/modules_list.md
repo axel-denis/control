@@ -48,6 +48,10 @@ Click on any of them to see detailed documentation.
 
   Navidrome allows you to enjoy your music collection from anywhere. See [navidrome.org](https://www.navidrome.org/).
 
+- [slskd](./perModule/slskd.md)
+
+  A modern client-server application for the Soulseek file-sharing network. See [slskd's Github](https://github.com/slskd/slskd/).
+
 ## Tools
 ###### Diverses utilities.
 
