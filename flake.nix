@@ -29,6 +29,7 @@
         siyuan = mkModule ./modules/siyuan.nix;
         navidrome = mkModule ./modules/navidrome.nix;
         navidrome = mkModule ./modules/cloudreve.nix;
+        slskd = mkModule ./modules/slskd.nix;
 
         default = { lib, ... }: {
           imports = [
@@ -45,6 +46,7 @@
             self.nixosModules.siyuan
             self.nixosModules.navidrome
             self.nixosModules.cloudreve
+            self.nixosModules.slskd
           ];
 
           options.control = {
