@@ -38,7 +38,7 @@ in {
     configuration = lib.mkOption {
       type = with types; attrsOf str;
       default = { };
-      defaultText = "{}";
+      defaultText = "{ }";
       description = "Passed as environment to slskd. See slskd docs";
     };
   };
@@ -47,14 +47,21 @@ in {
     virtualisation.docker.enable = true;
     virtualisation.oci-containers.backend = "docker";
 
+    assertions = [{
+      assertion = !(cfg.configuration ? SLSKD_SLSK_USERNAME && cfg.configuration
+        ? SLSKD_SLSK_PASSWORD);
+      message =
+        "Please provide control.slskd.SLSKD_SLSK_USERNAME and control.slskd.SLSKD_SLSK_PASSWORD for slskd to start.";
+    }];
+
     virtualisation.oci-containers.containers = {
       slskd = {
         image = "slskd/slskd:${cfg.version}";
         ports = (helpers.webServicePort config cfg 5031) ++ [ "50300:50300" ];
         extraOptions = [ "--pull=always" ];
         environment = cfg.configuration;
-        volumes = [ "${cfg.paths.data}:/app" ]
-          ++ helpers.readOnly (helpers.multiplesVolumes cfg.paths.directories "");
+        volumes = [ "${cfg.paths.data}:/app" ] ++ helpers.readOnly
+          (helpers.multiplesVolumes cfg.paths.directories "");
       };
     };
   };
