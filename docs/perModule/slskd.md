@@ -29,13 +29,32 @@ slskd.paths.directories = {
 /mount1
 /mount2
 
+`slskd.configuration`:
+Variables passed as environment variables to slskd.
+
+> [!CAUTION]
+> - `SLSKD_SLSK_USERNAME` and `SLSKD_SLSK_USERNAME` are mandatory for slskd to start. Please refer to [slskd docs](https://github.com/slskd/slskd/blob/master/docs/config.md)
+
+Example:
+```nix
+configuration = {
+    SLSKD_SLSK_USERNAME = "username";
+    SLSKD_SLSK_PASSWORD = "password";
+};
+```
 ---
 
 ### Example
 
 Minimal example :
 ```nix
-slskd.enable = true;
+slskd = {
+    enable = true;
+    configuration = {
+        SLSKD_SLSK_USERNAME = "username";
+        SLSKD_SLSK_PASSWORD = "password";
+    };
+};
 ```
 
 The above example enables Slskd, using [default](../defaults.md) values for port and location of the app data.
@@ -44,6 +63,12 @@ Complete example :
 ```nix
 slskd = {
     enable = true;
+
+    configuration = {
+        SLSKD_SLSK_USERNAME = "username";
+        SLSKD_SLSK_PASSWORD = "password";
+        #...
+    };
 
     subdomain = "slskd"; # -> slskd.yourdomain.com (if routing module enabled)
     port = 8080; # -> server_ip:8080 (if routing module NOT enabled)

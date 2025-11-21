@@ -30,6 +30,17 @@ navidrome.paths.music = {
 /music/mount1
 /music/mount2
 
+
+`navidrome.configuration`:
+Variables passed as environment variables to navidrome.
+
+Example:
+```nix
+configuration = {
+    ND_LOGLEVEL = "info";
+};
+```
+
 ---
 
 ### Example
@@ -45,6 +56,10 @@ Complete example :
 ```nix
 navidrome = {
     enable = true;
+
+    configuration = {
+        ND_LOGLEVEL = "info";
+    };
 
     subdomain = "music"; # -> music.yourdomain.com (if routing module enabled)
     port = 8080; # -> server_ip:8080 (if routing module NOT enabled)
