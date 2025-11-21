@@ -35,12 +35,12 @@ in {
       };
     };
 
-    configuration: lib.mkOption {
+    configuration = lib.mkOption {
       type = with types; attrsOf str;
-      default = {};
+      default = { };
       defaultText = "{}";
       description = "Passed as environment to Navidrome. See Navidrome docs";
-    }
+    };
   };
 
   config = mkIf cfg.enable {
@@ -53,8 +53,8 @@ in {
         ports = helpers.webServicePort config cfg 8096;
         extraOptions = [ "--pull=always" ];
         environment = cfg.configuration;
-        volumes = [ "${cfg.paths.data}:/data" ]
-          ++ helpers.readOnly (helpers.multiplesVolumes cfg.paths.music "/music");
+        volumes = [ "${cfg.paths.data}:/data" ] ++ helpers.readOnly
+          (helpers.multiplesVolumes cfg.paths.music "/music");
       };
     };
   };
