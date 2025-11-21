@@ -48,7 +48,8 @@ in {
     virtualisation.oci-containers.backend = "docker";
 
     assertions = [{
-      assertion = false;
+      assertion = !((cfg.configuration ? SLSKD_SLSK_USERNAME)
+        && (cfg.configuration ? SLSKD_SLSK_PASSWORD));
       message =
         "Please provide control.slskd.SLSKD_SLSK_USERNAME and control.slskd.SLSKD_SLSK_PASSWORD for slskd to start.";
     }];
