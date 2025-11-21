@@ -1,12 +1,9 @@
 {
   description = "Home Server Service Modules (aggregated)";
 
-  inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
-  };
+  inputs = { nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05"; };
 
-  outputs =
-    { self, nixpkgs, ... }:
+  outputs = { self, nixpkgs, ... }:
     let
       system = "x86_64-linux";
       lib = nixpkgs.lib;
@@ -14,9 +11,10 @@
 
       pkgs = import nixpkgs { inherit system; };
 
-      mkModule = path: { ... }@args: import path (args // { inherit helpers lib pkgs; });
-    in
-    {
+      mkModule = path:
+        { ... }@args:
+        import path (args // { inherit helpers lib pkgs; });
+    in {
       nixosModules = {
         immich = mkModule ./modules/immich.nix;
         jellyfin = mkModule ./modules/jellyfin.nix;
@@ -29,33 +27,33 @@
         routing = mkModule ./modules/routing.nix;
         pihole = mkModule ./modules/pihole.nix;
         siyuan = mkModule ./modules/siyuan.nix;
+        navidrome = mkModule ./modules/navidrome.nix;
 
-        default =
-          { lib, ... }:
-          {
-            imports = [
-              self.nixosModules.immich
-              self.nixosModules.jellyfin
-              self.nixosModules.transmission
-              self.nixosModules.openspeedtest
-              self.nixosModules.terminal
-              self.nixosModules.chibisafe
-              self.nixosModules.hdd-spindown
-              self.nixosModules.psitransfer
-              self.nixosModules.routing
-              self.nixosModules.pihole
-              self.nixosModules.siyuan
-            ];
+        default = { lib, ... }: {
+          imports = [
+            self.nixosModules.immich
+            self.nixosModules.jellyfin
+            self.nixosModules.transmission
+            self.nixosModules.openspeedtest
+            self.nixosModules.terminal
+            self.nixosModules.chibisafe
+            self.nixosModules.hdd-spindown
+            self.nixosModules.psitransfer
+            self.nixosModules.routing
+            self.nixosModules.pihole
+            self.nixosModules.siyuan
+            self.nixosModules.navidrome
+          ];
 
-            options.control = {
-              defaultPath = lib.mkOption {
-                type = lib.types.str;
-                default = "/control_appdata";
-                defaultText = "/control_appdata";
-                description = "Subdomain to use for all Control apps";
-              };
+          options.control = {
+            defaultPath = lib.mkOption {
+              type = lib.types.str;
+              default = "/control_appdata";
+              defaultText = "/control_appdata";
+              description = "Subdomain to use for all Control apps";
             };
           };
+        };
       };
     };
 }
