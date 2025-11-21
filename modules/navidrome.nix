@@ -49,7 +49,7 @@ in {
 
     virtualisation.oci-containers.containers = {
       navidrome = {
-        image = "navidrome/navidrome:${cfg.version}";
+        image = "deluan/navidrome:${cfg.version}";
         ports = helpers.webServicePort config cfg 8096;
         extraOptions = [ "--pull=always" ];
         environment = cfg.configuration;
