@@ -7,7 +7,7 @@ in {
     name = "Navidrome";
     version = "latest";
     subdomain = "navidrome";
-    port = 10002;
+    port = 10009;
   }) // {
     paths = {
       default = helpers.mkInheritedPathOption {
@@ -50,7 +50,7 @@ in {
     virtualisation.oci-containers.containers = {
       navidrome = {
         image = "deluan/navidrome:${cfg.version}";
-        ports = helpers.webServicePort config cfg 8096;
+        ports = helpers.webServicePort config cfg 4533;
         extraOptions = [ "--pull=always" ];
         environment = cfg.configuration;
         volumes = [ "${cfg.paths.data}:/data" ] ++ helpers.readOnly
