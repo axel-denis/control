@@ -9,7 +9,10 @@
 #### 2. Specific options for this module:
 
 `immich.dbPasswordFile`:
-A file containing a password for the internal database of Immich. (Required)
+Password for the internal database of Immich. (Required)
+
+`immich.dbIsHdd`:
+Enable if your database is stored on an HDD drive (postgres optimizations)
 
 `immich.paths`:
 | Name            | Description                             | Default                                  |

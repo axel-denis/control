@@ -49,3 +49,4 @@ You can check the [routing](./perModule/routing.md) module for more info.
 | Speedtest    | 10006        |
 | Pi-Hole http | 10007        |
 | SiYuan       | 10008        |
+| Cloudreve    | 10011        |
