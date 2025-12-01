@@ -47,12 +47,20 @@ in {
     virtualisation.docker.enable = true;
     virtualisation.oci-containers.backend = "docker";
 
+    systemd.tmpfiles.rules = [
+      "d ${cfg.paths.default} 0755 1000 1000"
+      "d ${cfg.paths.data} 0755 1000 1000"
+    ] ++ map (x: "d ${x.value} 0755 1000 1000") (attrsToList cfg.paths.music);
+
     virtualisation.oci-containers.containers = {
       navidrome = {
         image = "deluan/navidrome:${cfg.version}";
         ports = helpers.webServicePort config cfg 4533;
         extraOptions = [ "--pull=always" ];
-        environment = cfg.configuration;
+        environment = mkMerge [ cfg.configuration {
+          PUID = "1000";
+          PGID = "1000";
+        } ];
         volumes = [ "${cfg.paths.data}:/data" ] ++ helpers.readOnly
           (helpers.multiplesVolumes cfg.paths.music "/music");
       };
