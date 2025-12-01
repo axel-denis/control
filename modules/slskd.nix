@@ -64,10 +64,15 @@ in {
         image = "slskd/slskd:${cfg.version}";
         ports = (helpers.webServicePort config cfg 5031) ++ [ "50300:50300" ];
         extraOptions = [ "--pull=always" ];
-        environment = mkMerge [ cfg.configuration {
-          PUID = "1000";
-          PGID = "1000";
-        } ];
+        environment = mkMerge [
+          cfg.configuration 
+          {
+            PUID = "1000";
+            PGID = "1000";
+            SLSKD_SHARED_DIR = lists.forEach (attrsets.attrsToList paths.directories) (e: "/${e};");
+          }
+        ];
+        user = "1000:1000";
         volumes = [ "${cfg.paths.data}:/app" ] ++ helpers.readOnly
           (helpers.multiplesVolumes cfg.paths.directories "");
       };
