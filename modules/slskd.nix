@@ -54,9 +54,11 @@ in {
         "Please provide control.slskd.SLSKD_SLSK_USERNAME and control.slskd.SLSKD_SLSK_PASSWORD for slskd to start.";
     }];
 
-    systemd.tmpfiles.rules = [ "d ${cfg.paths.default} 0755 1000 1000" ];
-    systemd.tmpfiles.rules = [ "d ${cfg.paths.directories} 0755 1000 1000" ];
-    systemd.tmpfiles.rules = [ "d ${cfg.paths.data} 0755 1000 1000" ];
+    systemd.tmpfiles.rules = [
+      "d ${cfg.paths.default} 0755 1000 1000"
+      "d ${cfg.paths.data} 0755 1000 1000"
+    ] ++ map (x: "d ${x.value} 0755 1000 1000") (attrsToList cfg.paths.directories);
+
     virtualisation.oci-containers.containers = {
       slskd = {
         image = "slskd/slskd:${cfg.version}";
