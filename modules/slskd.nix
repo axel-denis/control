@@ -69,7 +69,7 @@ in {
           {
             PUID = "1000";
             PGID = "1000";
-            SLSKD_SHARED_DIR = lists.forEach (attrsets.attrsToList paths.directories) (e: "/${e};");
+            SLSKD_SHARED_DIR = concatStrings (lists.forEach (attrsets.attrsToList cfg.paths.directories) (e: "/${e.value};"));
           }
         ];
         user = "1000:1000";
