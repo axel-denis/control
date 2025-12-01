@@ -61,6 +61,7 @@ in {
           PUID = "1000";
           PGID = "1000";
         } ];
+        user = "1000:1000";
         volumes = [ "${cfg.paths.data}:/data" ] ++ helpers.readOnly
           (helpers.multiplesVolumes cfg.paths.music "/music");
       };
