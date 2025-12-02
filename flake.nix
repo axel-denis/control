@@ -52,6 +52,8 @@
               defaultText = "/control_appdata";
               description = "Subdomain to use for all Control apps";
             };
+
+            updateContainers = lib.mkEnableOption "Pulls the newest image of each enabled container";
           };
 
           config = {

@@ -51,7 +51,7 @@ in {
       siyuan = {
         image = "b3log/siyuan:${cfg.version}";
         ports = helpers.webServicePort config cfg 6806;
-        extraOptions = [ "--pull=always" ];
+        extraOptions = [ (mkIf config.control.updateContainers "--pull-always") ];
         environment = {
           #PUID = "1000";
           #PGID = "1000";

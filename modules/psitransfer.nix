@@ -40,7 +40,7 @@ in {
       psitransfer = {
         image = "psitrax/psitransfer:${cfg.version}";
         ports = helpers.webServicePort config cfg 3000;
-        extraOptions = [ "--pull=always" ];
+        extraOptions = [ (mkIf config.control.updateContainers "--pull-always") ];
         environment = {
           PUID = "0";
           PGID = "0";
