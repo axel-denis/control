@@ -54,11 +54,6 @@ in {
         "Please provide control.slskd.SLSKD_SLSK_USERNAME and control.slskd.SLSKD_SLSK_PASSWORD for slskd to start.";
     }];
 
-    systemd.tmpfiles.rules = [
-      "d ${cfg.paths.default} 0755 1000 100"
-      "d ${cfg.paths.data} 0755 1000 100"
-    ] ++ map (x: "d ${x.value} 0755 1000 100") (attrsToList cfg.paths.directories);
-
     virtualisation.oci-containers.containers = {
       slskd = {
         image = "slskd/slskd:${cfg.version}";
@@ -70,7 +65,6 @@ in {
             #SLSKD_SHARED_DIR = concatStrings (lists.forEach (attrsets.attrsToList cfg.paths.directories) (e: "/${e.name};"));
           # }
         ];
-        user = "1000:100";
         volumes = [ "${cfg.paths.data}:/app" ] ++ helpers.readOnly
           (helpers.multiplesVolumes cfg.paths.directories "");
       };
