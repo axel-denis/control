@@ -53,8 +53,6 @@ in {
         extraOptions =
           [ (mkIf config.control.updateContainers "--pull-always") ];
         environment = {
-          #PUID = "1000";
-          #PGID = "1000";
           TZ = cfg.timezone;
           SIYUAN_WORKSPACE_PATH = "/data";
           SIYUAN_ACCESS_AUTH_CODE = cfg.admin-password;
