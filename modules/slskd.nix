@@ -55,24 +55,22 @@ in {
     }];
 
     systemd.tmpfiles.rules = [
-      "d ${cfg.paths.default} 0755 1000 1000"
-      "d ${cfg.paths.data} 0755 1000 1000"
-    ] ++ map (x: "d ${x.value} 0755 1000 1000") (attrsToList cfg.paths.directories);
+      "d ${cfg.paths.default} 0755 1000 100"
+      "d ${cfg.paths.data} 0755 1000 100"
+    ] ++ map (x: "d ${x.value} 0755 1000 100") (attrsToList cfg.paths.directories);
 
     virtualisation.oci-containers.containers = {
       slskd = {
         image = "slskd/slskd:${cfg.version}";
-        ports = (helpers.webServicePort config cfg 5031) ++ [ "50300:50300" ];
+        ports = (helpers.webServicePort config cfg 5030) ++ [ "50300:50300" ];
         extraOptions = [ "--pull=always" ];
         environment = mkMerge [
           cfg.configuration 
-          {
-            PUID = "1000";
-            PGID = "1000";
+          # {
             #SLSKD_SHARED_DIR = concatStrings (lists.forEach (attrsets.attrsToList cfg.paths.directories) (e: "/${e.name};"));
-          }
+          # }
         ];
-        user = "1000:1000";
+        user = "1000:100";
         volumes = [ "${cfg.paths.data}:/app" ] ++ helpers.readOnly
           (helpers.multiplesVolumes cfg.paths.directories "");
       };
