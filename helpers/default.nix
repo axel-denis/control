@@ -102,6 +102,20 @@
       }${toString moduleConfig.port}:${toString containerPort}"
     ];
 
+  /* Takes an object like
+     {
+       name = "/path1";
+       name2 = "/test/path2";
+     }
+
+     and a path to place them: "/my_path_in_container"
+
+     Then gives an array of docker volumes :
+     [
+       "/path1:/my_path_in_container/name"
+       "/test/path2:/my_path_in_container/name2"
+     ]
+  */
   multiplesVolumes = volumes: containerMountPath:
     lib.lists.forEach (lib.attrsets.attrsToList volumes)
     (e: "${e.value}:${containerMountPath}/${e.name}");
