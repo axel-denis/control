@@ -45,7 +45,7 @@ in {
 
     virtualisation.oci-containers.containers.transmission = {
       image = "haugene/transmission-openvpn:${cfg.version}";
-      extraOptions = [ "--cap-add=NET_ADMIN" "--pull=always" ];
+      extraOptions = [ "--cap-add=NET_ADMIN" (mkIf config.control.updateContainers "--pull-always") ];
 
       volumes = [ "${cfg.paths.download}:/data" "${cfg.paths.config}:/config" ];
 
