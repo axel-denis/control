@@ -40,12 +40,14 @@ in {
   };
 
   config = mkIf cfg.enable {
-    
+    warnings =  [
+      "The Transmission container is in PRIVILEGED mode. Meaning it has full access to the computer."
+    ];
 
     virtualisation.oci-containers.containers.transmission = {
       image = "haugene/transmission-openvpn:${cfg.version}";
       extraOptions = [ (mkIf config.control.updateContainers "--pull-always") ];
-      capabilities = { NET_ADMIN = true; };
+      privileged = true;
       volumes = [ "${cfg.paths.download}:/data" "${cfg.paths.config}:/config" ];
 
       environmentFiles = [ cfg.environmentFile ];
