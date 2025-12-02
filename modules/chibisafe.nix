@@ -1,10 +1,4 @@
-{
-  config,
-  helpers,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, helpers, lib, pkgs, ... }:
 
 with lib;
 let
@@ -36,46 +30,43 @@ let
       }
     }
   '';
-in
-{
-  options.control.chibisafe =
-    (helpers.webServiceDefaults {
-      name = "Chibisafe";
-      version = "latest";
-      subdomain = "chibisafe";
-      port = 10004;
-    })
-    // {
-      paths = {
-        default = helpers.mkInheritedPathOption {
-          parentName = "home server global default path";
-          parent = config.control.defaultPath;
-          defaultSubpath = "chibisafe";
-          description = "Root path for chibisafe media and appdata";
-        };
+in {
+  options.control.chibisafe = (helpers.webServiceDefaults {
+    name = "Chibisafe";
+    version = "latest";
+    subdomain = "chibisafe";
+    port = 10004;
+  }) // {
+    paths = {
+      default = helpers.mkInheritedPathOption {
+        parentName = "home server global default path";
+        parent = config.control.defaultPath;
+        defaultSubpath = "chibisafe";
+        description = "Root path for chibisafe media and appdata";
+      };
 
-        database = helpers.mkInheritedPathOption {
-          parentName = "paths.default";
-          parent = cfg.paths.default;
-          defaultSubpath = "database";
-          description = "Path for chibisafe database.";
-        };
+      database = helpers.mkInheritedPathOption {
+        parentName = "paths.default";
+        parent = cfg.paths.default;
+        defaultSubpath = "database";
+        description = "Path for chibisafe database.";
+      };
 
-        uploads = helpers.mkInheritedPathOption {
-          parentName = "paths.default";
-          parent = cfg.paths.default;
-          defaultSubpath = "uploads";
-          description = "Path for chibisafe uploads.";
-        };
+      uploads = helpers.mkInheritedPathOption {
+        parentName = "paths.default";
+        parent = cfg.paths.default;
+        defaultSubpath = "uploads";
+        description = "Path for chibisafe uploads.";
+      };
 
-        logs = helpers.mkInheritedPathOption {
-          parentName = "paths.default";
-          parent = cfg.paths.default;
-          defaultSubpath = "logs";
-          description = "Path for chibisafe logs.";
-        };
+      logs = helpers.mkInheritedPathOption {
+        parentName = "paths.default";
+        parent = cfg.paths.default;
+        defaultSubpath = "logs";
+        description = "Path for chibisafe logs.";
       };
     };
+  };
 
   config = mkIf cfg.enable {
     virtualisation.docker.enable = true;
@@ -84,9 +75,7 @@ in
     virtualisation.oci-containers.containers = {
       chibisafe = {
         image = "chibisafe/chibisafe:${cfg.version}";
-        environment = {
-          BASE_API_URL = "http://chibisafe_server:8000";
-        };
+        environment = { BASE_API_URL = "http://chibisafe_server:8000"; };
         extraOptions = [ "--network=chibinet" "--pull=always" ];
       };
 
@@ -103,9 +92,7 @@ in
       chibisafe_caddy = {
         image = "caddy:2-alpine";
         ports = helpers.webServicePort config cfg 80;
-        environment = {
-          BASE_URL = ":80";
-        };
+        environment = { BASE_URL = ":80"; };
         volumes = [
           "${cfg.paths.uploads}:/app/uploads:ro"
           "${Caddyfile}:/etc/caddy/Caddyfile:ro"
