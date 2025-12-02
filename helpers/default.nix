@@ -101,4 +101,11 @@
           "127.0.0.1:"
       }${toString moduleConfig.port}:${toString containerPort}"
     ];
+
+  multiplesVolumes = volumes: containerMountPath:
+    lib.lists.forEach (lib.attrsets.attrsToList volumes)
+    (e: "${e.value}:${containerMountPath}/${e.name}");
+
+  # Append ":ro" to a list of volumes
+  readOnly = volumes: lib.lists.forEach volumes (v: "${v}:ro");
 }
