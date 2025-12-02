@@ -28,8 +28,8 @@
         pihole = mkModule ./modules/pihole.nix;
         siyuan = mkModule ./modules/siyuan.nix;
         navidrome = mkModule ./modules/navidrome.nix;
-        cloudreve = mkModule ./modules/cloudreve.nix;
         slskd = mkModule ./modules/slskd.nix;
+        cloudreve = mkModule ./modules/cloudreve.nix;
 
         default = { lib, ... }: {
           imports = [
@@ -45,8 +45,8 @@
             self.nixosModules.pihole
             self.nixosModules.siyuan
             self.nixosModules.navidrome
-            self.nixosModules.cloudreve
             self.nixosModules.slskd
+            self.nixosModules.cloudreve
           ];
 
           options.control = {
