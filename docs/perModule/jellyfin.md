@@ -56,7 +56,7 @@ jellyfin = {
         default = "/mnt/my_other_disk/my_jellyfin";
 
         # if unset, would default to "<default>/media" -> /mnt/my_other_disk/my_jellyfin/media
-        media = "/mnt/movies_disk/"; # useful if your media is on a separate disk
+        media = { main = "/mnt/movies_disk/"; }; # useful if your media is on a separate disk
 
         # if unset, would default to "<default>/config" -> /mnt/my_other_disk/my_jellyfin/config
         config = "/mnt/movies_disk/jellyfin_data"; # generally useless to set
