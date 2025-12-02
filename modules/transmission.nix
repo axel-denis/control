@@ -40,13 +40,12 @@ in {
   };
 
   config = mkIf cfg.enable {
-    virtualisation.docker.enable = true;
-    virtualisation.oci-containers.backend = "docker";
+    
 
     virtualisation.oci-containers.containers.transmission = {
       image = "haugene/transmission-openvpn:${cfg.version}";
-      extraOptions = [ "--cap-add=NET_ADMIN" "--pull=always" ];
-
+      extraOptions = [ "--pull=always" ];
+      devices = [ "/dev/net/tun" ];
       volumes = [ "${cfg.paths.download}:/data" "${cfg.paths.config}:/config" ];
 
       environmentFiles = [ cfg.environmentFile ];

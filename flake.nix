@@ -1,7 +1,7 @@
 {
   description = "Home Server Service Modules (aggregated)";
 
-  inputs = { nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05"; };
+  inputs = { nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11"; };
 
   outputs = { self, nixpkgs, ... }:
     let
@@ -51,6 +51,16 @@
               default = "/control_appdata";
               defaultText = "/control_appdata";
               description = "Subdomain to use for all Control apps";
+            };
+          };
+
+          config = {
+            virtualisation = {
+              containers.enable = true;
+              podman = {
+                enable = true;
+                dockerCompat = true;
+              };
             };
           };
         };

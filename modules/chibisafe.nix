@@ -69,8 +69,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    virtualisation.docker.enable = true;
-    virtualisation.oci-containers.backend = "docker";
+    
 
     virtualisation.oci-containers.containers = {
       chibisafe = {
@@ -101,9 +100,9 @@ in {
       };
     };
 
-    systemd.services = helpers.mkDockerNetworkService {
+    systemd.services = helpers.mkNetworkService {
       networkName = "chibinet";
-      dockerCli = "${config.virtualisation.docker.package}/bin/docker";
+      dockerCli = "${config.virtualisation.docker.package}/bin/podman";
     };
   };
 }

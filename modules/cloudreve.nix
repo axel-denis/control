@@ -46,9 +46,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    virtualisation.docker.enable = true;
-    virtualisation.oci-containers.backend = "docker";
-
+    
     virtualisation.oci-containers.containers = {
       cloudreve = {
         image = "cloudreve/cloudreve:${cfg.version}";
@@ -85,9 +83,9 @@ in {
       };
     };
 
-    systemd.services = helpers.mkDockerNetworkService {
+    systemd.services = helpers.mkNetworkService {
       networkName = "cloudreve-net";
-      dockerCli = "${config.virtualisation.docker.package}/bin/docker";
+      dockerCli = "${config.virtualisation.docker.package}/bin/podman";
     };
   };
 }

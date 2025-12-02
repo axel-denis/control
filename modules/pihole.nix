@@ -49,8 +49,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    virtualisation.docker.enable = true;
-    virtualisation.oci-containers.backend = "docker";
+    
 
     virtualisation.oci-containers.containers = {
       pihole = {
