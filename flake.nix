@@ -58,6 +58,11 @@
             updateContainers = lib.mkEnableOption
               "Pulls the newest image of each enabled container";
           };
+
+          config = {
+            virtualisation.docker.enable = true;
+            virtualisation.oci-containers.backend = "docker";
+          };
         };
       };
     };

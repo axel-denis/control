@@ -28,8 +28,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    virtualisation.docker.enable = true;
-    virtualisation.oci-containers.backend = "docker";
+    
 
     warnings = (optionals (cfg.admin-password == "secret") [
       "You should change the default admin password for Psitransfer! control.psitransfer.admin-password"
