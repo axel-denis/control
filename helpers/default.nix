@@ -77,6 +77,10 @@
       Disable routing for this service. You will only be able to access it on your LAN.
     '';
 
+    socket = lib.mkEnableOption ''
+      ...
+    '';
+
     basicAuth = lib.mkOption {
       type = with lib.types; attrsOf str;
       default = { };
@@ -102,16 +106,24 @@
       }${toString moduleConfig.port}:${toString containerPort}"
     ];
 
+  /* Takes an object like
+     {
+       name = "/path1";
+       name2 = "/test/path2";
+     }
+
+     and a path to place them: "/my_path_in_container"
+
+     Then gives an array of docker volumes :
+     [
+       "/path1:/my_path_in_container/name"
+       "/test/path2:/my_path_in_container/name2"
+     ]
+  */
   multiplesVolumes = volumes: containerMountPath:
     lib.lists.forEach (lib.attrsets.attrsToList volumes)
     (e: "${e.value}:${containerMountPath}/${e.name}");
 
   # Append ":ro" to a list of volumes
   readOnly = volumes: lib.lists.forEach volumes (v: "${v}:ro");
-
-  isEnabledWebModule = module:
-    module ? enable && module.enable && module ? subdomain && module ? port
-    && module ? lanOnly && !module.lanOnly;
-
-  modulesList = conf: lib.attrsets.mapAttrsToList (name: value: value) conf;
 }

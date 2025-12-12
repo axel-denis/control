@@ -27,7 +27,12 @@
         routing = mkModule ./modules/routing.nix;
         pihole = mkModule ./modules/pihole.nix;
         siyuan = mkModule ./modules/siyuan.nix;
+        navidrome = mkModule ./modules/navidrome.nix;
         cloudreve = mkModule ./modules/cloudreve.nix;
+        metadata-remote = mkModule ./modules/metadata-remote.nix;
+        picard = mkModule ./modules/picard.nix;
+        filestash = mkModule ./modules/filestash.nix;
+        nicotine = mkModule ./modules/nicotine.nix;
         custom-routing = mkModule ./modules/custom-routing.nix;
 
         default = { lib, ... }: {
@@ -43,7 +48,12 @@
             self.nixosModules.routing
             self.nixosModules.pihole
             self.nixosModules.siyuan
+            self.nixosModules.navidrome
             self.nixosModules.cloudreve
+            self.nixosModules.metadata-remote
+            self.nixosModules.picard
+            self.nixosModules.filestash
+            self.nixosModules.nicotine
             self.nixosModules.custom-routing
           ];
 

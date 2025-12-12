@@ -116,6 +116,22 @@ in {
               true; # TODO -> only for really required apps (immich, siyuan)
             basicAuth = module.basicAuth;
           };
+          locations."socket" = mkIf module.socket {
+            proxyPass = "http://127.0.0.1:${toString module.port}/socket";
+            proxyWebsockets = true;
+
+            extraConfig = ''
+              proxy_set_header Upgrade $http_upgrade;
+              proxy_set_header Connection "upgrade";
+              proxy_set_header Host $host;
+              proxy_read_timeout 86400;
+              proxy_send_timeout 86400;
+              proxy_buffering off;
+              proxy_request_buffering off;
+              proxy_cache_bypass $http_upgrade;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            '';
+          };
           extraConfig = strings.concatStringsSep "\n" [
             # TODO -> large body size only for really required apps (immich)
             "client_max_body_size 5000M;"

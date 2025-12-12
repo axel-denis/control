@@ -39,14 +39,19 @@ Example for [Jellyfin](./perModule/jellyfin.md):
 If not specified, those ports will be used as default for each app.
 You can check the [routing](./perModule/routing.md) module for more info.
 
-| Service      | Default port |
-| ------------ | ------------ |
-| Immich       | 10001        |
-| Jellyfin     | 10002        |
-| Transmission | 10003        |
-| Chibisafe    | 10004        |
-| Psitransfer  | 10005        |
-| Speedtest    | 10006        |
-| Pi-Hole http | 10007        |
-| SiYuan       | 10008        |
-| Cloudreve    | 10011        |
+| Service         | Default port |
+| --------------- | ------------ |
+| Immich          | 10001        |
+| Jellyfin        | 10002        |
+| Transmission    | 10003        |
+| Chibisafe       | 10004        |
+| Psitransfer     | 10005        |
+| Speedtest       | 10006        |
+| Pi-Hole http    | 10007        |
+| SiYuan          | 10008        |
+| Navidrome       | 10009        |
+| Nicotine        | 10010        |
+| Cloudreve       | 10011        |
+| Metadata-remote | 10012        |
+| Picard          | 10014        |
+| Filestash       | 10015        |

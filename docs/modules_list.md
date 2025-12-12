@@ -40,9 +40,17 @@ Click on any of them to see detailed documentation.
 
   Custom DNS to block ads or trackers. See [pi-hole.net](https://pi-hole.net/).
 
-- [SiYuan](./perModule/psitransfer.md)
+- [SiYuan](./perModule/siyuan.md)
 
   Privacy-first personal knowledge management system. See [SiYuan's Github](https://github.com/siyuan-note/siyuan).
+
+- [Navidrome](./perModule/navidrome.md)
+
+  Navidrome allows you to enjoy your music collection from anywhere. See [navidrome.org](https://www.navidrome.org/).
+
+- [slskd](./perModule/slskd.md)
+
+  A modern client-server application for the Soulseek file-sharing network. See [slskd's Github](https://github.com/slskd/slskd/).
 
 ## Tools
 ###### Diverses utilities.
