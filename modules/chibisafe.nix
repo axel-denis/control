@@ -78,7 +78,7 @@ in {
         environment = { BASE_API_URL = "http://chibisafe_server:8000"; };
         extraOptions = [
           "--network=chibinet"
-          (mkIf config.control.updateContainers "--pull-always")
+          (mkIf config.control.updateContainers "--pull=always")
         ];
       };
 
@@ -91,7 +91,7 @@ in {
         ];
         extraOptions = [
           "--network=chibinet"
-          (mkIf config.control.updateContainers "--pull-always")
+          (mkIf config.control.updateContainers "--pull=always")
         ];
       };
 
@@ -105,7 +105,7 @@ in {
         ];
         extraOptions = [
           "--network=chibinet"
-          (mkIf config.control.updateContainers "--pull-always")
+          (mkIf config.control.updateContainers "--pull=always")
         ];
       };
     };

@@ -65,7 +65,7 @@ in {
         volumes = [ "${cfg.paths.uploads}:/cloudreve/data" ];
         extraOptions = [
           "--network=cloudreve-net"
-          (mkIf config.control.updateContainers "--pull-always")
+          (mkIf config.control.updateContainers "--pull=always")
         ];
       };
 
@@ -80,7 +80,7 @@ in {
         volumes = [ "${cfg.paths.database}:/var/lib/postgresql/data" ];
         extraOptions = [
           "--network=cloudreve-net"
-          (mkIf config.control.updateContainers "--pull-always")
+          (mkIf config.control.updateContainers "--pull=always")
         ];
       };
 
@@ -89,7 +89,7 @@ in {
         volumes = [ "${cfg.paths.redis}:/data" ];
         extraOptions = [
           "--network=cloudreve-net"
-          (mkIf config.control.updateContainers "--pull-always")
+          (mkIf config.control.updateContainers "--pull=always")
         ];
       };
     };
