@@ -19,7 +19,7 @@ in {
         image = "openspeedtest/${cfg.version}";
         ports = helpers.webServicePort config cfg 3000;
         extraOptions =
-          [ (mkIf config.control.updateContainers "--pull-always") ];
+          [ (mkIf config.control.updateContainers "--pull=always") ];
       };
     };
   };

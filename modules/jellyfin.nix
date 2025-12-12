@@ -45,7 +45,7 @@ in {
         image = "jellyfin/jellyfin:${cfg.version}";
         ports = helpers.webServicePort config cfg 8096;
         extraOptions =
-          [ (mkIf config.control.updateContainers "--pull-always") ];
+          [ (mkIf config.control.updateContainers "--pull=always") ];
         volumes = [ "${cfg.paths.config}:/config" ]
           ++ helpers.multiplesVolumes cfg.paths.media "/media";
       };

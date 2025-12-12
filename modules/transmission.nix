@@ -47,7 +47,7 @@ in {
       image = "haugene/transmission-openvpn:${cfg.version}";
       extraOptions = [
         "--cap-add=NET_ADMIN"
-        (mkIf config.control.updateContainers "--pull-always")
+        (mkIf config.control.updateContainers "--pull=always")
       ];
 
       volumes = [ "${cfg.paths.download}:/data" "${cfg.paths.config}:/config" ];
