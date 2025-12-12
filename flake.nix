@@ -28,8 +28,11 @@
         pihole = mkModule ./modules/pihole.nix;
         siyuan = mkModule ./modules/siyuan.nix;
         navidrome = mkModule ./modules/navidrome.nix;
-        slskd = mkModule ./modules/slskd.nix;
         cloudreve = mkModule ./modules/cloudreve.nix;
+        metadata-remote = mkModule ./modules/metadata-remote.nix;
+        picard = mkModule ./modules/picard.nix;
+        filestash = mkModule ./modules/filestash.nix;
+        nicotine = mkModule ./modules/nicotine.nix;
 
         default = { lib, ... }: {
           imports = [
@@ -45,8 +48,11 @@
             self.nixosModules.pihole
             self.nixosModules.siyuan
             self.nixosModules.navidrome
-            self.nixosModules.slskd
             self.nixosModules.cloudreve
+            self.nixosModules.metadata-remote
+            self.nixosModules.picard
+            self.nixosModules.filestash
+            self.nixosModules.nicotine
           ];
 
           options.control = {

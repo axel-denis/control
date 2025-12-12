@@ -77,6 +77,10 @@
       Disable routing for this service. You will only be able to access it on your LAN.
     '';
 
+    socket = lib.mkEnableOption ''
+      ...
+    '';
+
     basicAuth = lib.mkOption {
       type = with lib.types; attrsOf str;
       default = { };

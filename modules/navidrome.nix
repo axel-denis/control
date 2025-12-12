@@ -43,14 +43,29 @@ in {
     };
   };
 
+
   config = mkIf cfg.enable {
     virtualisation.docker.enable = true;
     virtualisation.oci-containers.backend = "docker";
+
+    users.groups = {
+      music = {
+        gid = 990;
+      };
+    };
+
+    users.users.navidrome = {
+      isNormalUser = true;
+      uid = 1092;
+      group = "music";
+      extraGroups = [ "docker" "users" ];
+    };
 
     virtualisation.oci-containers.containers = {
       navidrome = {
         image = "deluan/navidrome:${cfg.version}";
         ports = helpers.webServicePort config cfg 4533;
+        user = "1092:990";
         extraOptions = [ "--pull=always" ];
         environment = cfg.configuration;
         volumes = [ "${cfg.paths.data}:/data" ] ++ helpers.readOnly
