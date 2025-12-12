@@ -5,10 +5,9 @@ let
   cfg = config.control.routing;
 
   # collect all (enabled) web-services
-  webservices = filter (module:
-    module ? enable && module.enable && module ? subdomain && module ? port
-    && module ? lanOnly && !module.lanOnly)
-    (attrsets.mapAttrsToList (name: value: value) config.control);
+  webservices =
+    (filter helpers.isEnabledWebModule (helpers.modulesList config.control))
+    ++ config.control.custom-routing.entries;
 
   # Cloudflare's Authenticated Origin Pulls CA certificate
   cloudflareCertificate = pkgs.fetchurl {
@@ -17,6 +16,7 @@ let
     sha256 = "sha256-wU/tDOUhDbBxn+oR0fELM3UNwX1gmur0fHXp7/DXuEM=";
   };
 in {
+
   options.control.routing = {
     enable = mkEnableOption "Enable Nginx routing";
 

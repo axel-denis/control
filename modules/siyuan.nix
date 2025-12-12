@@ -50,7 +50,8 @@ in {
       siyuan = {
         image = "b3log/siyuan:${cfg.version}";
         ports = helpers.webServicePort config cfg 6806;
-        extraOptions = [ "--pull=always" ];
+        extraOptions =
+          [ (mkIf config.control.updateContainers "--pull-always") ];
         environment = {
           TZ = cfg.timezone;
           SIYUAN_WORKSPACE_PATH = "/data";

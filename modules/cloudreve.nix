@@ -63,7 +63,10 @@ in {
           "CR_CONF_Redis.Server" = "cloudreve-redis:6379";
         };
         volumes = [ "${cfg.paths.uploads}:/cloudreve/data" ];
-        extraOptions = [ "--network=cloudreve-net" "--pull=always" ];
+        extraOptions = [
+          "--network=cloudreve-net"
+          (mkIf config.control.updateContainers "--pull-always")
+        ];
       };
 
       cloudreve-postgresql = {
@@ -75,13 +78,19 @@ in {
           DB_STORAGE_TYPE = mkIf cfg.dbIsHdd "HDD";
         };
         volumes = [ "${cfg.paths.database}:/var/lib/postgresql/data" ];
-        extraOptions = [ "--network=cloudreve-net" "--pull=always" ];
+        extraOptions = [
+          "--network=cloudreve-net"
+          (mkIf config.control.updateContainers "--pull-always")
+        ];
       };
 
       cloudreve-redis = {
         image = "redis:latest";
         volumes = [ "${cfg.paths.redis}:/data" ];
-        extraOptions = [ "--network=cloudreve-net" "--pull=always" ];
+        extraOptions = [
+          "--network=cloudreve-net"
+          (mkIf config.control.updateContainers "--pull-always")
+        ];
       };
     };
 

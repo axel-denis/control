@@ -33,6 +33,7 @@
         picard = mkModule ./modules/picard.nix;
         filestash = mkModule ./modules/filestash.nix;
         nicotine = mkModule ./modules/nicotine.nix;
+        custom-routing = mkModule ./modules/custom-routing.nix;
 
         default = { lib, ... }: {
           imports = [
@@ -53,6 +54,7 @@
             self.nixosModules.picard
             self.nixosModules.filestash
             self.nixosModules.nicotine
+            self.nixosModules.custom-routing
           ];
 
           options.control = {
@@ -62,6 +64,9 @@
               defaultText = "/control_appdata";
               description = "Subdomain to use for all Control apps";
             };
+
+            updateContainers = lib.mkEnableOption
+              "Pulls the newest image of each enabled container";
           };
         };
       };
