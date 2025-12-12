@@ -28,6 +28,7 @@
         pihole = mkModule ./modules/pihole.nix;
         siyuan = mkModule ./modules/siyuan.nix;
         cloudreve = mkModule ./modules/cloudreve.nix;
+        custom-routing = mkModule ./modules/custom-routing.nix;
 
         default = { lib, ... }: {
           imports = [
@@ -43,6 +44,7 @@
             self.nixosModules.pihole
             self.nixosModules.siyuan
             self.nixosModules.cloudreve
+            self.nixosModules.custom-routing
           ];
 
           options.control = {
@@ -53,7 +55,8 @@
               description = "Subdomain to use for all Control apps";
             };
 
-            updateContainers = lib.mkEnableOption "Pulls the newest image of each enabled container";
+            updateContainers = lib.mkEnableOption
+              "Pulls the newest image of each enabled container";
           };
         };
       };
