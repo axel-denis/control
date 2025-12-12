@@ -18,7 +18,7 @@
       nixosModules = {
         immich = mkModule ./modules/immich.nix;
         jellyfin = mkModule ./modules/jellyfin.nix;
-        transmission = mkModule ./modules/transmission.nix;
+        #transmission = mkModule ./modules/transmission.nix;
         openspeedtest = mkModule ./modules/openspeedtest.nix;
         terminal = mkModule ./modules/terminal.nix;
         chibisafe = mkModule ./modules/chibisafe.nix;
@@ -34,7 +34,7 @@
           imports = [
             self.nixosModules.immich
             self.nixosModules.jellyfin
-            self.nixosModules.transmission
+            #self.nixosModules.transmission
             self.nixosModules.openspeedtest
             self.nixosModules.terminal
             self.nixosModules.chibisafe

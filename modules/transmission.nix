@@ -45,9 +45,16 @@ in {
     virtualisation.oci-containers.containers.transmission = {
       image = "haugene/transmission-openvpn:${cfg.version}";
       extraOptions = [
-        "--cap-add=NET_ADMIN"
         (mkIf config.control.updateContainers "--pull=always")
       ];
+      capabilities = {
+        NET_ADMIN = true;
+      };
+      devices = [
+        "/dev/net/tun"
+      ];
+      privileged = true;
+      log-driver = "k8s-file";
 
       volumes = [ "${cfg.paths.download}:/data" "${cfg.paths.config}:/config" ];
 
