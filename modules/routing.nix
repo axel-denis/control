@@ -7,7 +7,7 @@ let
   # collect all (enabled) web-services
   webservices =
     (filter helpers.isEnabledWebModule (helpers.modulesList config.control))
-    ++ config.control.aaaa.entries;
+    ++ config.control.custom-routing.entries;
 
   # Cloudflare's Authenticated Origin Pulls CA certificate
   cloudflareCertificate = pkgs.fetchurl {

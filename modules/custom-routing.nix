@@ -1,10 +1,9 @@
 { config, helpers, lib, pkgs, ... }:
 
 with lib;
-let cfg = config.control.aaaa;
+let cfg = config.control.custom-routing;
 in {
-  options.control.aaaa = {
-    enable = mkEnableOption "enables aaaa";
+  options.control.custom-routing = {
     entries = mkOption {
       type = with types;
         listOf (submodule {

@@ -28,7 +28,7 @@
         pihole = mkModule ./modules/pihole.nix;
         siyuan = mkModule ./modules/siyuan.nix;
         cloudreve = mkModule ./modules/cloudreve.nix;
-        aaaa = mkModule ./modules/aaaa.nix;
+        custom-routing = mkModule ./modules/custom-routing.nix;
 
         default = { lib, ... }: {
           imports = [
@@ -44,7 +44,7 @@
             self.nixosModules.pihole
             self.nixosModules.siyuan
             self.nixosModules.cloudreve
-            self.nixosModules.aaaa
+            self.nixosModules.custom-routing
           ];
 
           options.control = {
