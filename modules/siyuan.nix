@@ -50,7 +50,7 @@ in {
     virtualisation.oci-containers.containers = {
       siyuan = {
         image = "b3log/siyuan:${cfg.version}";
-        ports = helpers.webServicePort config cfg 6806;
+        ports = [(helpers.webServicePort config cfg 6806)];
         extraOptions =
           [ (mkIf config.control.updateContainers "--pull=always") ];
         environment = {

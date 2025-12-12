@@ -51,8 +51,7 @@ in {
     virtualisation.oci-containers.containers = {
       cloudreve = {
         image = "cloudreve/cloudreve:${cfg.version}";
-        ports = helpers.webServicePort config cfg 5212
-          ++ [ "6888:6888" "6888:6888/udp" ];
+        #ports = [(helpers.webServicePort config cfg 5212) "6888:6888" "6888:6888/udp" ];
         environment = {
           "CR_CONF_Database.Type" = "postgres";
           "CR_CONF_Database.Host" = "cloudreve-postgresql";
@@ -63,7 +62,7 @@ in {
         };
         volumes = [ "${cfg.paths.uploads}:/cloudreve/data" ];
         extraOptions = [
-          "--network=cloudreve-net"
+          "--pod=cloudreve-pod"
           (mkIf config.control.updateContainers "--pull=always")
         ];
       };
@@ -78,7 +77,7 @@ in {
         };
         volumes = [ "${cfg.paths.database}:/var/lib/postgresql/data" ];
         extraOptions = [
-          "--network=cloudreve-net"
+          "--pod=cloudreve-pod"
           (mkIf config.control.updateContainers "--pull=always")
         ];
       };
@@ -87,15 +86,16 @@ in {
         image = "redis:latest";
         volumes = [ "${cfg.paths.redis}:/data" ];
         extraOptions = [
-          "--network=cloudreve-net"
+          "--pod=cloudreve-pod"
           (mkIf config.control.updateContainers "--pull=always")
         ];
       };
     };
 
-    systemd.services = helpers.mkDockerNetworkService {
-      networkName = "cloudreve-net";
-      dockerCli = "${config.virtualisation.docker.package}/bin/docker";
+    systemd.services = helpers.mkPodmanPodService {
+      podName = "cloudreve-pod";
+      podmanCli = "${config.virtualisation.podman.package}/bin/podman";
+      expose = helpers.webServicePort config cfg 5212;
     };
   };
 }

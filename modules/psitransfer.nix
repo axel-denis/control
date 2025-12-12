@@ -39,7 +39,7 @@ in {
     virtualisation.oci-containers.containers = {
       psitransfer = {
         image = "psitrax/psitransfer:${cfg.version}";
-        ports = helpers.webServicePort config cfg 3000;
+        ports = [(helpers.webServicePort config cfg 3000)];
         extraOptions =
           [ (mkIf config.control.updateContainers "--pull=always") ];
         environment = {

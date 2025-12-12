@@ -18,6 +18,19 @@
     };
   };
 
+  mkPodmanPodService = { podName, podmanCli, expose }: {
+    "init-${podName}-pod" = {
+      description = "Create Podman pod: ${podName}";
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig.Type = "oneshot";
+      script = ''
+      ${podmanCli} pod exists ${podName} || \
+        ${podmanCli} pod create -n ${podName} -p '${expose}'
+    '';
+    };
+  };
+
   /* Automates the creation of an inherited option like :
      dbPath = mkOption {
        type = types.path;
@@ -92,15 +105,13 @@
 
   # Setting containers exposure for webservices
   webServicePort = globalConfig: moduleConfig: containerPort:
-    [
-      "${
-        if (globalConfig.control.routing.lan || moduleConfig.forceLan
-          || moduleConfig.lanOnly) then
-          ""
-        else
-          "127.0.0.1:"
-      }${toString moduleConfig.port}:${toString containerPort}"
-    ];
+    "${
+      if (globalConfig.control.routing.lan || moduleConfig.forceLan
+        || moduleConfig.lanOnly) then
+        ""
+      else
+        "127.0.0.1:"
+    }${toString moduleConfig.port}:${toString containerPort}";
 
   multiplesVolumes = volumes: containerMountPath:
     lib.lists.forEach (lib.attrsets.attrsToList volumes)

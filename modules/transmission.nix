@@ -52,7 +52,7 @@ in {
       volumes = [ "${cfg.paths.download}:/data" "${cfg.paths.config}:/config" ];
 
       environmentFiles = [ cfg.environmentFile ];
-      ports = helpers.webServicePort config cfg 9091;
+      ports = [(helpers.webServicePort config cfg 9091)];
     };
   };
 }

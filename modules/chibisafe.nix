@@ -76,7 +76,7 @@ in {
         image = "chibisafe/chibisafe:${cfg.version}";
         environment = { BASE_API_URL = "http://chibisafe_server:8000"; };
         extraOptions = [
-          "--network=chibinet"
+          "--chibisafe-pod"
           (mkIf config.control.updateContainers "--pull=always")
         ];
       };
@@ -89,29 +89,30 @@ in {
           "${cfg.paths.logs}:/app/logs:rw"
         ];
         extraOptions = [
-          "--network=chibinet"
+          "--chibisafe-pod"
           (mkIf config.control.updateContainers "--pull=always")
         ];
       };
 
       chibisafe_caddy = {
         image = "caddy:2-alpine";
-        ports = helpers.webServicePort config cfg 80;
+        #ports = [(helpers.webServicePort config cfg 80)];
         environment = { BASE_URL = ":80"; };
         volumes = [
           "${cfg.paths.uploads}:/app/uploads:ro"
           "${Caddyfile}:/etc/caddy/Caddyfile:ro"
         ];
         extraOptions = [
-          "--network=chibinet"
+          "--chibisafe-pod"
           (mkIf config.control.updateContainers "--pull=always")
         ];
       };
     };
 
-    systemd.services = helpers.mkDockerNetworkService {
-      networkName = "chibinet";
-      dockerCli = "${config.virtualisation.docker.package}/bin/docker";
+    systemd.services = helpers.mkPodmanPodService {
+      podName = "chibisafe-pod";
+      podmanCli = "${config.virtualisation.podman.package}/bin/podman";
+      expose = helpers.webServicePort config cfg 80;
     };
   };
 }

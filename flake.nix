@@ -60,7 +60,18 @@
           };
 
           config = {
-            virtualisation.oci-containers.backend = "docker";
+            #virtualisation.oci-containers.backend = "docker"; # defaults to podman
+
+            users.users.control = {
+              isSystemUser = true;
+              uid = 10000;
+              group = "control";
+            };
+
+            users.groups.control = {
+              gid = 10000;
+              members = [ "control" ];
+            };
           };
         };
       };

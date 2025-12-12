@@ -42,7 +42,7 @@ in {
     virtualisation.oci-containers.containers = {
       jellyfin = {
         image = "jellyfin/jellyfin:${cfg.version}";
-        ports = helpers.webServicePort config cfg 8096;
+        ports = [(helpers.webServicePort config cfg 8096)];
         extraOptions =
           [ (mkIf config.control.updateContainers "--pull=always") ];
         volumes = [ "${cfg.paths.config}:/config" ]

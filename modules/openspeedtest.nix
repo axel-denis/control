@@ -16,7 +16,7 @@ in {
     virtualisation.oci-containers.containers = {
       openspeedtest = {
         image = "openspeedtest/${cfg.version}";
-        ports = helpers.webServicePort config cfg 3000;
+        ports = [(helpers.webServicePort config cfg 3000)];
         extraOptions =
           [ (mkIf config.control.updateContainers "--pull=always") ];
       };

@@ -58,7 +58,7 @@ in {
     virtualisation.oci-containers.containers = {
       immich_server = {
         image = "ghcr.io/immich-app/immich-server:${cfg.version}";
-        ports = helpers.webServicePort config cfg 2283;
+        #ports = [(helpers.webServicePort config cfg 2283)];
         environment = {
           DB_USERNAME = "postgres";
           DB_DATABASE_NAME = "immich";
@@ -68,7 +68,7 @@ in {
         volumes =
           [ "${cfg.paths.uploads}:/data" "/etc/localtime:/etc/localtime:ro" ];
         extraOptions = [
-          "--network=immich-net"
+          "--pod=immich-pod"
           (mkIf config.control.updateContainers "--pull=always")
         ];
       };
@@ -83,7 +83,7 @@ in {
         };
         volumes = [ "${cfg.paths.machineLearning}:/cache" ];
         extraOptions = [
-          "--network=immich-net"
+          "--pod=immich-pod"
           (mkIf config.control.updateContainers "--pull=always")
         ];
       };
@@ -92,7 +92,7 @@ in {
         image =
           "docker.io/valkey/valkey:8-bookworm@sha256:fea8b3e67b15729d4bb70589eb03367bab9ad1ee89c876f54327fc7c6e618571";
         extraOptions = [
-          "--network=immich-net"
+          "--pod=immich-pod"
           (mkIf config.control.updateContainers "--pull=always")
         ];
       };
@@ -109,15 +109,16 @@ in {
         };
         volumes = [ "${cfg.paths.database}:/var/lib/postgresql/data" ];
         extraOptions = [
-          "--network=immich-net"
+          "--pod=immich-pod"
           (mkIf config.control.updateContainers "--pull=always")
         ];
       };
     };
 
-    systemd.services = helpers.mkDockerNetworkService {
-      networkName = "immich-net";
-      dockerCli = "${config.virtualisation.docker.package}/bin/docker";
+    systemd.services = helpers.mkPodmanPodService {
+      podName = "immich-pod";
+      podmanCli = "${config.virtualisation.podman.package}/bin/podman";
+      expose = helpers.webServicePort config cfg 2283;
     };
   };
 }
