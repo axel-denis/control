@@ -108,4 +108,10 @@
 
   # Append ":ro" to a list of volumes
   readOnly = volumes: lib.lists.forEach volumes (v: "${v}:ro");
+
+  isEnabledWebModule = module:
+    module ? enable && module.enable && module ? subdomain && module ? port
+    && module ? lanOnly && !module.lanOnly;
+
+  modulesList = conf: lib.attrsets.mapAttrsToList (name: value: value) conf;
 }

@@ -5,10 +5,9 @@ let
   cfg = config.control.routing;
 
   # collect all (enabled) web-services
-  webservices = filter (module:
-    module ? enable && module.enable && module ? subdomain && module ? port
-    && module ? lanOnly && !module.lanOnly)
-    (attrsets.mapAttrsToList (name: value: value) config.control);
+  webservices =
+    (filter helpers.isEnabledWebModule (helpers.modulesList config.control))
+    ++ config.control.custom-routing.entries;
 
   # Cloudflare's Authenticated Origin Pulls CA certificate
   cloudflareCertificate = pkgs.fetchurl {
