@@ -101,6 +101,14 @@
         It is also known to break ACME.
       '';
     };
+
+    groups = lib.mkOption {
+      type = with lib.types; listOf str;
+      default = [ ];
+      description = ''
+        Others apps in the same groups as specified here will be able to read volumes of this app.
+      '';
+    };
   };
 
   # Setting containers exposure for webservices
@@ -125,4 +133,18 @@
     && module ? lanOnly && !module.lanOnly;
 
   modulesList = conf: lib.attrsets.mapAttrsToList (name: value: value) conf;
+
+  moduleUserHelper = name: id: isolation: groups: {
+    users.${name} = {
+      isNormalUser = true;
+      uid = id;
+      group = if isolation then name else "control";
+      extraGroups = groups;
+    };
+
+    groups.${name} = lib.mkIf isolation {
+      gid = id;
+      members = [ name ];
+    };
+  };
 }

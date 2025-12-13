@@ -1,13 +1,16 @@
 { config, helpers, lib, ... }:
 
 with lib;
-let cfg = config.control.immich;
+let
+  cfg = config.control.immich;
+  isolation = config.control.isolation;
+  id = 10001; # port and uid
 in {
   options.control.immich = (helpers.webServiceDefaults {
     name = "Immich";
     version = "release";
     subdomain = "immich";
-    port = 10001;
+    port = id;
   }) // {
     dbPassword = mkOption {
       type = types.str;
@@ -53,7 +56,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    
+    users = helpers.moduleUserHelper "control-immich" id isolation cfg.groups;
 
     virtualisation.oci-containers.containers = {
       immich_server = {
@@ -71,6 +74,8 @@ in {
           "--pod=immich-pod"
           (mkIf config.control.updateContainers "--pull=always")
         ];
+
+        podman.user = "control-immich";
       };
 
       immich-machine-learning = {

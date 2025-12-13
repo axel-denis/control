@@ -57,13 +57,19 @@
 
             updateContainers = lib.mkEnableOption
               "Pulls the newest image of each enabled container";
+            
+            isolation = lib.mkEnableOption
+              ''
+                Each container mountpoints are make through a separate user to prevent
+                files from one app from being read through another unauthorized app
+              '';
           };
 
           config = {
             #virtualisation.oci-containers.backend = "docker"; # defaults to podman
 
             users.users.control = {
-              isSystemUser = true;
+              isNormalUser = true;
               uid = 10000;
               group = "control";
             };
