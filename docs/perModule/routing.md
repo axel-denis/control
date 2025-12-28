@@ -237,3 +237,18 @@ With this setup, only requests presenting the valid certificat (only your proxy)
 > Cloudflare is a recognized DNS/Proxy provider enabling to easily create the setup just showed for free (once you have a domain):
 > Cloudflare DNS -> Cloudflare Proxy -> Your server
 > If `clientCertificateFile` is left undefined, it will use [Cloudflare Authenticated Origin Pulls CA](https://developers.cloudflare.com/ssl/origin-configuration/authenticated-origin-pull/) and should work out of the box if Cloudflare's Proxy is enabled for your domain and subdomains.
+
+## 4. Custom routing
+You can add non-control modules to the router like so:
+```nix
+# example for the btop app, that is not provided by Control
+control.custom-routing.entries = [
+  {
+    subdomain = "btop";
+    port = 7681;
+    basicAuth = { # optional
+      username = "password";
+    };
+  }
+];
+```
