@@ -1,8 +1,8 @@
-{ config, helpers, lib, ... }:
+{ config, helpers, lib, pkgs, ... }:
 
 with lib;
 let 
-    cc = cc;
+    cc = config.control;
     cfg = cc.homepage;
     settingsFormat = pkgs.formats.yaml { };
 
@@ -66,14 +66,15 @@ in {
                     memory = true;
                 };
             }]
-        ''
+        '';
     };
   };
 
   config = mkIf cfg.enable {
     services.homepage-dashboard.enable = true;
     services.homepage-dashboard.listenPort = cfg.port;
+    services.homepage-dashboard.allowedHosts = "${cfg.subdomain}.${cc.routing.domain}";
     services.homepage-dashboard.widgets = 
-        (forEach (m: mkDefaultWidget m.name m.module) webservices) ++ cfg.additionalWidgets;
+        (forEach webservices (m: mkDefaultWidget m.name m.module)) ++ cfg.additionalWidgets;
   };
 }

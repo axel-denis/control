@@ -1,6 +1,6 @@
 { lib, ... }:
 
-{
+rec {
   mkDockerNetworkService = { networkName, dockerCli }: {
     "init-${networkName}-network" = {
       description = "Create Docker network bridge: ${networkName}";
@@ -114,8 +114,8 @@
     && module ? lanOnly && !module.lanOnly;
 
   modulesList = conf: lib.attrsets.mapAttrsToList (name: value: value) conf;
-  modulesListWithNames = conf: lib.attrsets.mapAttrsToList (name: value: {name = name; module = value}) conf;
+  modulesListWithNames = conf: lib.attrsets.mapAttrsToList (name: value: {name = name; module = value;}) conf;
 
   # isEnabledWebModule for modulesListWithNames
-  isEnabledNamedWebVolume = tuple: isEnabledWebModule tuple.module;
+  isEnabledNamedWebModule = tuple: isEnabledWebModule tuple.module;
 }
