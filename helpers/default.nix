@@ -114,4 +114,8 @@
     && module ? lanOnly && !module.lanOnly;
 
   modulesList = conf: lib.attrsets.mapAttrsToList (name: value: value) conf;
+  modulesListWithNames = conf: lib.attrsets.mapAttrsToList (name: value: {name = name; module = value}) conf;
+
+  # isEnabledWebModule for modulesListWithNames
+  isEnabledNamedWebVolume = tuple: isEnabledWebModule tuple.module;
 }
