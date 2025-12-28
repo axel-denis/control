@@ -1,9 +1,15 @@
 {
   description = "Home Server Service Modules (aggregated)";
 
-  inputs = { nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05"; };
+  inputs = { 
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
 
-  outputs = { self, nixpkgs, ... }:
+  outputs = { self, nixpkgs, home-manager, ... }:
     let
       system = "x86_64-linux";
       lib = nixpkgs.lib;
@@ -32,6 +38,8 @@
 
         default = { lib, ... }: {
           imports = [
+            home-manager.nixosModules.home-manager
+
             self.nixosModules.immich
             self.nixosModules.jellyfin
             #self.nixosModules.transmission

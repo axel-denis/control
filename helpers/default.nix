@@ -136,10 +136,14 @@
 
   moduleUserHelper = name: id: isolation: groups: {
     users.${name} = {
-      isNormalUser = true;
+      isSystemUser = true;
+      linger = true;
+      autoSubUidGidRange = true;
       uid = id;
       group = if isolation then name else "control";
       extraGroups = groups;
+      home = "/control_users/${name}"; 
+      createHome = true; # Assurez-vous qu'il est créé
     };
 
     groups.${name} = lib.mkIf isolation {
