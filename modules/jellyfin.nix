@@ -1,4 +1,4 @@
-{ config, helpers, lib, ... }:
+{ config, helpers, lib, pkgs, ... }:
 
 with lib;
 let cfg = config.control.jellyfin;
@@ -9,6 +9,11 @@ in {
     subdomain = "jellyfin";
     port = 10002;
   }) // {
+
+    hardware-acceleration = {
+      intel = mkEnableOption "Enables Intel hardware acceleration";
+    };
+
     paths = {
       default = helpers.mkInheritedPathOption {
         parentName = "home server global default path";
@@ -44,10 +49,15 @@ in {
       jellyfin = {
         image = "jellyfin/jellyfin:${cfg.version}";
         ports = helpers.webServicePort config cfg 8096;
-        extraOptions =
-          [ (mkIf config.control.updateContainers "--pull=always") ];
+        extraOptions = [
+          (mkIf config.control.updateContainers "--pull=always")
+          (mkIf cfg.hardware-acceleration.intel
+            "--group-add=${toString config.users.groups.render.gid}")
+        ];
         volumes = [ "${cfg.paths.config}:/config" ]
           ++ helpers.multiplesVolumes cfg.paths.media "/media";
+        devices = optionals cfg.hardware-acceleration.intel
+          [ "/dev/dri/renderD128:/dev/dri/renderD128" ];
       };
     };
   };
