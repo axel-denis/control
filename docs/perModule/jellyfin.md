@@ -31,6 +31,10 @@ jellyfin.paths.media = {
 /media/mount2
 
 ---
+`jellyfin.hardware-acceleration.intel`: Enables intel hardware acceleration if set to true. (Must also be enabled in the Jellyfin's settings page)
+---
+
+
 
 ### Example
 
