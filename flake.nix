@@ -29,6 +29,7 @@
         siyuan = mkModule ./modules/siyuan.nix;
         cloudreve = mkModule ./modules/cloudreve.nix;
         custom-routing = mkModule ./modules/custom-routing.nix;
+        gitlab = mkModule ./modules/gitlab.nix;
 
         default = { lib, ... }: {
           imports = [
@@ -45,6 +46,7 @@
             self.nixosModules.siyuan
             self.nixosModules.cloudreve
             self.nixosModules.custom-routing
+            self.nixosModules.gitlab
           ];
 
           options.control = {
