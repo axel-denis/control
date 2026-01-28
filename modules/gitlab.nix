@@ -9,6 +9,14 @@ in {
     subdomain = "gitlab";
     port = 10012;
   }) // {
+
+    ssh-port = lib.mkOption {
+      type = lib.types.int;
+      default = 44;
+      defaultText = toString 44;
+      description = "SSH port to use for GitLab";
+    };
+
     paths = {
       default = helpers.mkInheritedPathOption {
         parentName = "home server global default path";
@@ -44,21 +52,25 @@ in {
     virtualisation.docker.enable = true;
     virtualisation.oci-containers.backend = "docker";
 
-    warnings = (optionals (cfg.admin-password == "secret") [
-      "You should change the default admin password for GitLab! control.gitlab.admin-password"
-    ]);
-
     # Creating directory with the user id asked by the container
     systemd.tmpfiles.rules = [ "d ${cfg.paths.default} 0755 1000 1000" ];
     virtualisation.oci-containers.containers = {
       gitlab = {
-        image = "psitrax/gitlab:${cfg.version}";
-        ports = (helpers.webServicePort config cfg 80) ++ "22:22";
+        image = "gitlab/gitlab-ce:${cfg.version}";
+        ports = (helpers.webServicePort config cfg 80) ++ ["${toString cfg.ssh-port}:22"];
         extraOptions =
           [ (mkIf config.control.updateContainers "--pull=always") "--shm-size=256m" ];
         environment = {
           GITLAB_OMNIBUS_CONFIG =
-            "external_url ${cfg.subdomain}.${config.control.routing.domain}; gitlab_rails['lfs_enabled'] = true;";
+            ''
+              external_url 'https://${cfg.subdomain}.${config.control.routing.domain}';
+              gitlab_rails['lfs_enabled'] = true;
+              gitlab_rails['gitlab_shell_ssh_port'] = ${toString cfg.ssh-port};
+              letsencrypt['enabled'] = false;
+              nginx['enable'] = true;
+              nginx['listen_port'] = 80;
+              nginx['listen_https'] = false;
+            '';
         };
         volumes = [ 
           "${cfg.paths.config}:/etc/gitlab"
