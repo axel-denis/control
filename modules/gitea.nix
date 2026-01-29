@@ -17,12 +17,21 @@ in {
       description = "SSH port to use for Gitea";
     };
 
+    enable-registration = mkEnableOption "Enable open registration for Gitea";
+
     paths = {
       default = helpers.mkInheritedPathOption {
         parentName = "home server global default path";
         parent = config.control.defaultPath;
         defaultSubpath = "gitea";
         description = "Root path for Gitea";
+      };
+
+      database = helpers.mkInheritedPathOption {
+        parentName = "paths.default";
+        parent = cfg.paths.default;
+        defaultSubpath = "database";
+        description = "Path for Gitea database";
       };
     };
   };
@@ -38,6 +47,7 @@ in {
         environment = {
           USER_UID = "1000";
           USER_GID = "1000";
+          DISABLE_REGISTRATION = if cfg.enable-registration then "false" else "true";
         };
         volumes = [ 
           "${cfg.paths.default}:/data"
@@ -61,6 +71,9 @@ in {
         extraOptions = [
           "--network=gitea-net"
           (mkIf config.control.updateContainers "--pull=always")
+        ];
+        volumes = [ 
+          "${cfg.paths.database}:/var/lib/mysql"
         ];
       };
     };
