@@ -30,6 +30,7 @@
         cloudreve = mkModule ./modules/cloudreve.nix;
         custom-routing = mkModule ./modules/custom-routing.nix;
         gitlab = mkModule ./modules/gitlab.nix;
+        gitea = mkModule ./modules/gitea.nix;
 
         default = { lib, ... }: {
           imports = [
@@ -47,6 +48,7 @@
             self.nixosModules.cloudreve
             self.nixosModules.custom-routing
             self.nixosModules.gitlab
+            self.nixosModules.gitea
           ];
 
           options.control = {

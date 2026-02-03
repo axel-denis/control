@@ -17,7 +17,7 @@ SSH port for GitLab
 | default | The main path of the app | `<main path>/gitlab`            |
 | config  | Path for GitLab config   | `<main path>/<default>/config`  |
 | logs    | Path for GitLab logs     | `<main path>/<default>/logs`    |
-| data    | Path for GitLab data     | `<main path>/<default>/uploads` |
+| data    | Path for GitLab data     | `<main path>/<default>/data` |
 
 - `<main path>` = Main path for all the apps. See [defaults](../defaults.md#paths).
 - `<default>` - `gitlab.paths.default`
