@@ -13,6 +13,13 @@ This module brings some quality of life improvements for your terminal.
   
   -> default: `robbyrussell`
 
-- `enableNeofetchGreet` -> Will print [Neofetch](https://github.com/dylanaraps/neofetch) when you start your terminal. Absolutely useless, but wow how badass it is.
+- `enableNeofetchGreet` -> Will print [Neofetch](https://github.com/dylanaraps/neofetch) when you start your terminal. Absolutely useless, but wow how badass it is. (Only works with ZSH enabled for now)
+  
+- `enableCommandHelpers` -> Add the following commands to your terminal: (Only works with ZSH enabled for now)
+  - ns -> same as `nix shell ...`
+  - nr -> same as `nix run ...`
+  
+  -> default: `false`
+
 > [!WARNING]
-> Only works with ZSH enabled for now
+> NeofetchGreet & CommandHelpers only works with ZSH enabled
