@@ -42,16 +42,14 @@ If you followed the [Getting Started](../getting_started.md) guide, you should b
 }
 ```
 
-Right now, you can access services on your local network, by using `<server_ip>:<port>`. By example if your server's ip is `192.168.0.50`, you can access [openspeedtest](./openspeedtest.md) through `192.168.0.50:10006`. Default ports are defined in [the section "port" of the webservices docs](../web_options.md#serviceport).
+Right now, you can access services on your local network, by using `<server_ip>:<port>`. By example if your server's ip is `192.168.0.50`, you can access [openspeedtest](./openspeedtest.md) through `192.168.0.50:10006`. Default ports are defined in [the section "port" of the default definitions](../defaults.md#ports).
 
 If you want to set a custom port for an app, that's possible:
 ```nix
 { control, ... }
 {
   control = {
-    immich.enable = true;
-    jellyfin.enable = true;
-    psitransfer.enable = true;
+    # ...
     openspeedtest = {
         enable = true;
         port = 8080;
@@ -60,7 +58,10 @@ If you want to set a custom port for an app, that's possible:
 }
 ```
 
-Let's now enable the router to bind everything to it's respective subdomain (don't rebuild it yet, you could get an error):
+> [!NOTE]
+> The routing module will not be bothered if you define custom ports. Just be sure not to define two apps on the same port as this is *undefined behavior*.
+
+Let's now **enable the router** to bind everything to it's respective subdomain (don't rebuild it yet, you could get an error):
 ```nix
 { control, ... }
 {
@@ -90,14 +91,14 @@ This configuration contains some new options, let's get through them.
   Will only work if your dns is already configured and ports 80 & 443 opened (we'll get to that bellow).
 
 > [!IMPORTANT]
-> It's really recommanded for your server to use https, and Let's Encrypt ACME provides a nice, free and NixOS compliant way to do it. [Let's Encrypt ToS](https://letsencrypt.org/repository/) has to be accepted.<br>
-> This flake does not provide a way to import custom certificates (if you already have some) for now. But that's should be some easy modifications if you want to contribute :smile:
+> It's really recommanded for your server to use https, and Let's Encrypt ACME provides a nice, free and NixOS compliant way to do it. [Let's Encrypt ToS](https://letsencrypt.org/repository/) have to be accepted.<br>
+> This flake does not provide a way to import custom certificates (if you already have some) for now. But that's should be some easy modifications if you want to contribute :)
 
 > [!NOTE] 
 > With router enabled, all usual containers ports are closed (you can't access by `<your_ip>:<port>` anymore). **Only ports 80 (http) and 443 (https) are opened.**
 
 ### To access your apps through your domain, you must do those steps:
-1. Use your DNS provider to redirect your domain and each subdomain to your router ip.
+1. Use your DNS provider to redirect your domain and each subdomain to your router ip. You have to do it for each app subdomain before rebuilding, or LetsEncrypt will not work properly.
 2. Open your router port's$\color{red} *$ 80 and 443 -> *must be open at rebuild-time for the `letsencrypt` option to work.*
 3. Rebuild (`sudo nixos-rebuild switch`)
 
@@ -170,7 +171,10 @@ Now that we have a basic configuration of the routing module, let's see some cus
     jellyfin.enable = true;
     psitransfer.enable = true;
 
-    openspeedtest.enable = true;
+    openspeedtest = {
+        enable = true;
+        lanOnly = true; # <-
+    };
 
     routing = {
       enable = true;
@@ -186,10 +190,11 @@ Now that we have a basic configuration of the routing module, let's see some cus
 ```
 
 - `<module>.forceLan` -> Keeps LAN access enabled, even if the routing module is also enabled (does nothing if not) -> You will be able to access your module both with it's subdomain and it's port.
+- `<module>.lanOnly` -> Will not be routed by the routing module -> and will be only accessible via the ip:port
 - `routing.lan` -> Keeps LAN enabled for every module. -> You will be able to access every module both with it's subdomain and it's port.
 
 > [!TIP]
-> It can be useful to access to your apps through your local network (<ip>:<port> instead of your domain name); As it can give a large network speed improvement. However this should not be the default, security wise.
+> It can be useful to access to your apps through your local network (\<ip>:\<port> instead of your domain name)
 
 </details>
 
@@ -237,3 +242,18 @@ With this setup, only requests presenting the valid certificat (only your proxy)
 > Cloudflare is a recognized DNS/Proxy provider enabling to easily create the setup just showed for free (once you have a domain):
 > Cloudflare DNS -> Cloudflare Proxy -> Your server
 > If `clientCertificateFile` is left undefined, it will use [Cloudflare Authenticated Origin Pulls CA](https://developers.cloudflare.com/ssl/origin-configuration/authenticated-origin-pull/) and should work out of the box if Cloudflare's Proxy is enabled for your domain and subdomains.
+
+## 4. Custom routing
+You can add non-control modules to the router like so:
+```nix
+# example for the btop app, that is not provided by Control
+control.custom-routing.entries = [
+  {
+    subdomain = "btop";
+    port = 7681;
+    basicAuth = { # optional
+      username = "password";
+    };
+  }
+];
+```
