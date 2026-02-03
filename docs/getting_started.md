@@ -50,7 +50,7 @@ If needed, we can directly change the default path for all apps in one go:
     immich.enable = true;
     jellyfin.enable = true;
     terminal.enableOhMyZsh = true;
-  }
+  };
 }
 ```
 
@@ -67,7 +67,7 @@ Sometime, we would like to have some app's data stored in another disk or locati
         enable = true;
         paths.default = "/other_disk/immich";
     };
-  }
+  };
 }
 ```
 Here, all the immich data will be under that new path, instead of the global default path.
@@ -92,7 +92,7 @@ It's a common use case scenario to store the media on a different disk:
       enable = true;
       paths.media = "/other_disk";
     };
-  }
+  };
 }
 ```
 With this setup, the media will be stored on the specified disk, while `path.config` will stay at the default location.
@@ -126,7 +126,7 @@ Let's add them:
     jellyfin.enable = true;
     terminal.enableOhMyZsh = true;
     hdd-spindown.enable = true; # Default time is 20min
-  }
+  };
 }
 ```
 
@@ -156,7 +156,7 @@ Let's enable the routing module:
         email = "email.for.letsencrypt@example.com";
       };
     };
-  }
+  };
 }
 ```
 This configuration contains some new options, let's get through them.

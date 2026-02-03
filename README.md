@@ -1,6 +1,7 @@
 <p align="center">
   <img src="./docs/assets/control_logo.svg" style="width:75%;" />
 </p>
+<br>
 
 # Control; An easy NixOS homeserver
 [Get started.](#ready-to-dive-in--check-one-of-the-guides)
@@ -18,12 +19,12 @@ This package does all the heavy lifting for you, and let you with a "can't be si
     jellyfin.enable = true; # self hosted netflix
     immich.enable = true; # self hosted google photos
     psitransfer.enable = true; # self hosted wetransfer
-    # ...there's more if you want
+    # ...there's more
   };
 }
 ```
 
-**That's all you need to have a control hosting Jellyfin, Immich and Psitransfer !**
+**That's all you need to have a control hosting Jellyfin, Immich and Psitransfer running on your server !**
 
 ---
 
@@ -60,7 +61,7 @@ jellyfin = {
 ```
 
 > [!NOTE]
-> The same properties can be used for other webservices as well.
+> The same properties can be used for other webservices (Immich, GitLab, PsiTransfer...) as well.
 
 ---
 
@@ -75,10 +76,10 @@ jellyfin = {
 Or check the <u>[list of supported services and tools](./docs/modules_list.md)</u>.
 
 > [!CAUTION]
-> This module is in heavy developement, and subject to change. We are only on v1, but future updates could break your current configuration, so please be sure to read the update docs when it releases !
+> This module is in heavy developement, and subject to change. This doc is for v2.0, future updates could break your current configuration, so please be sure to read the update docs when it releases !
 
 ## Contribute ?
-We don't have proper contribute documentation yet, but contributions are always welcome !
+We don't have proper contributing documentation yet, but contributions are always welcome !
 
 We are looking for more modules to add. If you are using one on your own config, why not add it here ?
 
@@ -86,4 +87,4 @@ If you're already a Nix developer, just have a look on how other modules are bui
 
 Keypoints (for webservices):
 - Please use the same common options as other webservices
-- Please run the service in a docker (soon podman, but docker for now) container. (better security wise)
+- Please run the service in a docker container.
