@@ -5,7 +5,7 @@ You need to add this flake into your main flakes inputs:
 inputs = {
   nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05"; # (example)
   # ...
-  control.url = "github:axel-denis/control/v1.0";
+  control.url = "github:axel-denis/control/v2.0";
   control.inputs.nixpkgs.follows = "nixpkgs";
 };
 ```
@@ -27,8 +27,7 @@ Here is an example of a complete flake:
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
-    control.url = "github:axel-denis/control/v1.0"; # don't forget to point a specific version
-    control.inputs.nixpkgs.follows = "nixpkgs";
+    control.url = "github:axel-denis/control/v2.0"; # don't forget to point a specific version
   };
 
   outputs = inputs@{ self, nixpkgs, control, ... }: let
@@ -45,10 +44,26 @@ Here is an example of a complete flake:
       modules = [
         ./hardware-configuration.nix
         ./configuration.nix
-        ./other_configuration.nix
         control.nixosModules.default
       ];
     };
   };
 }
 ```
+
+---
+
+Then, in any configuration file, you can proceed as follow:
+
+```nix
+{ control, pkgs, ...}:
+{
+  control = {
+    jellyfin.enable = true;
+    immich.enable = true;
+    # ...
+  };
+}
+```
+
+### Next: [Getting started](./getting_started.md)
