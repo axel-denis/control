@@ -24,16 +24,7 @@ Default: the service name (lowercase)
 
 ## `<service>.port`
 Port to use the service (if routing is disabled)<br>
-Default:
-| Service      | Default port |
-| ------------ | ------------ |
-| Immich       | 10001        |
-| Jellyfin     | 10002        |
-| Transmission | 10003        |
-| Chibisafe    | 10004        |
-| Psitransfer  | 10005        |
-| Speedtest    | 10006        |
-| Pi-Hole http | 10007        |
+You can see the default port for each app here: [defaults](./defaults.md)
 
 ## `<service>.forceLan`
 Keeps LAN access, even if the [routing](./perModule/routing.md) module is enabled.<br>
