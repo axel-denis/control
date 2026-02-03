@@ -22,7 +22,7 @@ in {
         parentName = "home server global default path";
         parent = config.control.defaultPath;
         defaultSubpath = "gitlab";
-        description = "Root path for GitLab media and appdata";
+        description = "Root path for GitLab";
       };
 
       config = helpers.mkInheritedPathOption {
@@ -52,8 +52,6 @@ in {
     virtualisation.docker.enable = true;
     virtualisation.oci-containers.backend = "docker";
 
-    # Creating directory with the user id asked by the container
-    systemd.tmpfiles.rules = [ "d ${cfg.paths.default} 0755 1000 1000" ];
     virtualisation.oci-containers.containers = {
       gitlab = {
         image = "gitlab/gitlab-ce:${cfg.version}";
