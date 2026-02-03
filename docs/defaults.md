@@ -50,3 +50,5 @@ You can check the [routing](./perModule/routing.md) module for more info.
 | Pi-Hole http | 10007        |
 | SiYuan       | 10008        |
 | Cloudreve    | 10011        |
+| GitLab       | 10012        |
+| Gitea        | 10013        |
