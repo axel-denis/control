@@ -44,6 +44,18 @@ Click on any of them to see detailed documentation.
 
   Privacy-first personal knowledge management system. See [SiYuan's Github](https://github.com/siyuan-note/siyuan).
 
+- [Cloudreve](./perModule/cloudreve.md)
+
+  Self hosted file manage and sharing system. See [cloudreve.org/](https://cloudreve.org).
+
+- [GitLab](./perModule/gitlab.md)
+
+  Self hosted Github alternative. See [gitlab.com/](https://gitlab.com).
+
+- [Gitea](./perModule/gitea.md)
+
+  Self hostedGithub alternative. See [about.gitea.org/](https://about.gitea.com/).
+
 ## Tools
 ###### Diverses utilities.
 
