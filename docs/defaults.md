@@ -49,6 +49,8 @@ You can check the [routing](./perModule/routing.md) module for more info.
 | Speedtest    | 10006        |
 | Pi-Hole http | 10007        |
 | SiYuan       | 10008        |
+| Navidrome    | 10009        |
+| Slskd        | 10010        |
 | Cloudreve    | 10011        |
 | GitLab       | 10012        |
 | Gitea        | 10013        |

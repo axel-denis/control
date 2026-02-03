@@ -46,8 +46,6 @@ in {
       "You should change the default admin password for Siyuan! control.siyuan.admin-password"
     ]);
 
-    # Creating directory with the user id asked by the container
-    systemd.tmpfiles.rules = [ "d ${cfg.paths.default} 0755 1000 1000" ];
     virtualisation.oci-containers.containers = {
       siyuan = {
         image = "b3log/siyuan:${cfg.version}";
@@ -55,8 +53,6 @@ in {
         extraOptions =
           [ (mkIf config.control.updateContainers "--pull=always") ];
         environment = {
-          #PUID = "1000";
-          #PGID = "1000";
           TZ = cfg.timezone;
           SIYUAN_WORKSPACE_PATH = "/data";
           SIYUAN_ACCESS_AUTH_CODE = cfg.admin-password;

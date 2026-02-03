@@ -28,6 +28,8 @@
         pihole = mkModule ./modules/pihole.nix;
         siyuan = mkModule ./modules/siyuan.nix;
         cloudreve = mkModule ./modules/cloudreve.nix;
+        navidrome = mkModule ./modules/navidrome.nix;
+        slskd = mkModule ./modules/slskd.nix;
         custom-routing = mkModule ./modules/custom-routing.nix;
         gitlab = mkModule ./modules/gitlab.nix;
         gitea = mkModule ./modules/gitea.nix;
@@ -45,6 +47,8 @@
             self.nixosModules.routing
             self.nixosModules.pihole
             self.nixosModules.siyuan
+            self.nixosModules.navidrome
+            self.nixosModules.slskd
             self.nixosModules.cloudreve
             self.nixosModules.custom-routing
             self.nixosModules.gitlab
