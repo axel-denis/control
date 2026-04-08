@@ -1,7 +1,7 @@
 {
   description = "Home Server Service Modules (aggregated)";
 
-  inputs = { nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05"; };
+  inputs = { nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11-small"; };
 
   outputs = { self, nixpkgs, ... }:
     let
