@@ -1,11 +1,20 @@
-{ config, helpers, lib, pkgs, ... }:
+{
+  config,
+  helpers,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
-let cfg = config.control.custom-routing;
-in {
+let
+  cfg = config.control.custom-routing;
+in
+{
   options.control.custom-routing = {
     entries = mkOption {
-      type = with types;
+      type =
+        with types;
         listOf (submodule {
           options = {
             subdomain = mkOption { type = str; };
