@@ -24,7 +24,7 @@ in {
 
       media = lib.mkOption {
         type = with types; attrsOf path;
-        default = { mainmedia = parent + "/media"; };
+        default = { mainmedia = cfg.paths.default + "/media"; };
         defaultText = ''{main_media = jellyfin_default_path + "/media";}'';
         description = ''
           List of mountpoints giving data to the jellyfin container.
