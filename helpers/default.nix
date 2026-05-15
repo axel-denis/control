@@ -58,12 +58,19 @@ rec {
       description = "(default to ${parentName} + 1)";
     };
 
-  controlUser = name: {
-    users.users.${toUsername name} = {
-      isSystemUser = true;
-      linger = true;
-    };
-  };
+  controlContainer =
+    enabled: name: config:
+    (
+      lib.mkIf (enabled) (let username = toUsername name; in {
+        users.users.${username} = {
+          isSystemUser = true;
+          group = username;
+          linger = true;
+        };
+        users.groups.${username} = {};
+      })
+      // config
+    );
 
   # Automates the creation of defaults for every standardized web service
   webServiceDefaults =

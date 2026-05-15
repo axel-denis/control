@@ -36,30 +36,28 @@ in
       };
     };
 
-  config =
-    mkIf cfg.enable {
-      warnings = (
-        optionals (cfg.admin-password == "secret") [
-          "You should change the default admin password for Psitransfer! control.psitransfer.admin-password"
-        ]
-      );
+  config = helpers.controlContainer cfg.enable name {
+    warnings = (
+      optionals (cfg.admin-password == "secret") [
+        "You should change the default admin password for Psitransfer! control.psitransfer.admin-password"
+      ]
+    );
 
-      # Creating directory with the user id asked by the container
-      # systemd.tmpfiles.rules = [ "d ${cfg.paths.default} 0755 1000 1000" ];
-      virtualisation.oci-containers.containers = {
-        ${name} = {
-          podman.user = helpers.toUsername name;
-          image = "psitrax/psitransfer:${cfg.version}";
-          ports = helpers.webServicePort config cfg 3000;
-          extraOptions = [ (mkIf config.control.updateContainers "--pull=always") ];
-          environment = {
-            # PUID = "0";
-            # PGID = "0";
-            PSITRANSFER_ADMIN_PASS = cfg.admin-password;
-          };
-          volumes = [ "${cfg.paths.default}:/data" ];
+    # Creating directory with the user id asked by the container
+    # systemd.tmpfiles.rules = [ "d ${cfg.paths.default} 0755 1000 1000" ];
+    virtualisation.oci-containers.containers = {
+      ${name} = {
+        podman.user = helpers.toUsername name;
+        image = "psitrax/psitransfer:${cfg.version}";
+        ports = helpers.webServicePort config cfg 3000;
+        extraOptions = [ (mkIf config.control.updateContainers "--pull=always") ];
+        environment = {
+          # PUID = "0";
+          # PGID = "0";
+          PSITRANSFER_ADMIN_PASS = cfg.admin-password;
         };
+        volumes = [ "${cfg.paths.default}:/data" ];
       };
-    }
-    // helpers.controlUser name;
+    };
+  };
 }

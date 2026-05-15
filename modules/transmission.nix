@@ -49,7 +49,7 @@ in
       };
     };
 
-  config = mkIf cfg.enable {
+  config = helpers.controlContainer cfg.enable name {
 
     virtualisation.oci-containers.containers.${name} = {
       podman.user = helpers.toUsername name;

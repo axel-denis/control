@@ -51,45 +51,43 @@ in
       };
     };
 
-  config =
-    mkIf cfg.enable {
-      virtualisation.oci-containers.containers = {
-        ${name} = {
-          podman.user = helpers.toUsername name;
-          image = "docker.gitea.com/gitea:${cfg.version}";
-          ports = (helpers.webServicePort config cfg 3000) ++ [ "${toString cfg.ssh-port}:22" ];
-          environment = {
-            USER_UID = "1000";
-            USER_GID = "1000";
-            DISABLE_REGISTRATION = if cfg.enable-registration then "false" else "true";
-          };
-          volumes = [
-            "${cfg.paths.default}:/data"
-            "/etc/timezone:/etc/timezone:ro"
-            "/etc/localtime:/etc/localtime:ro"
-          ];
-          extraOptions = [
-            (mkIf config.control.updateContainers "--pull=always")
-          ];
+  config = helpers.controlContainer cfg.enable name {
+    virtualisation.oci-containers.containers = {
+      ${name} = {
+        podman.user = helpers.toUsername name;
+        image = "docker.gitea.com/gitea:${cfg.version}";
+        ports = (helpers.webServicePort config cfg 3000) ++ [ "${toString cfg.ssh-port}:22" ];
+        environment = {
+          USER_UID = "1000";
+          USER_GID = "1000";
+          DISABLE_REGISTRATION = if cfg.enable-registration then "false" else "true";
         };
-
-        "${name}_db" = {
-          podman.user = helpers.toUsername name;
-          image = "docker.io/library/mysql:8";
-          environment = {
-            MYSQL_ROOT_PASSWORD = cfg.password;
-            MYSQL_USER = "gitea";
-            MYSQL_PASSWORD = cfg.password;
-            MYSQL_DATABASE = "gitea";
-          };
-          extraOptions = [
-            (mkIf config.control.updateContainers "--pull=always")
-          ];
-          volumes = [
-            "${cfg.paths.database}:/var/lib/mysql"
-          ];
-        };
+        volumes = [
+          "${cfg.paths.default}:/data"
+          "/etc/timezone:/etc/timezone:ro"
+          "/etc/localtime:/etc/localtime:ro"
+        ];
+        extraOptions = [
+          (mkIf config.control.updateContainers "--pull=always")
+        ];
       };
-    }
-    // helpers.controlUser name;
+
+      "${name}_db" = {
+        podman.user = helpers.toUsername name;
+        image = "docker.io/library/mysql:8";
+        environment = {
+          MYSQL_ROOT_PASSWORD = cfg.password;
+          MYSQL_USER = "gitea";
+          MYSQL_PASSWORD = cfg.password;
+          MYSQL_DATABASE = "gitea";
+        };
+        extraOptions = [
+          (mkIf config.control.updateContainers "--pull=always")
+        ];
+        volumes = [
+          "${cfg.paths.database}:/var/lib/mysql"
+        ];
+      };
+    };
+  };
 }

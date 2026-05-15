@@ -54,22 +54,20 @@ in
       };
     };
 
-  config =
-    mkIf cfg.enable {
+  config = helpers.controlContainer cfg.enable name {
 
-      virtualisation.oci-containers.containers = {
-        ${name} = {
-          podman.user = helpers.toUsername name;
-          image = "jellyfin/jellyfin:${cfg.version}";
-          ports = helpers.webServicePort config cfg 8096;
-          extraOptions = [
-            (mkIf config.control.updateContainers "--pull=always")
-            (mkIf cfg.hardware-acceleration.intel "--group-add=${toString config.users.groups.render.gid}")
-          ];
-          volumes = [ "${cfg.paths.config}:/config" ] ++ helpers.multiplesVolumes cfg.paths.media "/media";
-          devices = optionals cfg.hardware-acceleration.intel [ "/dev/dri/renderD128:/dev/dri/renderD128" ];
-        };
+    virtualisation.oci-containers.containers = {
+      ${name} = {
+        podman.user = helpers.toUsername name;
+        image = "jellyfin/jellyfin:${cfg.version}";
+        ports = helpers.webServicePort config cfg 8096;
+        extraOptions = [
+          (mkIf config.control.updateContainers "--pull=always")
+          (mkIf cfg.hardware-acceleration.intel "--group-add=${toString config.users.groups.render.gid}")
+        ];
+        volumes = [ "${cfg.paths.config}:/config" ] ++ helpers.multiplesVolumes cfg.paths.media "/media";
+        devices = optionals cfg.hardware-acceleration.intel [ "/dev/dri/renderD128:/dev/dri/renderD128" ];
       };
-    }
-    // helpers.controlUser name;
+    };
+  };
 }

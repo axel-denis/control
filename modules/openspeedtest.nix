@@ -18,17 +18,15 @@ in
     port = 10006;
   };
 
-  config =
-    mkIf cfg.enable {
+  config = helpers.controlContainer cfg.enable name {
 
-      virtualisation.oci-containers.containers = {
-        ${name} = {
-          podman.user = helpers.toUsername name;
-          image = "openspeedtest/${cfg.version}";
-          ports = helpers.webServicePort config cfg 3000;
-          extraOptions = [ (mkIf config.control.updateContainers "--pull=always") ];
-        };
+    virtualisation.oci-containers.containers = {
+      ${name} = {
+        podman.user = helpers.toUsername name;
+        image = "openspeedtest/${cfg.version}";
+        ports = helpers.webServicePort config cfg 3000;
+        extraOptions = [ (mkIf config.control.updateContainers "--pull=always") ];
       };
-    }
-    // helpers.controlUser name;
+    };
+  };
 }

@@ -58,36 +58,34 @@ in
       };
     };
 
-  config =
-    mkIf cfg.enable {
+  config = helpers.controlContainer cfg.enable name {
 
-      virtualisation.oci-containers.containers = {
-        ${name} = {
-          podman.user = helpers.toUsername name;
-          image = "gitlab/gitlab-ce:${cfg.version}";
-          ports = (helpers.webServicePort config cfg 80) ++ [ "${toString cfg.ssh-port}:22" ];
-          extraOptions = [
-            (mkIf config.control.updateContainers "--pull=always")
-            "--shm-size=256m"
-          ];
-          environment = {
-            GITLAB_OMNIBUS_CONFIG = ''
-              external_url 'https://${cfg.subdomain}.${config.control.routing.domain}';
-              gitlab_rails['lfs_enabled'] = true;
-              gitlab_rails['gitlab_shell_ssh_port'] = ${toString cfg.ssh-port};
-              letsencrypt['enabled'] = false;
-              nginx['enable'] = true;
-              nginx['listen_port'] = 80;
-              nginx['listen_https'] = false;
-            '';
-          };
-          volumes = [
-            "${cfg.paths.config}:/etc/gitlab"
-            "${cfg.paths.logs}:/var/logs/gitlab"
-            "${cfg.paths.data}:/var/opt/gitlab"
-          ];
+    virtualisation.oci-containers.containers = {
+      ${name} = {
+        podman.user = helpers.toUsername name;
+        image = "gitlab/gitlab-ce:${cfg.version}";
+        ports = (helpers.webServicePort config cfg 80) ++ [ "${toString cfg.ssh-port}:22" ];
+        extraOptions = [
+          (mkIf config.control.updateContainers "--pull=always")
+          "--shm-size=256m"
+        ];
+        environment = {
+          GITLAB_OMNIBUS_CONFIG = ''
+            external_url 'https://${cfg.subdomain}.${config.control.routing.domain}';
+            gitlab_rails['lfs_enabled'] = true;
+            gitlab_rails['gitlab_shell_ssh_port'] = ${toString cfg.ssh-port};
+            letsencrypt['enabled'] = false;
+            nginx['enable'] = true;
+            nginx['listen_port'] = 80;
+            nginx['listen_https'] = false;
+          '';
         };
+        volumes = [
+          "${cfg.paths.config}:/etc/gitlab"
+          "${cfg.paths.logs}:/var/logs/gitlab"
+          "${cfg.paths.data}:/var/opt/gitlab"
+        ];
       };
-    }
-    // helpers.controlUser name;
+    };
+  };
 }
