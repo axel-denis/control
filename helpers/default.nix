@@ -63,13 +63,15 @@ rec {
     (
       lib.mkIf (enabled) (let username = toUsername name; in {
         users.users.${username} = {
-          isSystemUser = true;
-          group = username;
+          isNormalUser = true;
+          group = username + "Group";
           linger = true;
+          createHome = true;
+          home = "/var/lib/${username}";
+          autoSubUidGidRange = true;
         };
-        users.groups.${username} = {};
-      })
-      // config
+        users.groups.${username + "Group"} = {};
+      } // config)
     );
 
   # Automates the creation of defaults for every standardized web service
