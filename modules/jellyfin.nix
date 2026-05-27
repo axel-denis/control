@@ -8,11 +8,11 @@
 
 with lib;
 let
-  cfg = config.control.jellyfin;
   name = "jellyfin";
+  cfg = config.control.${name};
 in
 {
-  options.control.jellyfin =
+  options.control.${name} =
     (helpers.webServiceDefaults {
       name = helpers.toName name;
       version = "latest";
@@ -45,29 +45,39 @@ in
           '';
         };
 
-        config = helpers.mkInheritedPathOption {
+        appdata = helpers.mkInheritedPathOption {
           parentName = "paths.default";
           parent = cfg.paths.default;
           defaultSubpath = "config";
-          description = "Path for Jellyfin appdata (config).";
+          description = "Path for Jellyfin appdata (appdata).";
         };
       };
     };
 
-  config = helpers.controlContainer cfg.enable name {
+  config =
+    helpers.controlContainer cfg.enable name
+      (with cfg; [ paths.appdata ] ++ helpers.multiplesVolumesToPaths paths.media)
+      config.control.enableControl3Migration
+      {
 
-    virtualisation.oci-containers.containers = {
-      ${name} = {
-        podman.user = helpers.toUsername name;
-        image = "jellyfin/jellyfin:${cfg.version}";
-        ports = helpers.webServicePort config cfg 8096;
-        extraOptions = [
-          (mkIf config.control.updateContainers "--pull=always")
-          (mkIf cfg.hardware-acceleration.intel "--group-add=${toString config.users.groups.render.gid}")
-        ];
-        volumes = [ "${cfg.paths.config}:/config" ] ++ helpers.multiplesVolumes cfg.paths.media "/media";
-        devices = optionals cfg.hardware-acceleration.intel [ "/dev/dri/renderD128:/dev/dri/renderD128" ];
+        virtualisation.oci-containers.containers = {
+          ${name} = {
+            podman.user = helpers.toUsername name;
+            image = "jellyfin/jellyfin:${cfg.version}";
+            ports = helpers.webServicePort config cfg 8096;
+            extraOptions = [
+              "--cgroups=disabled"
+              (mkIf config.control.updateContainers "--pull=always")
+              (mkIf cfg.hardware-acceleration.intel "--group-add=${toString config.users.groups.render.gid}")
+            ];
+            volumes = [ "${cfg.paths.appdata}:/config" ] ++ helpers.multiplesVolumes cfg.paths.media "/media";
+            devices = optionals cfg.hardware-acceleration.intel [ "/dev/dri/renderD128:/dev/dri/renderD128" ];
+          };
+        };
+
+        # systemd.services."podman-${name}".environment = {
+        #   XDG_RUNTIME_DIR = "/run/user/1004";
+        #   #DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/user/1004/bus";
+        # };
       };
-    };
-  };
 }

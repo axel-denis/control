@@ -78,47 +78,55 @@ in
       };
     };
 
-  config = helpers.controlContainer cfg.enable name {
-    virtualisation.oci-containers.containers = {
-      ${name} = {
-        podman.user = helpers.toUsername name;
-        image = "chibisafe/chibisafe:${cfg.version}";
-        environment = {
-          BASE_API_URL = "http://chibisafe_server:8000";
-        };
-        extraOptions = [
-          (mkIf config.control.updateContainers "--pull=always")
-        ];
-      };
+  config =
+    helpers.controlContainer cfg.enable name
+      (with cfg; [
+        paths.database
+        paths.uploads
+        paths.logs
+      ])
+      config.control.enableControl3Migration
+      {
+        virtualisation.oci-containers.containers = {
+          ${name} = {
+            podman.user = helpers.toUsername name;
+            image = "chibisafe/chibisafe:${cfg.version}";
+            environment = {
+              BASE_API_URL = "http://chibisafe_server:8000";
+            };
+            extraOptions = [
+              (mkIf config.control.updateContainers "--pull=always")
+            ];
+          };
 
-      "${name}_server" = {
-        podman.user = helpers.toUsername name;
-        image = "chibisafe/chibisafe-server:${cfg.version}";
-        volumes = [
-          "${cfg.paths.database}:/app/database:rw"
-          "${cfg.paths.uploads}:/app/uploads:rw"
-          "${cfg.paths.logs}:/app/logs:rw"
-        ];
-        extraOptions = [
-          (mkIf config.control.updateContainers "--pull=always")
-        ];
-      };
+          "${name}_server" = {
+            podman.user = helpers.toUsername name;
+            image = "chibisafe/chibisafe-server:${cfg.version}";
+            volumes = [
+              "${cfg.paths.database}:/app/database:rw"
+              "${cfg.paths.uploads}:/app/uploads:rw"
+              "${cfg.paths.logs}:/app/logs:rw"
+            ];
+            extraOptions = [
+              (mkIf config.control.updateContainers "--pull=always")
+            ];
+          };
 
-      "${name}_caddy" = {
-        podman.user = helpers.toUsername name;
-        image = "caddy:2-alpine";
-        ports = helpers.webServicePort config cfg 80;
-        environment = {
-          BASE_URL = ":80";
+          "${name}_caddy" = {
+            podman.user = helpers.toUsername name;
+            image = "caddy:2-alpine";
+            ports = helpers.webServicePort config cfg 80;
+            environment = {
+              BASE_URL = ":80";
+            };
+            volumes = [
+              "${cfg.paths.uploads}:/app/uploads:ro"
+              "${Caddyfile}:/etc/caddy/Caddyfile:ro"
+            ];
+            extraOptions = [
+              (mkIf config.control.updateContainers "--pull=always")
+            ];
+          };
         };
-        volumes = [
-          "${cfg.paths.uploads}:/app/uploads:ro"
-          "${Caddyfile}:/etc/caddy/Caddyfile:ro"
-        ];
-        extraOptions = [
-          (mkIf config.control.updateContainers "--pull=always")
-        ];
       };
-    };
-  };
 }

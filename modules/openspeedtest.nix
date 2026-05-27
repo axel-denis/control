@@ -18,7 +18,7 @@ in
     port = 10006;
   };
 
-  config = helpers.controlContainer cfg.enable name {
+  config = helpers.controlContainer cfg.enable name [ ] config.control.enableControl3Migration {
 
     virtualisation.oci-containers.containers = {
       ${name} = {

@@ -49,25 +49,32 @@ in
       };
     };
 
-  config = helpers.controlContainer cfg.enable name {
+  config =
+    helpers.controlContainer cfg.enable name
+      (with cfg; [
+        paths.download
+        paths.config
+      ])
+      config.control.enableControl3Migration
+      {
 
-    virtualisation.oci-containers.containers.${name} = {
-      podman.user = helpers.toUsername name;
-      image = "haugene/transmission-openvpn:${cfg.version}";
-      extraOptions = [
-        "--cap-add=NET_ADMIN"
-        (mkIf config.control.updateContainers "--pull=always")
-      ];
+        virtualisation.oci-containers.containers.${name} = {
+          podman.user = helpers.toUsername name;
+          image = "haugene/transmission-openvpn:${cfg.version}";
+          extraOptions = [
+            "--cap-add=NET_ADMIN"
+            (mkIf config.control.updateContainers "--pull=always")
+          ];
 
-      volumes = [
-        "${cfg.paths.download}:/data"
-        "${cfg.paths.config}:/config"
-      ];
+          volumes = [
+            "${cfg.paths.download}:/data"
+            "${cfg.paths.config}:/config"
+          ];
 
-      environmentFiles = [ cfg.environmentFile ];
-      ports = helpers.webServicePort config cfg 9091;
-    };
-  };
+          environmentFiles = [ cfg.environmentFile ];
+          ports = helpers.webServicePort config cfg 9091;
+        };
+      };
 }
 
 /*

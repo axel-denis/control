@@ -56,25 +56,28 @@ in
     };
   };
 
-  config = helpers.controlContainer cfg.enable name {
+  config =
+    helpers.controlContainer cfg.enable name (with cfg; [ paths.default ])
+      config.control.enableControl3Migration
+      {
 
-    virtualisation.oci-containers.containers = {
-      ${name} = {
-        podman.user = helpers.toUsername name;
-        image = "pihole/pihole:${cfg.version}";
-        ports = [
-          "${toString cfg.port}:80"
-          "53:53/tcp"
-          "53:53/udp"
-        ];
-        extraOptions = [ (mkIf config.control.updateContainers "--pull=always") ];
-        environment = {
-          TZ = cfg.timezone;
-          FTLCONF_webserver_api_password = cfg.password;
-          FTLCONF_dns_listeningMode = "all";
+        virtualisation.oci-containers.containers = {
+          ${name} = {
+            podman.user = helpers.toUsername name;
+            image = "pihole/pihole:${cfg.version}";
+            ports = [
+              "${toString cfg.port}:80"
+              "53:53/tcp"
+              "53:53/udp"
+            ];
+            extraOptions = [ (mkIf config.control.updateContainers "--pull=always") ];
+            environment = {
+              TZ = cfg.timezone;
+              FTLCONF_webserver_api_password = cfg.password;
+              FTLCONF_dns_listeningMode = "all";
+            };
+            volumes = [ "${cfg.paths.default}:/etc/pihole" ];
+          };
         };
-        volumes = [ "${cfg.paths.default}:/etc/pihole" ];
       };
-    };
-  };
 }

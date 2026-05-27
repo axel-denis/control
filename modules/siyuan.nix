@@ -47,28 +47,29 @@ in
       };
     };
 
-  config = helpers.controlContainer cfg.enable name {
-    warnings = (
-      optionals (cfg.admin-password == "secret") [
-        "You should change the default admin password for Siyuan! control.siyuan.admin-password"
-      ]
-    );
+  config =
+    helpers.controlContainer cfg.enable name (with cfg; [ paths.default ])
+      config.control.enableControl3Migration
+      {
+        warnings = (
+          optionals (cfg.admin-password == "secret") [
+            "You should change the default admin password for Siyuan! control.siyuan.admin-password"
+          ]
+        );
 
-    # Creating directory with the user id asked by the container
-    # systemd.tmpfiles.rules = [ "d ${cfg.paths.default} 0755 1000 1000" ];
-    virtualisation.oci-containers.containers = {
-      ${name} = {
-        podman.user = helpers.toUsername name;
-        image = "b3log/siyuan:${cfg.version}";
-        ports = helpers.webServicePort config cfg 6806;
-        extraOptions = [ (mkIf config.control.updateContainers "--pull=always") ];
-        environment = {
-          TZ = cfg.timezone;
-          SIYUAN_WORKSPACE_PATH = "/data";
-          SIYUAN_ACCESS_AUTH_CODE = cfg.admin-password;
+        virtualisation.oci-containers.containers = {
+          ${name} = {
+            podman.user = helpers.toUsername name;
+            image = "b3log/siyuan:${cfg.version}";
+            ports = helpers.webServicePort config cfg 6806;
+            extraOptions = [ (mkIf config.control.updateContainers "--pull=always") ];
+            environment = {
+              TZ = cfg.timezone;
+              SIYUAN_WORKSPACE_PATH = "/data";
+              SIYUAN_ACCESS_AUTH_CODE = cfg.admin-password;
+            };
+            volumes = [ "${cfg.paths.default}:/data" ];
+          };
         };
-        volumes = [ "${cfg.paths.default}:/data" ];
       };
-    };
-  };
 }

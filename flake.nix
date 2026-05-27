@@ -10,7 +10,7 @@
     let
       system = "x86_64-linux";
       lib = nixpkgs.lib;
-      helpers = import ./helpers { inherit lib; };
+      helpers = import ./helpers { inherit lib pkgs; };
 
       pkgs = import nixpkgs { inherit system; };
 
@@ -56,17 +56,6 @@
               self.nixosModules.gitlab
               self.nixosModules.gitea
             ];
-
-            options.control = {
-              defaultPath = lib.mkOption {
-                type = lib.types.str;
-                default = "/control_appdata";
-                defaultText = "/control_appdata";
-                description = "Subdomain to use for all Control apps";
-              };
-
-              updateContainers = lib.mkEnableOption "Pulls the newest image of each enabled container";
-            };
           };
       };
     };

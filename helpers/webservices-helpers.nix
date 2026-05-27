@@ -19,6 +19,8 @@ with lib;
     volumes: containerMountPath:
     lists.forEach (attrsets.attrsToList volumes) (e: "${e.value}:${containerMountPath}/${e.name}");
 
+  multiplesVolumesToPaths = volumes: lib.mapAttrsToList (name: value: toString value) volumes;
+
   # Automates the creation of defaults for every standardized web service
   webServiceDefaults =
     {
@@ -75,7 +77,7 @@ with lib;
 
   controlContainer =
     with strings;
-    enabled: name: config:
+    enabled: name: paths: remapPaths: conf:
     (mkIf (enabled) (
       let
         username = toUsername name;
@@ -91,7 +93,17 @@ with lib;
           autoSubUidGidRange = true;
         };
         users.groups.${groupname} = { };
+
+        systemd.tmpfiles.rules = (
+          mkIf remapPaths lists.flatten (
+            map (p: [
+              "d ${p} 0700 ${username} ${groupname} - -"
+              "Z ${p} 0700 ${username} ${groupname} - -"
+            ]) paths
+
+          )
+        );
       }
-      // config
+      // conf
     ));
 }
