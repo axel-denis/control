@@ -12,14 +12,10 @@ let
   cfg = config.control;
 
   # {name, value}
-  webservices = filter (i: helpers.isEnabledWebModule i.value) (
-    attrsets.mapAttrsToList (
-      name: value: {
-        name = name;
-        value = value;
-      }
-    )
-  );
+  webservices =
+    (filter helpers.isEnabledWebModule (helpers.modulesList cfg));
+
+  modulesList = conf: attrsets.mapAttrsToList (name: value: trace name value) conf;
 
   # {name, [paths]}
   webservicesPaths = map (s: {
@@ -61,8 +57,9 @@ let
 in
 {
   config = {
-    systemd.tmpfiles.rules = mkIf cfg.enableControl3Migration (
-      map (wp: (lists.flatten (webservicePathsToPerms wp.name wp.paths))) webservicesPaths
+    warnings = map (wp: (lists.flatten (webservicePathsToPerms wp.name wp.paths))) webservicesPaths;
+    systemd.tmpfiles.rules = mkIf true (
+      let o = map (wp: (lists.flatten (webservicePathsToPerms wp.name wp.paths))) webservicesPaths; in trace o o
     );
   };
 }

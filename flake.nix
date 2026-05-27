@@ -19,6 +19,7 @@
     {
       nixosModules = {
         base = mkModule ./modules/base.nix;
+        #perms = mkModule ./modules/perms.nix;
         immich = mkModule ./modules/immich.nix;
         jellyfin = mkModule ./modules/jellyfin.nix;
         transmission = mkModule ./modules/transmission.nix;
@@ -40,6 +41,7 @@
           {
             imports = [
               self.nixosModules.base
+              #self.nixosModules.perms
               self.nixosModules.immich
               self.nixosModules.jellyfin
               self.nixosModules.transmission

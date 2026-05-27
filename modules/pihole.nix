@@ -54,6 +54,12 @@ in
         description = "Root path for Pi-hole appdata";
       };
     };
+
+    _meta = mkOption {
+        type = types.attrs;
+        internal = true;
+        default = {};
+      };
   };
 
   config =

@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  helpers,
   ...
 }:
 
@@ -44,7 +45,7 @@
             It is advised to set it to false after the first use,
             otherwise it will run everytime at rebuild or startup.
           ''
-        ]);
+        ]) ++ (map (m: m.name + " -> " + lib.concatStrings (lib.strings.intersperse "\n" m.value._meta.paths)) (helpers.controlModulesList cfg));
 
       systemd.services."podman-jellyfin".serviceConfig.Type = lib.mkForce "simple";
       virtualisation.podman.enable = true;

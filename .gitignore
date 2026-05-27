@@ -1,3 +1,4 @@
 hardware-configuration.nix
 # Ignore automatically generated direnv output
 .direnv
+result

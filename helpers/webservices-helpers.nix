@@ -73,6 +73,12 @@ with lib;
           It is also known to break ACME.
         '';
       };
+
+      _meta = mkOption {
+        type = types.attrs;
+        internal = true;
+        default = {};
+      };
     };
 
   controlContainer =
@@ -94,15 +100,21 @@ with lib;
         };
         users.groups.${groupname} = { };
 
-        systemd.tmpfiles.rules = (
-          mkIf remapPaths lists.flatten (
-            map (p: [
-              "d ${p} 0700 ${username} ${groupname} - -"
-              "Z ${p} 0700 ${username} ${groupname} - -"
-            ]) paths
+        control.${name}._meta = {
+          inherit name;
+          isControlModule = true;
+          paths = paths;
+        };
 
-          )
-        );
+        # systemd.tmpfiles.rules = (
+        #   mkIf remapPaths lists.flatten (
+        #     map (p: [
+        #       "d ${p} 0700 ${username} ${groupname} - -"
+        #       "Z ${p} 0700 ${username} ${groupname} - -"
+        #     ]) paths
+
+        #   )
+        # );
       }
       // conf
     ));
