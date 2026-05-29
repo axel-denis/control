@@ -70,6 +70,17 @@ let
       path = p.path;
     }) paths;
 
+  # string, [ GROUP_OWNED_PATH ] -> [ string ]
+  GetGroupsForUser =
+    let
+      # string, string -> bool
+      userBelongsToGroup = username: group: hasInfix (toLower username) (toLower group);
+
+      # [ GROUP_OWNED_PATH ] -> [ string ]
+      extractGroups = paths: helpers.lists.dedup (map (p: p.groupname) paths);
+
+    in
+    username: paths: filter (group: userBelongsToGroup username group) (extractGroups paths);
 in
 {
   # [ MODULE ] -> [ GROUP_OWNED_PATH ]
@@ -85,4 +96,6 @@ in
         "Z ${p.path} 0700 ${helpers.strings.toUsername p.owner} ${p.groupname} - -"
       ]) paths
     );
+
+  inherit GetGroupsForUser;
 }
