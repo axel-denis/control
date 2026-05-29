@@ -65,9 +65,7 @@ lib.runTests {
       ];
     in
     {
-      expr = lib.sort (a: b: a.path > b.path) (
-        with helpers; ComputeGroups (ComputeAllPathsOwners (GetPathsFromModules INPUTS))
-      );
+      expr = lib.sort (a: b: a.path > b.path) (with helpers; ComputePathPerms INPUTS);
       expected = RESULTS;
     };
 }
