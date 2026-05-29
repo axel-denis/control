@@ -77,7 +77,7 @@ with lib;
       _meta = mkOption {
         type = types.attrs;
         internal = true;
-        default = {};
+        default = { };
       };
     };
 

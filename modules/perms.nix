@@ -8,58 +8,80 @@
 
 with lib;
 
+/*
+  TYPES
+
+  MODULE: [{name: string, value: {...}}]
+  OWNED_PATH: {owner: string; path: string}
+  MULTIPLE_OWNED_PATH {owner: string; owners: [string]; path: string}
+  GROUP_OWNED_PATH {owner: string; groupname: string; path: string} (groupname: owners sorted + dedup + concat. ex: ImmichJellyfin)
+*/
+
 let
   cfg = config.control;
 
-  # {name, value}
-  webservices =
-    (filter helpers.isEnabledWebModule (helpers.modulesList cfg));
+  # -> [ MODULE ]
+  # list of all the affected modules
+  MODULES = helpers.controlModulesList cfg;
 
-  modulesList = conf: attrsets.mapAttrsToList (name: value: trace name value) conf;
+  # MODULE -> [ OWNED_PATH ]
+  # gets the paths of this module
+  extractModulePath =
+    module:
+    map (p: {
+      owner = module.name;
+      path = p;
+    }) module.value._meta.paths;
 
-  # {name, [paths]}
-  webservicesPaths = map (s: {
-    name = s.name;
-    paths = (attrsets.mapAttrsToList (n: v: v) s.paths);
-  }) webservices;
+  # [ MODULE ] -> [ OWNED_PATH ]
+  # makes a list of all the paths from every given module
+  GetPathsFromModules = modules: concatMap (m: extractModulePath m) modules;
 
-  # path, [paths]  -> bool
-  doesPathOverlapWith =
-    path: paths: length (filter (p: (hasPrefix p path || hasPrefix path p)) paths) > 0;
+  # path, path  -> bool
+  doesPathOverlapWith = path1: path2: (hasPrefix path1 path2 || hasPrefix path2 path1);
 
-  # [paths], [otherpaths]  -> bool
-  doesPathsOverlapWith =
-    paths: otherpaths: length (filter (p: doesPathOverlapWith p otherpaths) paths) > 0;
+  # OWNED_PATH, [ OWNED_PATHS ] -> MULTIPLE_OWNED_PATH
+  # for each path, makes a list of owners (determined by a simple overlap function for now)
+  computePathOwners = path: paths: {
+    owner = p.owner;
+    owners = helpers.dedup (map (p: p.owner) (filter (p: doesPathOverlapWith path.path p.path) paths));
+    path = path.path;
+  };
 
-  # name -> all other webservicesPaths
-  otherServicesThan = name: filter (wp: wp.name != name) webservicesPaths;
+  # [ OWNED_PATH ] -> [ MULTIPLE_OWNED_PATH ]
+  # computePathOwners for each path
+  ComputeAllPathsOwners = paths: flatten (map (p: computePathOwners p paths) paths);
 
-  doesServiceOverlapWithOtherService =
-    service1: service2: doesPathsOverlapWith service1.paths service2.paths;
+  # [string] -> [string]
+  # sort owners, and concatenate them, ex: ImmichJellyfin
+  ownersToGroupName = owners: map (a: helpers.toName (toLower a)) (sort (a: b: a < b) owners);
 
-  # service -> [names]
-  serviceOverlaps =
-    service:
-    fold (
-      acc: v: (acc ++ (if (doesServiceOverlapWithOtherService service v) then [ v.name ] else [ ]))
-    ) [ ] (otherServicesThan name);
+  # [MULTIPLE_OWNED_PATH] -> [GROUP_OWNED_PATH]
+  # for every path, replaces the list of owners by the generated group name
+  ComputeGroups =
+    paths:
+    map (p: {
+      owner = p.owner;
+      groupname = ownersToGroupName p.owners;
+      path = p.path;
+    }) paths;
 
-  # [members: [members names]]
-  overlapGroups = map (e: e) webservicesPaths;
-
-  #[strings]
-  webservicePathsToPerms =
-    name: paths:
-    map (p: [
-      "d ${p} 0700 ${helpers.toUsername name} ${groupname} - -"
-      "Z ${p} 0700 ${helpers.toUsername name} ${groupname} - -"
-    ]) paths;
+  # [ GROUP_OWNED_PATH ] -> [string]
+  # generates the permissions for systemd.tmpfiles.rules
+  ComputePerms =
+    paths:
+    flatten (
+      map (p: [
+        "d ${p.path} 0700 ${helpers.toUsername p.owner} ${p.groupname} - -"
+        "Z ${p.path} 0700 ${helpers.toUsername p.owner} ${p.groupname} - -"
+      ]) paths
+    );
 in
 {
   config = {
     warnings = map (wp: (lists.flatten (webservicePathsToPerms wp.name wp.paths))) webservicesPaths;
     systemd.tmpfiles.rules = mkIf true (
-      let o = map (wp: (lists.flatten (webservicePathsToPerms wp.name wp.paths))) webservicesPaths; in trace o o
+      ComputePerms (ComputeGroups (ComputeAllPathsOwners (GetPathsFromModules MODULES)))
     );
   };
 }

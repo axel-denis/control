@@ -56,10 +56,10 @@ in
     };
 
     _meta = mkOption {
-        type = types.attrs;
-        internal = true;
-        default = {};
-      };
+      type = types.attrs;
+      internal = true;
+      default = { };
+    };
   };
 
   config =
