@@ -81,6 +81,12 @@ let
 
     in
     username: paths: filter (group: userBelongsToGroup username group) (extractGroups paths);
+
+  # GROUP_OWNED_PATH -> [string, string]
+  computeTmpfilesRule = p: [
+    "d ${p.path} 0700 ${helpers.strings.toUsername p.owner} ${p.groupname} - -"
+    "Z ${p.path} 0700 ${helpers.strings.toUsername p.owner} ${p.groupname} - -"
+  ];
 in
 {
   # [ MODULE ] -> [ GROUP_OWNED_PATH ]
@@ -88,14 +94,8 @@ in
 
   # [ GROUP_OWNED_PATH ] -> [string]
   # generates the permissions for systemd.tmpfiles.rules
-  ComputeTmpfilesRules =
-    paths:
-    flatten (
-      map (p: [
-        "d ${p.path} 0700 ${helpers.strings.toUsername p.owner} ${p.groupname} - -"
-        "Z ${p.path} 0700 ${helpers.strings.toUsername p.owner} ${p.groupname} - -"
-      ]) paths
-    );
+  ComputeTmpfilesRules = paths: flatten map computeTmpfilesRule paths;
 
+  # string, [ GROUP_OWNED_PATH ] -> [ string ]
   inherit GetGroupsForUser;
 }
