@@ -87,18 +87,17 @@ with lib;
     (mkIf (enabled) (
       let
         username = toUsername name;
-        groupname = toGroupname name;
       in
       {
-        users.users.${username} = {
-          isNormalUser = true;
-          group = groupname;
-          linger = true;
-          createHome = true;
-          home = "/var/lib/${username}";
-          autoSubUidGidRange = true;
-        };
-        users.groups.${groupname} = { };
+        # users.users.${username} = {
+        #   isNormalUser = true;
+        #   group = groupname;
+        #   linger = true;
+        #   createHome = true;
+        #   home = "/var/lib/${username}";
+        #   autoSubUidGidRange = true;
+        # };
+        # users.groups.${groupname} = { };
 
         control.${name}._meta = {
           inherit name;

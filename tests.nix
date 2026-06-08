@@ -7,43 +7,46 @@ let
 
   MODULES_INPUTS = [
     {
-      name = "Jellyfin";
+      name = "jellyfin";
       value._meta.paths = [
         "/jellyfin/media"
         "/transmission/completed"
       ];
+      value._meta.name = "jellyfin";
     }
     {
-      name = "Transmission";
+      name = "transmission";
       value._meta.paths = [
         "/transmission"
       ];
+      value._meta.name = "transmission";
     }
     {
-      name = "Immich";
+      name = "immich";
       value._meta.paths = [
         "/immich"
       ];
+      value._meta.name = "immich";
     }
   ];
   GROUP_OWNED_PATHS_RESULTS = lib.sort (a: b: a.path > b.path) [
     {
-      owner = "Jellyfin";
+      owner = "jellyfin";
       groupname = "Jellyfin";
       path = "/jellyfin/media";
     }
     {
-      owner = "Jellyfin";
+      owner = "jellyfin";
       groupname = "JellyfinTransmission";
       path = "/transmission/completed";
     }
     {
-      owner = "Transmission";
+      owner = "transmission";
       groupname = "JellyfinTransmission";
       path = "/transmission";
     }
     {
-      owner = "Immich";
+      owner = "immich";
       groupname = "Immich";
       path = "/immich";
     }
@@ -70,11 +73,20 @@ lib.runTests {
     expected = GROUP_OWNED_PATHS_RESULTS;
   };
 
-  testUsersGroups = with pkgs; {
-    expr = helpers.GetGroupsForUser "Jellyfin" (helpers.ComputePathPerms MODULES_INPUTS);
+  testGetUsersForGroup = with pkgs; {
+    expr = helpers.GetUsersForGroup "JellyfinTransmission" (helpers.ComputePathPerms MODULES_INPUTS);
     expected = [
-      "Jellyfin"
-      "JellyfinTransmission"
+      "jellyfin"
+      "transmission"
+    ];
+  };
+
+  testModulesNames = with pkgs; {
+    expr = helpers.controlModulesNamesList MODULES_INPUTS;
+    expected = [
+      "jellyfin"
+      "transmission"
+      "immich"
     ];
   };
 }

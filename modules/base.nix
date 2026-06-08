@@ -23,6 +23,10 @@
   config =
     let
       cfg = config.control;
+      control-modules = helpers.controlModulesList cfg;
+      control-names = helpers.controlModulesNamesList control-modules;
+      control-pathperms = helpers.ComputePathPerms control-modules;
+      control-groups = helpers.GetControlGroups control-pathperms;
     in
     {
       warnings =
@@ -55,7 +59,37 @@
       virtualisation.oci-containers.backend = "podman";
       virtualisation.podman.dockerCompat = true;
       virtualisation.podman.defaultNetwork.settings.dns_enabled = true;
+
+      users.users = builtins.listToAttrs (
+        map (
+          u:
+          let
+            username = helpers.toUsername u;
+          in
+          helpers.deepTrace {
+            name = username;
+            value = {
+              isNormalUser = true;
+              group = lib.mkIf (helpers.UserHasPrimaryGroup u control-pathperms) (helpers.toGroupname u);
+              linger = true;
+              createHome = true;
+              home = "/var/lib/${username}";
+              autoSubUidGidRange = true;
+            };
+          }
+        ) control-names
+      );
+
+      users.groups = builtins.listToAttrs (
+        map (
+          g:
+          helpers.deepTrace {
+            name = helpers.toGroupname g;
+            value = {
+              members = helpers.GetUsersForGroup g control-pathperms;
+            };
+          }
+        ) control-groups
+      );
     };
 }
-
-# TODO : verifier les paths qui seraient overlap entre deux containers (pose probleme avec le chmod)

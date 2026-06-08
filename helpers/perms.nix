@@ -4,6 +4,7 @@ let
   helpers = {
     lists = import ./lists.nix { inherit lib; };
     strings = import ./strings.nix { inherit lib; };
+    deepTrace = import ./deepTrace.nix { inherit lib; };
   };
 in
 with lib;
@@ -71,31 +72,53 @@ let
     }) paths;
 
   # string, [ GROUP_OWNED_PATH ] -> [ string ]
-  GetGroupsForUser =
+  GetUsersForGroup =
     let
       # string, string -> bool
       userBelongsToGroup = username: group: hasInfix (toLower username) (toLower group);
 
       # [ GROUP_OWNED_PATH ] -> [ string ]
-      extractGroups = paths: helpers.lists.dedup (map (p: p.groupname) paths);
+      extractUsers = paths: helpers.lists.dedup (map (p: p.owner) paths);
 
     in
-    username: paths: filter (group: userBelongsToGroup username group) (extractGroups paths);
+    groupname: paths:
+    map helpers.strings.toUsername (
+      filter (user: userBelongsToGroup user groupname) (extractUsers paths)
+    );
 
   # GROUP_OWNED_PATH -> [string, string]
   computeTmpfilesRule = p: [
-    "d ${p.path} 0700 ${helpers.strings.toUsername p.owner} ${p.groupname} - -"
-    "Z ${p.path} 0700 ${helpers.strings.toUsername p.owner} ${p.groupname} - -"
-  ];
+    "d ${p.path} 0760 ${helpers.strings.toUsername p.owner} ${p.groupname} - -"
+    "Z ${p.path} 0760 ${helpers.strings.toUsername p.owner} ${p.groupname} - -"
+  ]; # TODO - check 760 good
+
+  # string, [ GROUP_OWNED_PATH ] -> bool
+  UserHasPrimaryGroup = user: paths: any (p: toLower p.owner == toLower user) paths;
+
+  # [ GROUP_OWNED_PATH ] -> [ GROUP_OWNED_PATH ]
+  # changes all owners to usernames, and all groups to groupnames
+  fixUsernamesAndGroupnames =
+    paths:
+    map (p: {
+      owner = helpers.strings.toUsername p.owner;
+      groupname = helpers.strings.toGroupname p.groupname;
+      path = p.path;
+    }) paths;
 in
 {
   # [ MODULE ] -> [ GROUP_OWNED_PATH ]
-  ComputePathPerms = modules: ComputeGroups (ComputeAllPathsOwners (GetPathsFromModules modules));
+  ComputePathPerms = modules: (ComputeGroups (ComputeAllPathsOwners (GetPathsFromModules modules)));
 
   # [ GROUP_OWNED_PATH ] -> [string]
   # generates the permissions for systemd.tmpfiles.rules
   ComputeTmpfilesRules = paths: flatten map computeTmpfilesRule paths;
 
   # string, [ GROUP_OWNED_PATH ] -> [ string ]
-  inherit GetGroupsForUser;
+  inherit GetUsersForGroup;
+
+  # string, [ GROUP_OWNED_PATH ] -> bool
+  inherit UserHasPrimaryGroup;
+
+  # [ GROUP_OWNED_PATH ] -> [ string ]
+  GetControlGroups = paths: helpers.lists.dedup (map (p: p.groupname) paths);
 }

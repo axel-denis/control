@@ -1,7 +1,10 @@
 { lib }:
 
 with lib;
-{
+let
+  lists = import ./lists.nix { inherit lib; };
+in
+rec {
   isEnabledWebModule =
     module:
     module ? enable
@@ -20,7 +23,7 @@ with lib;
   # deprecated
   modulesList = conf: attrsets.mapAttrsToList (name: value: value) conf;
 
-  # [{name, {...config}}]
+  # config.control -> [{name, {...config}}]
   controlModulesList =
     conf:
     filter (m: m.value._meta.isControlModule or false) (
@@ -29,4 +32,7 @@ with lib;
         value = value;
       }) conf
     );
+
+  # controlModulesList -> [ string ]
+  controlModulesNamesList = moduleList: lists.dedup (map (m: m.value._meta.name) moduleList);
 }
