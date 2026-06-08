@@ -87,10 +87,12 @@ let
     );
 
   # GROUP_OWNED_PATH -> [string, string]
-  computeTmpfilesRule = p: [
-    "d ${p.path} 0760 ${helpers.strings.toUsername p.owner} ${p.groupname} - -"
-    "Z ${p.path} 0760 ${helpers.strings.toUsername p.owner} ${p.groupname} - -"
-  ]; # TODO - check 760 good
+  computeTmpfilesRule =
+    with helpers.strings;
+    p: [
+      "d ${p.path} 2770 ${toUsername p.owner} ${toGroupname p.groupname} - -"
+      "Z ${p.path} 2770 ${toUsername p.owner} ${toGroupname p.groupname} - -"
+    ]; # TODO - check 760 good
 
   # string, [ GROUP_OWNED_PATH ] -> bool
   UserHasPrimaryGroup = user: paths: any (p: toLower p.owner == toLower user) paths;

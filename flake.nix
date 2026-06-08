@@ -41,7 +41,6 @@
           {
             imports = [
               self.nixosModules.base
-              #self.nixosModules.perms
               self.nixosModules.immich
               self.nixosModules.jellyfin
               self.nixosModules.transmission

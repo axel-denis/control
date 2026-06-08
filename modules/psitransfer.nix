@@ -51,7 +51,11 @@ in
             podman.user = helpers.toUsername name;
             image = "psitrax/psitransfer:${cfg.version}";
             ports = helpers.webServicePort config cfg 3000;
-            extraOptions = [ (mkIf config.control.updateContainers "--pull=always") ];
+            extraOptions = [
+              (mkIf config.control.updateContainers "--pull=always")
+              "--userns=keep-id"
+              "--group-add=keep-groups"
+            ];
             environment = {
               PSITRANSFER_ADMIN_PASS = cfg.admin-password;
             };

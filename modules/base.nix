@@ -86,6 +86,6 @@
         }) control-groups
       );
 
-      systemd.tmpfiles.rules = helpers.ComputeTmpfilesRules control-pathperms;
+      systemd.tmpfiles.rules = helpers.deepTrace (helpers.ComputeTmpfilesRules control-pathperms);
     };
 }

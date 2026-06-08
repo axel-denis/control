@@ -82,6 +82,8 @@ in
             volumes = [ "${cfg.paths.uploads}:/cloudreve/data" ];
             extraOptions = [
               (mkIf config.control.updateContainers "--pull=always")
+              "--userns=keep-id"
+              "--group-add=keep-groups"
             ];
           };
 
@@ -97,6 +99,8 @@ in
             volumes = [ "${cfg.paths.database}:/var/lib/postgresql/data" ];
             extraOptions = [
               (mkIf config.control.updateContainers "--pull=always")
+              "--userns=keep-id"
+              "--group-add=keep-groups"
             ];
           };
 
@@ -106,6 +110,8 @@ in
             volumes = [ "${cfg.paths.redis}:/data" ];
             extraOptions = [
               (mkIf config.control.updateContainers "--pull=always")
+              "--userns=keep-id"
+              "--group-add=keep-groups"
             ];
           };
         };

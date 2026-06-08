@@ -66,9 +66,10 @@ in
             image = "jellyfin/jellyfin:${cfg.version}";
             ports = helpers.webServicePort config cfg 8096;
             extraOptions = [
-              "--cgroups=disabled"
               (mkIf config.control.updateContainers "--pull=always")
-              (mkIf cfg.hardware-acceleration.intel "--group-add=${toString config.users.groups.render.gid}")
+              "--userns=keep-id"
+              "--group-add=keep-groups"
+              #(mkIf cfg.hardware-acceleration.intel "--group-add=${toString config.users.groups.render.gid}")
             ];
             volumes = [ "${cfg.paths.appdata}:/config" ] ++ helpers.multiplesVolumes cfg.paths.media "/media";
             devices = optionals cfg.hardware-acceleration.intel [ "/dev/dri/renderD128:/dev/dri/renderD128" ];

@@ -76,7 +76,11 @@ in
               "53:53/tcp"
               "53:53/udp"
             ];
-            extraOptions = [ (mkIf config.control.updateContainers "--pull=always") ];
+            extraOptions = [
+              (mkIf config.control.updateContainers "--pull=always")
+              "--userns=keep-id"
+              "--group-add=keep-groups"
+            ];
             environment = {
               TZ = cfg.timezone;
               FTLCONF_webserver_api_password = cfg.password;

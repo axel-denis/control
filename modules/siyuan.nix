@@ -62,7 +62,11 @@ in
             podman.user = helpers.toUsername name;
             image = "b3log/siyuan:${cfg.version}";
             ports = helpers.webServicePort config cfg 6806;
-            extraOptions = [ (mkIf config.control.updateContainers "--pull=always") ];
+            extraOptions = [
+              (mkIf config.control.updateContainers "--pull=always")
+              "--userns=keep-id"
+              "--group-add=keep-groups"
+            ];
             environment = {
               TZ = cfg.timezone;
               SIYUAN_WORKSPACE_PATH = "/data";

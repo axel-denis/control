@@ -76,6 +76,8 @@ in
             ];
             extraOptions = [
               (mkIf config.control.updateContainers "--pull=always")
+              "--userns=keep-id"
+              "--group-add=keep-groups"
             ];
           };
 
@@ -90,6 +92,8 @@ in
             };
             extraOptions = [
               (mkIf config.control.updateContainers "--pull=always")
+              "--userns=keep-id"
+              "--group-add=keep-groups"
             ];
             volumes = [
               "${cfg.paths.database}:/var/lib/mysql"

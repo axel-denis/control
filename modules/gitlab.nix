@@ -75,6 +75,8 @@ in
             ports = (helpers.webServicePort config cfg 80) ++ [ "${toString cfg.ssh-port}:22" ];
             extraOptions = [
               (mkIf config.control.updateContainers "--pull=always")
+              "--userns=keep-id"
+              "--group-add=keep-groups"
               "--shm-size=256m"
             ];
             environment = {

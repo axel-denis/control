@@ -64,6 +64,8 @@ in
           extraOptions = [
             "--cap-add=NET_ADMIN"
             (mkIf config.control.updateContainers "--pull=always")
+            "--userns=keep-id"
+            "--group-add=keep-groups"
           ];
 
           volumes = [
