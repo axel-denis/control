@@ -49,10 +49,7 @@
             It is advised to set it to false after the first use,
             otherwise it will run everytime at rebuild or startup.
           ''
-        ])
-        ++ (map (
-          m: m.name + " -> " + lib.concatStrings (lib.strings.intersperse "\n" m.value._meta.paths)
-        ) (helpers.controlModulesList cfg));
+        ]);
 
       systemd.services."podman-jellyfin".serviceConfig.Type = lib.mkForce "simple";
       virtualisation.podman.enable = true;
@@ -66,7 +63,7 @@
           let
             username = helpers.toUsername u;
           in
-          helpers.deepTrace {
+          {
             name = username;
             value = {
               isNormalUser = true;
@@ -81,15 +78,14 @@
       );
 
       users.groups = builtins.listToAttrs (
-        map (
-          g:
-          helpers.deepTrace {
-            name = helpers.toGroupname g;
-            value = {
-              members = helpers.GetUsersForGroup g control-pathperms;
-            };
-          }
-        ) control-groups
+        map (g: {
+          name = helpers.toGroupname g;
+          value = {
+            members = helpers.GetUsersForGroup g control-pathperms;
+          };
+        }) control-groups
       );
+
+      systemd.tmpfiles.rules = helpers.ComputeTmpfilesRules control-pathperms;
     };
 }

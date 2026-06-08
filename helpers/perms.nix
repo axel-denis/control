@@ -111,7 +111,7 @@ in
 
   # [ GROUP_OWNED_PATH ] -> [string]
   # generates the permissions for systemd.tmpfiles.rules
-  ComputeTmpfilesRules = paths: flatten map computeTmpfilesRule paths;
+  ComputeTmpfilesRules = paths: flatten (map computeTmpfilesRule paths);
 
   # string, [ GROUP_OWNED_PATH ] -> [ string ]
   inherit GetUsersForGroup;
