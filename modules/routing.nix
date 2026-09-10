@@ -50,6 +50,13 @@ in {
       the `clientCertificateFile` option.
     '';
 
+    blockWildcardAccess = mkOption {
+      type = types.bool;
+      default = true;
+      defaultText = "true";
+      description = "Blocks access to the server without a valid subdomain (ex. direct ip or direct domain wo subdomain)";
+    };
+
     clientCertificateFile = mkOption {
       type = types.path;
       default = cloudflareCertificate;
@@ -106,7 +113,15 @@ in {
       recommendedProxySettings = true;
       recommendedTlsSettings = true;
 
-      virtualHosts = listToAttrs (lists.forEach webservices (module:
+      virtualHosts = (lib.optionalAttrs cfg.blockWildcardAccess {
+          "_" = {
+            default = true;
+            rejectSSL = true;
+            extraConfig = ''
+              return 444;
+            '';
+          };
+        }) // (listToAttrs (lists.forEach webservices (module:
         attrsets.nameValuePair "${module.subdomain}.${cfg.domain}" {
           forceSSL = cfg.letsencrypt.enable;
           enableACME = cfg.letsencrypt.enable;
@@ -126,7 +141,7 @@ in {
             '' else
               "")
           ];
-        }));
+        })));
     };
 
     # Let's Encrypt (ACME)
