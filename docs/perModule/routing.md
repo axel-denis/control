@@ -227,7 +227,7 @@ Thats why this flake has options to filter incoming requests, **ensuring only th
         enable = true;
         email = "email.for.letsencrypt@example.com";
       };
-      checkClientCertificate = true;
+      checkClientCertificate = true; # <- enable
       clientCertificateFile = "/cert.pem"; # <- default to Cloudflare's
     };
   }
@@ -244,6 +244,7 @@ With this setup, only requests presenting the valid certificat (only your proxy)
 > If `clientCertificateFile` is left undefined, it will use [Cloudflare Authenticated Origin Pulls CA](https://developers.cloudflare.com/ssl/origin-configuration/authenticated-origin-pull/) and should work out of the box if Cloudflare's Proxy is enabled for your domain and subdomains.
 
 ## 4. Custom routing
+### 4.1 non-Control modules
 You can add non-control modules to the router like so:
 ```nix
 # example for the btop app, that is not provided by Control
@@ -256,4 +257,12 @@ control.custom-routing.entries = [
     };
   }
 ];
+```
+
+### 4.2 Main domain access
+By default, requests to the main domain are dropped, and so are the requests directly targeted to the ip of the server.
+
+If you want to allow them, disable this:
+```nix
+control.routing.blockWildcardAccess = false # (default to true)
 ```
