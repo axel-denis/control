@@ -1,4 +1,10 @@
-{ config, helpers, lib, pkgs, ... }:
+{
+  config,
+  helpers,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
@@ -11,11 +17,11 @@ let
 
   # Cloudflare's Authenticated Origin Pulls CA certificate
   cloudflareCertificate = pkgs.fetchurl {
-    url =
-      "https://developers.cloudflare.com/ssl/static/authenticated_origin_pull_ca.pem";
+    url = "https://developers.cloudflare.com/ssl/static/authenticated_origin_pull_ca.pem";
     sha256 = "sha256-wU/tDOUhDbBxn+oR0fELM3UNwX1gmur0fHXp7/DXuEM=";
   };
-in {
+in
+{
 
   options.control.routing = {
     enable = mkEnableOption "Enable Nginx routing";
@@ -98,14 +104,8 @@ in {
             default           1;
           }
         ''
-        (if cfg.checkClientCertificate then
-          "ssl_client_certificate ${cfg.clientCertificateFile};"
-        else
-          "")
-        (if cfg.checkClientCertificate then
-          "ssl_verify_client optional;"
-        else
-          "")
+        (if cfg.checkClientCertificate then "ssl_client_certificate ${cfg.clientCertificateFile};" else "")
+        (if cfg.checkClientCertificate then "ssl_verify_client optional;" else "")
       ];
 
       recommendedGzipSettings = true;
@@ -113,7 +113,8 @@ in {
       recommendedProxySettings = true;
       recommendedTlsSettings = true;
 
-      virtualHosts = (lib.optionalAttrs cfg.blockWildcardAccess {
+      virtualHosts =
+        (lib.optionalAttrs cfg.blockWildcardAccess {
           "_" = {
             default = true;
             rejectSSL = true;
@@ -121,27 +122,35 @@ in {
               return 444;
             '';
           };
-        }) // (listToAttrs (lists.forEach webservices (module:
-        attrsets.nameValuePair "${module.subdomain}.${cfg.domain}" {
-          forceSSL = cfg.letsencrypt.enable;
-          enableACME = cfg.letsencrypt.enable;
-          locations."/" = {
-            proxyPass = "http://127.0.0.1:${toString module.port}";
-            proxyWebsockets =
-              true; # TODO -> only for really required apps (immich, siyuan)
-            basicAuth = module.basicAuth;
-          };
-          extraConfig = strings.concatStringsSep "\n" [
-            # TODO -> large body size only for really required apps (immich)
-            "client_max_body_size 5000M;"
-            (if cfg.checkClientCertificate then ''
-              if ($reject_client) {
-                return 403;
-              }
-            '' else
-              "")
-          ];
-        })));
+        })
+        // (listToAttrs (
+          lists.forEach webservices (
+            module:
+            attrsets.nameValuePair "${module.subdomain}.${cfg.domain}" {
+              forceSSL = cfg.letsencrypt.enable;
+              enableACME = cfg.letsencrypt.enable;
+              locations."/" = {
+                proxyPass = "http://127.0.0.1:${toString module.port}";
+                proxyWebsockets = true; # TODO -> only for really required apps (immich, siyuan)
+                basicAuth = module.basicAuth;
+              };
+              extraConfig = strings.concatStringsSep "\n" [
+                # TODO -> large body size only for really required apps (immich)
+                "client_max_body_size 5000M;"
+                (
+                  if cfg.checkClientCertificate then
+                    ''
+                      if ($reject_client) {
+                        return 403;
+                      }
+                    ''
+                  else
+                    ""
+                )
+              ];
+            }
+          )
+        ));
     };
 
     # Let's Encrypt (ACME)
@@ -149,10 +158,14 @@ in {
       acceptTerms = true;
       defaults.email = cfg.letsencrypt.email;
       # NOTE - for testing: uses staging CA to avoid rate limits:
-      defaults.server = mkIf cfg.letsencrypt.test-mode
-        "https://acme-staging-v02.api.letsencrypt.org/directory";
+      defaults.server = mkIf cfg.letsencrypt.test-mode "https://acme-staging-v02.api.letsencrypt.org/directory";
     };
 
-    networking.firewall = { allowedTCPPorts = [ 80 443 ]; };
+    networking.firewall = {
+      allowedTCPPorts = [
+        80
+        443
+      ];
+    };
   };
 }

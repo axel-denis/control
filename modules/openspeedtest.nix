@@ -1,8 +1,15 @@
-{ config, helpers, lib, ... }:
+{
+  config,
+  helpers,
+  lib,
+  ...
+}:
 
 with lib;
-let cfg = config.control.openspeedtest;
-in {
+let
+  cfg = config.control.openspeedtest;
+in
+{
   options.control.openspeedtest = helpers.webServiceDefaults {
     name = "OpenSpeedTest";
     version = "latest";
@@ -18,8 +25,7 @@ in {
       openspeedtest = {
         image = "openspeedtest/${cfg.version}";
         ports = helpers.webServicePort config cfg 3000;
-        extraOptions =
-          [ (mkIf config.control.updateContainers "--pull=always") ];
+        extraOptions = [ (mkIf config.control.updateContainers "--pull=always") ];
       };
     };
   };
