@@ -1,8 +1,15 @@
-{ config, helpers, lib, ... }:
+{
+  config,
+  helpers,
+  lib,
+  ...
+}:
 
 with lib;
-let cfg = config.control.pihole;
-in {
+let
+  cfg = config.control.pihole;
+in
+{
   options.control.pihole = {
     enable = mkEnableOption "Enable Pi-hole";
 
@@ -55,9 +62,12 @@ in {
     virtualisation.oci-containers.containers = {
       pihole = {
         image = "pihole/pihole:${cfg.version}";
-        ports = [ "${toString cfg.port}:80" "53:53/tcp" "53:53/udp" ];
-        extraOptions =
-          [ (mkIf config.control.updateContainers "--pull=always") ];
+        ports = [
+          "${toString cfg.port}:80"
+          "53:53/tcp"
+          "53:53/udp"
+        ];
+        extraOptions = [ (mkIf config.control.updateContainers "--pull=always") ];
         environment = {
           TZ = cfg.timezone;
           FTLCONF_webserver_api_password = cfg.password;

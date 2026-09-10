@@ -1,48 +1,57 @@
-{ config, helpers, lib, ... }:
+{
+  config,
+  helpers,
+  lib,
+  ...
+}:
 
 with lib;
-let cfg = config.control.cloudreve;
-in {
-  options.control.cloudreve = (helpers.webServiceDefaults {
-    name = "Cloudreve";
-    version = "latest";
-    subdomain = "cloudreve";
-    port = 10011;
-  }) // {
-    dbIsHdd = mkEnableOption ''
-      Enable if `paths.database`points to an HDD drive.
-    '';
+let
+  cfg = config.control.cloudreve;
+in
+{
+  options.control.cloudreve =
+    (helpers.webServiceDefaults {
+      name = "Cloudreve";
+      version = "latest";
+      subdomain = "cloudreve";
+      port = 10011;
+    })
+    // {
+      dbIsHdd = mkEnableOption ''
+        Enable if `paths.database`points to an HDD drive.
+      '';
 
-    paths = {
-      default = helpers.mkInheritedPathOption {
-        parentName = "home server global default path";
-        parent = config.control.defaultPath;
-        defaultSubpath = "cloudreve";
-        description = "Default path for Cloudreve data";
-      };
+      paths = {
+        default = helpers.mkInheritedPathOption {
+          parentName = "home server global default path";
+          parent = config.control.defaultPath;
+          defaultSubpath = "cloudreve";
+          description = "Default path for Cloudreve data";
+        };
 
-      database = helpers.mkInheritedPathOption {
-        parentName = "paths.default";
-        parent = cfg.paths.default;
-        defaultSubpath = "database";
-        description = "Path for Cloudreve database.";
-      };
+        database = helpers.mkInheritedPathOption {
+          parentName = "paths.default";
+          parent = cfg.paths.default;
+          defaultSubpath = "database";
+          description = "Path for Cloudreve database.";
+        };
 
-      redis = helpers.mkInheritedPathOption {
-        parentName = "paths.default";
-        parent = cfg.paths.default;
-        defaultSubpath = "redis";
-        description = "Path for Cloudreve redis.";
-      };
+        redis = helpers.mkInheritedPathOption {
+          parentName = "paths.default";
+          parent = cfg.paths.default;
+          defaultSubpath = "redis";
+          description = "Path for Cloudreve redis.";
+        };
 
-      uploads = helpers.mkInheritedPathOption {
-        parentName = "paths.default";
-        parent = cfg.paths.default;
-        defaultSubpath = "uploads";
-        description = "Path for Cloudreve uploads (pictures).";
+        uploads = helpers.mkInheritedPathOption {
+          parentName = "paths.default";
+          parent = cfg.paths.default;
+          defaultSubpath = "uploads";
+          description = "Path for Cloudreve uploads (pictures).";
+        };
       };
     };
-  };
 
   config = mkIf cfg.enable {
 
@@ -52,8 +61,10 @@ in {
     virtualisation.oci-containers.containers = {
       cloudreve = {
         image = "cloudreve/cloudreve:${cfg.version}";
-        ports = helpers.webServicePort config cfg 5212
-          ++ [ "6888:6888" "6888:6888/udp" ];
+        ports = helpers.webServicePort config cfg 5212 ++ [
+          "6888:6888"
+          "6888:6888/udp"
+        ];
         environment = {
           "CR_CONF_Database.Type" = "postgres";
           "CR_CONF_Database.Host" = "cloudreve-postgresql";

@@ -1,9 +1,12 @@
 {
   description = "Home Server Service Modules (aggregated)";
 
-  inputs = { nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11"; };
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
+  };
 
-  outputs = { self, nixpkgs, ... }:
+  outputs =
+    { self, nixpkgs, ... }:
     let
       system = "x86_64-linux";
       lib = nixpkgs.lib;
@@ -11,10 +14,9 @@
 
       pkgs = import nixpkgs { inherit system; };
 
-      mkModule = path:
-        { ... }@args:
-        import path (args // { inherit helpers lib pkgs; });
-    in {
+      mkModule = path: { ... }@args: import path (args // { inherit helpers lib pkgs; });
+    in
+    {
       nixosModules = {
         immich = mkModule ./modules/immich.nix;
         jellyfin = mkModule ./modules/jellyfin.nix;
@@ -59,8 +61,7 @@
               description = "Subdomain to use for all Control apps";
             };
 
-            updateContainers = lib.mkEnableOption
-              "Pulls the newest image of each enabled container";
+            updateContainers = lib.mkEnableOption "Pulls the newest image of each enabled container";
           };
         };
       };
