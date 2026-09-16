@@ -33,6 +33,8 @@
         custom-routing = mkModule ./modules/custom-routing.nix;
         gitlab = mkModule ./modules/gitlab.nix;
         gitea = mkModule ./modules/gitea.nix;
+        seerr = mkModule ./modules/seerr.nix;
+        prowlarr = mkModule ./modules/prowlarr.nix;
 
         default = { lib, ... }: {
           imports = [
@@ -51,6 +53,8 @@
             self.nixosModules.custom-routing
             self.nixosModules.gitlab
             self.nixosModules.gitea
+            self.nixosModules.seerr
+            self.nixosModules.prowlarr
           ];
 
           options.control = {
