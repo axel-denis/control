@@ -79,6 +79,8 @@ in
         WEBUI_PORTS = "9696/tcp";
       };
 
+      networks = [ "arr-net" ];
+
       environmentFiles = [ cfg.environmentFile ];
 
       volumes = [
