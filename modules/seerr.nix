@@ -38,6 +38,7 @@ in
       seerr = {
         image = "ghcr.io/seerr-team/seerr:${cfg.version}";
         ports = helpers.webServicePort config cfg 5055;
+        networks = [ "arr-net" ];
         extraOptions = [
           (mkIf config.control.updateContainers "--pull=always")
           "--init"

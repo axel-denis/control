@@ -61,6 +61,7 @@ in
       jellyfin = {
         image = "jellyfin/jellyfin:${cfg.version}";
         ports = helpers.webServicePort config cfg 8096;
+        networks = [ "arr-net" ];
         extraOptions = [
           (mkIf config.control.updateContainers "--pull=always")
           (mkIf cfg.hardware-acceleration.intel "--group-add=${toString config.users.groups.render.gid}")
@@ -69,5 +70,11 @@ in
         devices = optionals cfg.hardware-acceleration.intel [ "/dev/dri/renderD128:/dev/dri/renderD128" ];
       };
     };
+
+    systemd.services = helpers.mkDockerNetworkService {
+      networkName = "arr-net";
+      dockerCli = "${config.virtualisation.docker.package}/bin/docker";
+    };
+
   };
 }
