@@ -19,12 +19,6 @@ in
       port = 10016;
     })
     // {
-      environmentFile = mkOption {
-        type = types.nullOr types.path;
-        default = null;
-        description = "Env file for vpn config";
-      };
-
       paths = {
         default = helpers.mkInheritedPathOption {
           parentName = "home server global default path";
@@ -63,6 +57,7 @@ in
     virtualisation.oci-containers.containers.radarr = {
       image = "ghcr.io/hotio/radarr:${cfg.version}";
       ports = helpers.webServicePort config cfg 7878;
+      hostname = "radarr.internal";
 
       extraOptions = [ (mkIf config.control.updateContainers "--pull=always") ];
 
@@ -75,8 +70,6 @@ in
       };
 
       networks = [ "arr-net" ];
-
-      environmentFiles = optional (cfg.environmentFile != null) cfg.environmentFile;
 
       volumes = [
         "${cfg.paths.config}:/config"

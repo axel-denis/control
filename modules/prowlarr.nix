@@ -61,6 +61,7 @@ in
     virtualisation.oci-containers.containers.prowlarr = {
       image = "ghcr.io/hotio/prowlarr:${cfg.version}";
       ports = helpers.webServicePort config cfg 9696;
+      hostname = "prowlarr.internal";
 
       extraOptions = [
         (mkIf config.control.updateContainers "--pull=always")

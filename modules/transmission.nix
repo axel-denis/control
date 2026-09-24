@@ -64,6 +64,8 @@ in
         "${cfg.paths.config}:/config"
       ];
 
+      networks = [ "arr-net" ];
+
       environmentFiles = [ cfg.environmentFile ];
       ports = helpers.webServicePort config cfg 9091;
     };
