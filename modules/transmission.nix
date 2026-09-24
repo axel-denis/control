@@ -59,6 +59,11 @@ in
         (mkIf config.control.updateContainers "--pull=always")
       ];
 
+      environment = {
+        PUID = "1000";
+        PGID = "1000";
+      };
+
       volumes = [
         "${cfg.paths.download}:/data"
         "${cfg.paths.config}:/config"
