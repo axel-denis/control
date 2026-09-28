@@ -153,6 +153,16 @@ in
         ));
     };
 
+    # Restricting docker networks subnets, avoiding interferences with VPNs
+    virtualisation.docker.daemon.settings = {
+      default-address-pools = [
+        {
+          base = "172.20.0.0/14";
+          size = 24;
+        }
+      ];
+    };
+
     # Let's Encrypt (ACME)
     security.acme = mkIf cfg.letsencrypt.enable {
       acceptTerms = true;
