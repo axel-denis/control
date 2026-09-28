@@ -52,6 +52,11 @@ in
     virtualisation.docker.enable = true;
     virtualisation.oci-containers.backend = "docker";
 
+    # Creating directory with the user id asked by the container
+    systemd.tmpfiles.rules = [
+      "d ${cfg.paths.config} 0755 1000 1000"
+      "d ${cfg.paths.download} 0775 1000 1000"
+    ];
     virtualisation.oci-containers.containers.transmission = {
       image = "haugene/transmission-openvpn:${cfg.version}";
       extraOptions = [

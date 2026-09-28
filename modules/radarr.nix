@@ -37,7 +37,7 @@ in
         data = helpers.mkInheritedPathOption {
           parentName = "home server global default path";
           parent = config.control.defaultPath;
-          defaultSubpath = "media";
+          defaultSubpath = "data";
           description = "Root media/data path for hardlinks and media management";
         };
       };
@@ -49,7 +49,6 @@ in
 
     # Creating directory with the user id asked by the container
     systemd.tmpfiles.rules = [
-      "d ${cfg.paths.default} 0755 1000 1000"
       "d ${cfg.paths.config} 0755 1000 1000"
       "d ${cfg.paths.data} 0775 1000 1000"
     ];

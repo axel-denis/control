@@ -87,8 +87,9 @@ in
       volumes = [
         "${cfg.paths.config}:/config"
       ]
-      ++ optional (cfg.wireguardConfigFile != null)
-        "${toString cfg.wireguardConfigFile}:/config/wireguard/wg0.conf:ro";
+      ++ optional (
+        cfg.wireguardConfigFile != null
+      ) "${toString cfg.wireguardConfigFile}:/config/wireguard/wg0.conf:ro";
     };
   };
 }

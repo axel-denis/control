@@ -36,6 +36,7 @@
         seerr = mkModule ./modules/seerr.nix;
         prowlarr = mkModule ./modules/prowlarr.nix;
         radarr = mkModule ./modules/radarr.nix;
+        arr-stack = mkModule ./modules/arr-stack.nix;
 
         default = { lib, ... }: {
           imports = [
@@ -57,6 +58,7 @@
             self.nixosModules.seerr
             self.nixosModules.prowlarr
             self.nixosModules.radarr
+            self.nixosModules.arr-stack
           ];
 
           options.control = {
